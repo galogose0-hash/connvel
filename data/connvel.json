@@ -1,0 +1,254 @@
+{
+  "novels": [
+    {
+      "id": "oke",
+      "title": "oke",
+      "author": "langlang",
+      "genre": "Fantasi",
+      "status": "Ongoing",
+      "chapters": 2,
+      "visible": true,
+      "poster": "assets/images/uploads/oke-poster.png",
+      "synopsis": "oke aja sih"
+    },
+    {
+      "id": "putri-sang-kartografer",
+      "title": "Putri Sang Kartografer",
+      "author": "Alya Prameswari",
+      "genre": "Fantasi",
+      "status": "Ongoing",
+      "chapters": 24,
+      "visible": true,
+      "poster": "assets/images/cover-cartographer.jpg",
+      "synopsis": "Seorang pembuat peta muda menemukan jalur yang tidak pernah tercatat di peta mana pun, dan rahasia lama kota pelabuhan Vharen mulai terbuka."
+    },
+    {
+      "id": "orbit-kesunyian",
+      "title": "Orbit Kesunyian",
+      "author": "Kenji Arata",
+      "genre": "Fiksi Ilmiah",
+      "status": "Ongoing",
+      "chapters": 31,
+      "visible": true,
+      "poster": "assets/images/cover-orbit.jpg",
+      "synopsis": "Di stasiun luar angkasa yang sunyi, seorang teknisi menerima pesan dari orbit yang seharusnya kosong."
+    },
+    {
+      "id": "surat-surat-dari-pesisir",
+      "title": "Surat-Surat dari Pesisir",
+      "author": "Elena Voss",
+      "genre": "Roman",
+      "status": "Completed",
+      "chapters": 42,
+      "visible": true,
+      "poster": "assets/images/cover-letters.jpg",
+      "synopsis": "Tujuh puluh surat tanpa penerima membawa seorang arsiparis kembali ke pesisir yang ia tinggalkan bertahun-tahun lalu."
+    },
+    {
+      "id": "rumah-di-bukit-lentera",
+      "title": "Rumah di Bukit Lentera",
+      "author": "Rania Aldebaran",
+      "genre": "Misteri",
+      "status": "Ongoing",
+      "chapters": 18,
+      "visible": true,
+      "poster": "assets/images/cover-lantern.jpg",
+      "synopsis": "Sebuah rumah tua di bukit menyalakan lentera setiap malam untuk seseorang yang tak pernah pulang."
+    },
+    {
+      "id": "meja-hari-minggu",
+      "title": "Meja Hari Minggu",
+      "author": "Mira Halim",
+      "genre": "Potongan Kehidupan",
+      "status": "Completed",
+      "chapters": 16,
+      "visible": true,
+      "poster": "assets/images/cover-sunday.jpg",
+      "synopsis": "Kisah-kisah kecil yang tumbuh di sekitar meja makan keluarga pada hari Minggu."
+    },
+    {
+      "id": "garam-dan-kayu-manis",
+      "title": "Garam & Kayu Manis",
+      "author": "Theo Mahendra",
+      "genre": "Sejarah",
+      "status": "Completed",
+      "chapters": 37,
+      "visible": true,
+      "poster": "assets/images/cover-salt.jpg",
+      "synopsis": "Di kota pelabuhan abad ke-18, seorang juru masak menyimpan resep yang bisa mengubah arah sejarah."
+    },
+    {
+      "id": "lumut-dan-cahaya-bulan",
+      "title": "Lumut & Cahaya Bulan",
+      "author": "Wren Ashby",
+      "genre": "Fantasi",
+      "status": "Ongoing",
+      "chapters": 22,
+      "visible": true,
+      "poster": "assets/images/cover-moss.jpg",
+      "synopsis": "Di hutan yang bernapas, seorang penjaga cahaya bulan menemukan jejak yang bukan milik manusia."
+    }
+  ],
+  "chapters": [
+    {
+      "id": "putri-bab-1",
+      "novelId": "putri-sang-kartografer",
+      "number": 1,
+      "title": "Peta yang Hilang",
+      "date": "2026-10-12",
+      "published": true,
+      "content": "<blockquote class=\"chapter-epigraph\">\n          <p>“Tidak semua tempat ingin ditemukan. Beberapa tempat justru menghilang karena seseorang pernah berusaha mencarinya.”</p>\n        </blockquote>\n\n        <p class=\"chapter-opening\">Hujan turun di kota pelabuhan Vharen sejak pagi.</p>\n\n        <p>Butir-butir air mengetuk atap rumah, membasahi jalanan berbatu, dan mengalir melalui sela-sela bangunan tua yang berdiri rapat di sepanjang pesisir. Angin laut membawa aroma garam dan kayu basah, sementara lonceng menara kota berdentang sembilan kali, menandakan pagi telah dimulai.</p>\n\n        <p>Di antara rumah-rumah yang menghadap pelabuhan, berdiri sebuah bangunan tua berlantai dua dengan papan kayu bertuliskan Biro Kartografi Arven.</p>\n\n        <p>Cat pada papan itu mulai mengelupas. Beberapa huruf bahkan nyaris tidak terbaca. Namun, bagi penduduk Vharen, tempat itu bukan sekadar toko pembuatan peta. Selama puluhan tahun, bangunan tersebut menjadi tempat seorang kartografer menyimpan catatan tentang wilayah-wilayah yang bahkan tidak pernah diketahui keberadaannya oleh orang biasa.</p>\n\n        <p>Dan sekarang, tempat itu hanya dihuni oleh seorang gadis bernama Ilaria.</p>\n\n        <p>Gadis itu berdiri di depan jendela lantai dua, memandangi kapal-kapal yang bergerak perlahan meninggalkan pelabuhan. Rambut cokelat gelapnya tergerai hingga bahu, beberapa helainya menempel di pipi akibat udara lembap. Di tangannya terdapat secangkir teh yang sudah kehilangan kehangatannya.</p>\n\n        <p>Sudah tujuh tahun sejak ayahnya menghilang.</p>\n\n        <p>Tujuh tahun tanpa kabar. Tanpa jasad. Tanpa satu pun petunjuk yang dapat menjelaskan ke mana lelaki itu pergi.</p>\n\n        <p>Bagi sebagian orang, kehilangan selama itu berarti seseorang harus belajar melupakan.</p>\n\n        <p>Namun, bagi Ilaria, melupakan bukanlah sesuatu yang mudah dilakukan ketika setiap sudut rumah masih menyimpan jejak orang yang telah pergi.</p>\n\n        <p>Meja kayu di dekat jendela masih memiliki bekas goresan kompas milik ayahnya. Rak-rak buku masih dipenuhi jurnal perjalanan. Bahkan aroma tinta dan kulit tua yang melekat pada ruangan itu terkadang membuatnya merasa bahwa ayahnya baru saja meninggalkan meja untuk mengambil sesuatu di dapur.</p>\n\n        <p>\"Ilaria!\"</p>\n\n        <p>Suara seorang perempuan tua terdengar dari lantai bawah.</p>\n\n        <p>Gadis itu tersentak kecil.</p>\n\n        <p>\"Ya, Nyonya Elsen?\"</p>\n\n        <p>\"Kalau kau sudah selesai melamun, tolong periksa kiriman dari balai kota. Ada beberapa peta yang harus diselesaikan sebelum sore.\"</p>\n\n        <p>Ilaria meletakkan cangkirnya.</p>\n\n        <p>\"Baik!\"</p>\n\n        <p>Ia berjalan menuju tangga, melewati dinding yang dipenuhi bingkai peta. Beberapa di antaranya menggambarkan wilayah kerajaan Vharen, pegunungan sebelah timur, hingga gugusan pulau kecil di selatan.</p>\n\n        <p>Namun, ada satu bingkai kosong yang selalu menarik perhatiannya.</p>\n\n        <p>Bingkai itu berada tepat di tengah dinding utama.</p>\n\n        <p>Dahulu, di sanalah peta terbesar milik ayahnya tergantung.</p>\n\n        <p>Peta wilayah utara.</p>\n\n        <p>Peta yang belum pernah selesai.</p>\n\n        <p>\"Surat untukmu.\"</p>\n\n        <p>Nyonya Elsen meletakkan sebuah amplop di atas meja.</p>\n\n        <p>Perempuan itu sudah berusia enam puluh tahun. Rambut putihnya selalu disanggul rapi dan suaranya memiliki ketegasan yang terkadang membuat para pelanggan enggan bertanya terlalu banyak.</p>\n\n        <p>Ia bukan keluarga Ilaria. Namun, sejak kepergian ayahnya, perempuan itulah yang membantu menjaga biro kartografi tersebut.</p>\n\n        <p>Ilaria mengambil amplop itu.</p>\n\n        <p>Tidak ada nama pengirim. Hanya lambang kerajaan berupa seekor burung bersayap tiga yang tercetak di bagian depan.</p>\n\n        <p>\"Balai kartografi kerajaan?\" tanyanya.</p>\n\n        <p>Nyonya Elsen mengangguk.</p>\n\n        <p>\"Sepertinya mereka membutuhkan salinan peta jalur perdagangan.\"</p>\n\n        <p>Ilaria membuka amplop itu dan membaca isinya sekilas.</p>\n\n        <p>Benar saja.</p>\n\n        <p>Sebuah pesanan biasa, sesuatu yang sudah berkali-kali ia kerjakan sejak mengambil alih pekerjaan ayahnya.</p>\n\n        <p>Namun, sebelum memasukkan surat tersebut ke laci, ia melihat sesuatu yang membuat gerakannya terhenti.</p>\n\n        <p>Di bagian belakang amplop terdapat tulisan kecil dengan tinta biru.</p>\n\n        <p>Tulisan tangan yang sangat dikenalnya.</p>\n\n        <p class=\"chapter-note\">Jangan biarkan mereka menemukan peta itu.</p>\n\n        <p>Ilaria membeku.</p>\n\n        <p>Cangkir yang baru saja hendak diambilnya terlepas dari tangan.</p>\n\n        <p>Prang!</p>\n\n        <p>Pecahan keramik berserakan di lantai.</p>\n\n        <p>\"Ada apa?\" Nyonya Elsen segera menghampirinya.</p>\n\n        <p>Ilaria tidak menjawab.</p>\n\n        <p>Matanya terpaku pada tulisan di belakang amplop itu. Ia mengenali setiap bentuk hurufnya. Cara huruf 'J' melengkung ke bawah, tekanan pena yang semakin tebal di ujung kalimat, hingga jarak antarkata yang tidak pernah benar-benar teratur.</p>\n\n        <p>Itu tulisan ayahnya.</p>\n\n        <p>\"Ilaria?\"</p>\n\n        <p>Perempuan tua itu menyentuh bahunya.</p>\n\n        <p>\"Di mana kau mendapatkan ini?\" tanya Ilaria dengan suara bergetar.</p>\n\n        <p>\"Amplop itu diantar seorang kurir pagi tadi.\"</p>\n\n        <p>\"Siapa kurirnya?\"</p>\n\n        <p>\"Aku tidak tahu. Dia hanya meninggalkannya di depan pintu.\"</p>\n\n        <p>Ilaria membalik amplop itu berkali-kali, berharap menemukan sesuatu yang lain. Nama. Alamat. Tanda pengenal. Apa pun.</p>\n\n        <p>Tetapi tidak ada.</p>\n\n        <p>Hanya sebuah kalimat yang mungkin telah menunggu selama bertahun-tahun untuk sampai ke tangannya.</p>\n\n        <p>\"Ini tulisan ayahku,\" bisiknya.</p>\n\n        <p>Wajah Nyonya Elsen berubah.</p>\n\n        <p>Ia memandang tulisan tersebut cukup lama sebelum akhirnya menghela napas.</p>\n\n        <p>\"Ilaria, mungkin kau salah melihat.\"</p>\n\n        <p>\"Aku tidak mungkin salah.\"</p>\n\n        <p>\"Sudah tujuh tahun.\"</p>\n\n        <p>\"Justru karena itu aku tahu.\"</p>\n\n        <p>Suasana mendadak hening.</p>\n\n        <p>Ilaria menggenggam amplop tersebut erat-erat.</p>\n\n        <p>\"Ada yang harus kucari.\"</p>\n\n        <p>Tanpa menunggu jawaban, ia berlari menuju tangga.</p>\n\n        <p>Kamar kerja ayahnya berada di bagian paling belakang lantai dua.</p>\n\n        <p>Ruangan itu jarang dibuka. Sebagian besar barang di dalamnya masih dibiarkan sebagaimana terakhir kali lelaki itu menggunakannya.</p>\n\n        <p>Debu menutupi permukaan meja. Sebuah lampu minyak berdiri di sudut ruangan, bersebelahan dengan kotak peralatan yang berisi jangka, penggaris kuningan, kompas, dan pena khusus untuk menggambar garis lintang.</p>\n\n        <p>Ilaria menutup pintu.</p>\n\n        <p>Ia mulai menggeledah laci-laci meja.</p>\n\n        <p>Buku catatan dibuka satu per satu. Kertas-kertas dipindahkan. Kotak kayu diperiksa. Bahkan bagian bawah meja pun tak luput dari perhatiannya.</p>\n\n        <p>Tidak ada apa-apa.</p>\n\n        <p>\"Ayo, Ayah...\" gumamnya.</p>\n\n        <p>Ia menarik napas panjang.</p>\n\n        <p>Selama tujuh tahun, ia sudah berkali-kali mencoba memahami kepergian ayahnya. Beberapa orang mengatakan bahwa lelaki itu tersesat dalam perjalanan menuju wilayah utara. Ada pula yang percaya bahwa ia sengaja melarikan diri setelah mengetahui sesuatu yang tidak seharusnya diketahui.</p>\n\n        <p>Namun, tidak pernah ada bukti.</p>\n\n        <p>Dan tidak pernah ada penjelasan.</p>\n\n        <p>Ilaria mengusap wajahnya, lalu kembali memeriksa rak buku di dekat dinding.</p>\n\n        <p>Saat menarik sebuah jurnal tua, ia mendengar suara ketukan kecil.</p>\n\n        <p>Tok.</p>\n\n        <p>Ia berhenti.</p>\n\n        <p>Tok.</p>\n\n        <p>Suara itu berasal dari balik rak.</p>\n\n        <p>Ilaria mengerutkan kening. Ia meletakkan jurnal, kemudian mencoba menggeser rak tersebut. Awalnya tidak bergerak. Namun, setelah menarik tuas kecil berbentuk kompas di sisi kanan, terdengar bunyi mekanis dari dalam dinding.</p>\n\n        <p>Krek.</p>\n\n        <p>Sebuah bagian kayu terbuka perlahan.</p>\n\n        <p>Di baliknya terdapat ruang kecil yang sebelumnya tidak pernah ia ketahui.</p>\n\n        <p>Ilaria mengambil lampu minyak dan mengarahkannya ke dalam.</p>\n\n        <p>Di sana tergeletak sebuah tabung logam berwarna kehitaman.</p>\n\n        <p>Ia mengambilnya dengan hati-hati.</p>\n\n        <p>Tutup tabung itu terkunci, tetapi sebuah simbol terukir pada permukaannya. Simbol berupa lingkaran dengan empat garis yang saling berpotongan.</p>\n\n        <p>Ilaria mengenalinya.</p>\n\n        <p>Itu adalah lambang pribadi ayahnya.</p>\n\n        <p>Dengan tangan gemetar, ia membuka tabung tersebut.</p>\n\n        <p>Di dalamnya terdapat beberapa lembar kertas yang dilipat rapi, sebuah kompas tua, dan sebuah amplop kecil.</p>\n\n        <p>Ilaria mengambil amplop itu terlebih dahulu.</p>\n\n        <p>Tulisan di bagian depannya hanya terdiri dari dua kata.</p>\n\n        <p>Untuk Ilaria.</p>\n\n        <p>Ia duduk di kursi terdekat.</p>\n\n        <p>Lalu membuka surat itu.</p>\n\n        <div class=\"chapter-letter\">\n          <p>Putriku,</p>\n\n          <p>Jika surat ini sampai ke tanganmu, berarti sesuatu telah berubah.</p>\n\n          <p>Ada banyak hal yang tidak sempat Ayah ceritakan kepadamu. Bukan karena Ayah tidak mempercayaimu, tetapi karena ada hal-hal yang lebih aman jika tetap tersembunyi.</p>\n\n          <p>Peta yang Ayah gambar bukanlah peta biasa.</p>\n\n          <p>Jangan pernah menyerahkannya kepada kerajaan. Jangan percaya kepada siapa pun yang mengaku mengetahui jalan menuju wilayah utara.</p>\n\n          <p>Dan yang terpenting, jangan pernah mengikuti garis yang muncul ketika hujan pertama turun.</p>\n\n          <p>Maafkan Ayah karena meninggalkanmu dengan begitu banyak pertanyaan.</p>\n\n          <p>Jika suatu hari kau menemukan jalan itu, ingatlah satu hal:</p>\n\n          <p>Tidak semua yang hilang ingin ditemukan.</p>\n\n          <p class=\"letter-signature\">— Ayah.</p>\n        </div>\n\n        <p>Ilaria membaca surat itu berulang kali.</p>\n\n        <p>Ada sesuatu yang terasa tidak masuk akal.</p>\n\n        <p>Ayahnya memperingatkan agar ia tidak mengikuti sebuah garis yang muncul ketika hujan pertama turun. Tetapi bagaimana mungkin sebuah garis pada peta bisa berubah hanya karena hujan?</p>\n\n        <p>Ia membuka lembaran kertas lain dari tabung logam.</p>\n\n        <p>Sebuah peta.</p>\n\n        <p>Kertasnya berwarna kekuningan dengan beberapa bagian yang mulai rapuh. Garis-garis pantai, sungai, dan pegunungan digambar menggunakan tinta hitam. Di sisi kanan terdapat catatan kecil berisi angka dan simbol yang sulit dimengerti.</p>\n\n        <p>Namun, bagian paling menarik terletak di tengah peta.</p>\n\n        <p>Sebuah wilayah kosong.</p>\n\n        <p>Tidak ada nama kota. Tidak ada jalur perdagangan. Bahkan tidak ada tanda penunjuk arah.</p>\n\n        <p>Hanya sebuah lingkaran besar yang digambar mengelilingi ruang kosong tersebut.</p>\n\n        <p>Di bagian bawahnya tertulis:</p>\n\n        <p>VAELORIA.</p>\n\n        <p>Ilaria mendekatkan lampu minyak.</p>\n\n        <p>Nama itu terasa asing.</p>\n\n        <p>Ia belum pernah mendengar kota, kerajaan, ataupun wilayah dengan nama tersebut.</p>\n\n        <p>Namun, ada satu hal lain yang membuatnya terdiam.</p>\n\n        <p>Di tepi bawah peta terdapat tulisan tangan yang sama dengan tulisan pada amplop.</p>\n\n        <p class=\"chapter-note\">Ketika musim gugur menyentuh tanah, jalan akan kembali terbuka.</p>\n\n        <p>Ilaria mengangkat wajahnya.</p>\n\n        <p>Di luar jendela, hujan masih turun.</p>\n\n        <p>Dan tanpa disadarinya, satu tetes air dari atap yang bocor jatuh tepat di permukaan peta.</p>\n\n        <p>Sssst...</p>\n\n        <p>Ilaria tersentak.</p>\n\n        <p>Tinta yang sebelumnya mengering mulai berubah warna.</p>\n\n        <p>Garis tipis berwarna kebiruan perlahan muncul di atas kertas, bergerak melintasi wilayah kosong yang sebelumnya tidak memiliki penanda apa pun.</p>\n\n        <p>Garis itu berkelok melewati pegunungan, menyusuri lembah, kemudian berhenti tepat di tengah lingkaran besar.</p>\n\n        <p>Ilaria menahan napas.</p>\n\n        <p>\"Itu... tidak mungkin.\"</p>\n\n        <p>Ia mendekatkan wajahnya.</p>\n\n        <p>Garis tersebut terus memanjang sedikit demi sedikit, membentuk sebuah jalur yang sebelumnya tidak pernah ada.</p>\n\n        <p>Lalu muncul sebuah tulisan kecil di ujungnya.</p>\n\n        <p>Bukan tulisan yang biasa digunakan dalam peta kerajaan.</p>\n\n        <p>Bentuk hurufnya berbeda.</p>\n\n        <p>Namun, anehnya, Ilaria bisa membacanya.</p>\n\n        <p class=\"chapter-note\">Pulanglah, Ilaria.</p>\n\n        <p>Jantungnya seketika berdetak lebih cepat.</p>\n\n        <p>Ia menjatuhkan kompas tua yang sejak tadi dipegangnya.</p>\n\n        <p>Benda itu membentur meja, berputar beberapa kali, kemudian berhenti.</p>\n\n        <p>Jarumnya tidak menunjuk ke utara.</p>\n\n        <p>Jarum itu menunjuk tepat ke arah pintu kamar.</p>\n\n        <p>Pada saat yang sama, terdengar tiga ketukan dari lantai bawah.</p>\n\n        <p>Tok.</p>\n\n        <p>Tok.</p>\n\n        <p>Tok.</p>\n\n        <p>Ilaria menoleh.</p>\n\n        <p>Tidak ada seorang pun di rumah yang seharusnya datang pada jam seperti ini.</p>\n\n        <p>\"Nyona Elsen?\" panggilnya.</p>\n\n        <p>Tidak ada jawaban.</p>\n\n        <p>Kemudian terdengar suara laki-laki dari balik pintu utama.</p>\n\n        <p>\"Permisi. Apakah ini kediaman keluarga Arven?\"</p>\n\n        <p>Suara itu terdengar berat dan tenang.</p>\n\n        <p>Ilaria bergegas menggulung peta tersebut dan menyimpannya kembali ke dalam tabung logam.</p>\n\n        <p>Ia kemudian turun dengan hati-hati.</p>\n\n        <p>Nyonya Elsen sudah berdiri di dekat pintu. Wajahnya terlihat tegang ketika memandang seseorang yang berada di luar.</p>\n\n        <p>Seorang pria mengenakan mantel panjang berwarna abu-abu gelap. Sepasang sepatu botnya basah oleh hujan, sementara sebuah tas kulit menggantung di bahu kirinya.</p>\n\n        <p>Di pinggangnya terdapat pisau pendek dengan gagang berukir sederhana.</p>\n\n        <p>Pria itu menatap Ilaria ketika gadis tersebut muncul dari tangga.</p>\n\n        <p>\"Apakah kau Ilaria Arven?\" tanyanya.</p>\n\n        <p>\"Siapa yang mencari?\"</p>\n\n        <p>Pria itu tidak langsung menjawab.</p>\n\n        <p>Ia justru mengamati wajah gadis tersebut, seolah sedang memastikan bahwa orang yang berdiri di hadapannya benar-benar seseorang yang selama ini ia cari.</p>\n\n        <p>\"Namaku Kael,\" katanya akhirnya. \"Aku datang karena ayahmu.\"</p>\n\n        <p>Ilaria menggenggam pegangan tangga.</p>\n\n        <p>\"Apa yang kau ketahui tentang ayahku?\"</p>\n\n        <p>Kael mengalihkan pandangannya ke arah jendela yang dipenuhi air hujan.</p>\n\n        <p>\"Aku tahu di mana dia terakhir terlihat.\"</p>\n\n        <p>\"Di mana?\"</p>\n\n        <p>\"Wilayah utara.\"</p>\n\n        <p>Ilaria terdiam.</p>\n\n        <p>Selama beberapa saat, hanya suara hujan yang terdengar di antara mereka.</p>\n\n        <p>Kemudian Kael kembali berbicara.</p>\n\n        <p>\"Tapi sebelum kau bertanya lebih banyak, ada sesuatu yang harus kau ketahui.\"</p>\n\n        <p>Ia membuka tas kulitnya dan mengeluarkan sebuah potongan kertas tua.</p>\n\n        <p>Di atasnya terdapat gambar simbol yang sama seperti yang terukir pada tabung logam milik ayah Ilaria.</p>\n\n        <p>\"Orang-orang yang mencari ayahmu belum berhenti,\" katanya pelan. \"Dan mereka sekarang sedang mencari sesuatu yang mungkin sudah berada di tanganmu.\"</p>\n\n        <p>Wajah Ilaria memucat.</p>\n\n        <p>\"Apa maksudmu?\"</p>\n\n        <p>Kael menatapnya lurus.</p>\n\n        <p>\"Petanya.\"</p>\n\n        <p>Sebelum Ilaria sempat menjawab, sebuah suara keras terdengar dari luar.</p>\n\n        <p>KLANG!</p>\n\n        <p>Pintu belakang rumah terbuka paksa.</p>\n\n        <p>Nyonya Elsen menoleh dengan terkejut.</p>\n\n        <p>Kael segera menarik pisau dari pinggangnya.</p>\n\n        <p>\"Matikan semua lampu,\" perintahnya.</p>\n\n        <p>\"Apa?\"</p>\n\n        <p>\"Sekarang!\"</p>\n\n        <p>Dari balik jendela, terlihat beberapa bayangan bergerak di tengah hujan.</p>\n\n        <p>Mereka mengenakan mantel hitam. Wajah mereka tertutup tudung, dan salah seorang di antaranya membawa sebuah lentera dengan cahaya kebiruan.</p>\n\n        <p>Ilaria mundur selangkah.</p>\n\n        <p>Salah satu orang itu mengangkat kepalanya.</p>\n\n        <p>Tatapan mereka bertemu melalui kaca jendela.</p>\n\n        <p>Kemudian terdengar suara laki-laki dari luar rumah.</p>\n\n        <p>\"Kami tahu kau menyimpan sesuatu milik Arven.\"</p>\n\n        <p>Kael berdiri di depan Ilaria.</p>\n\n        <p>\"Jangan bergerak,\" bisiknya.</p>\n\n        <p>Pria bertudung itu mengetuk kaca sebanyak tiga kali.</p>\n\n        <p>Tok.</p>\n\n        <p>Tok.</p>\n\n        <p>Tok.</p>\n\n        <p>\"Serahkan petanya, dan kami tidak akan menyakitimu.\"</p>\n\n        <p>Ilaria merasakan tangannya mulai gemetar.</p>\n\n        <p>Di balik pakaiannya, ia masih bisa merasakan keberadaan tabung logam yang baru saja disembunyikannya.</p>\n\n        <p>Peta yang selama tujuh tahun dianggap hilang kini telah ditemukan.</p>\n\n        <p>Dan ternyata, bukan hanya dirinya yang mencarinya.</p>\n\n        <p class=\"chapter-continued\">Bersambung...</p>"
+    },
+    {
+      "id": "putri-bab-2",
+      "novelId": "putri-sang-kartografer",
+      "number": 2,
+      "title": "Hujan Pertama",
+      "date": "2026-10-15",
+      "published": false,
+      "content": "<blockquote class=\"chapter-epigraph\">\n          <p>“Hujan tidak membuka jalan. Ia hanya menghapus debu yang selama ini menyembunyikannya.”</p>\n        </blockquote>\n\n        <p class=\"chapter-opening\">Pintu belakang rumah terbuka tepat saat lampu di ruang depan padam.</p>\n\n        <p>Ilaria tidak sempat berteriak.</p>\n\n        <p>Kael bergerak lebih cepat dari yang ia sangka. Lengan gadis itu ditarik, tubuhnya didorong ke balik meja kayu, dan sebuah kursi dilempar ke arah pintu dapur.</p>\n\n        <p>Kayu menghantam kayu.</p>\n\n        <p>Dari kegelapan luar terdengar suara langkah basah menginjak lantai.</p>\n\n        <p>“Jangan biarkan mereka melihat petanya,” bisik Kael.</p>\n\n        <p>Ilaria meraih tabung logam di balik mantelnya. Benda itu dingin, tetapi bobotnya terasa jauh lebih berat daripada sebelumnya.</p>\n\n        <p>Nyonya Elsen sudah berdiri di ambang dapur. Perempuan tua itu memegang pemukul api tembaga dengan kedua tangan. Wajahnya pucat, namun matanya tidak menunjukkan rasa takut.</p>\n\n        <p>“Ke pintu samping,” katanya singkat. “Sekarang.”</p>\n\n        <p>“Nyonya—”</p>\n\n        <p>“Aku sudah menjaga rumah ini lebih lama daripada kau hidup di dalamnya, Ilaria. Pergi.”</p>\n\n        <p>Kael meraih gagang pintu samping dan membukanya.</p>\n\n        <p>Hujan langsung menyambut mereka.</p>\n\n        <p>Ilaria berlari keluar tepat ketika sesuatu menghantam meja di belakangnya. Ia tidak menoleh. Kakinya melompati selokan sempit, menembus tirai air, lalu masuk ke gang yang diapit dua rumah batu.</p>\n\n        <p>Kael berada di sisinya, mantel abu-abunya basah dan menempel di punggung.</p>\n\n        <p>“Mereka melihat kita,” katanya.</p>\n\n        <p>Ilaria mendengar suara langkah di belakang. Lebih dari satu orang. Lebih dari tiga.</p>\n\n        <p>Lentera biru itu muncul di ujung gang, mengambang seperti mata yang tidak berkedip.</p>\n\n        <p>“Ke kiri,” perintah Kael.</p>\n\n        <p>Mereka berbelok ke jalan sempit yang menurun ke arah pelabuhan. Bau garam dan ikan busuk memenuhi udara. Beberapa lampu rumah masih menyala di balik jendela, tetapi tidak ada seorang pun yang membuka pintu.</p>\n\n        <p>Penduduk Vharen sudah terbiasa tidak melihat apa yang tidak ingin mereka lihat.</p>\n\n        <p>Di depan, sebuah gerobak kayu melintang di tengah jalan. Kael mendorongnya ke samping, lalu menarik Ilaria ke balik deretan tong ikan.</p>\n\n        <p>Mereka berhenti.</p>\n\n        <p>Napas Ilaria memburu. Air hujan menetes dari ujung rambutnya, bercampur keringat yang membasahi pelipis.</p>\n\n        <p>“Siapa mereka?” tanyanya.</p>\n\n        <p>Kael mengintip dari celah tong. Lentera biru itu bergerak melewati gang, lalu berhenti.</p>\n\n        <p>“Orang-orang yang bekerja untuk Balai Kartografi Kerajaan,” jawabnya. “Atau setidaknya, untuk seseorang di dalamnya.”</p>\n\n        <p>“Kenapa mereka mengejar peta ayahku?”</p>\n\n        <p>Kael menatapnya untuk sesaat.</p>\n\n        <p>“Karena peta itu bukan hanya menunjukkan tempat. Ia bisa mengubah jalan menuju tempat tersebut.”</p>\n\n        <p>Ilaria mengerutkan kening. “Aku tidak mengerti.”</p>\n\n        <p>“Ayahmu menemukan sesuatu di utara. Sesuatu yang seharusnya tidak ada.” Kael menurunkan suaranya. “Kerajaan mengirim tiga ekspedisi untuk mencarinya. Tidak ada yang kembali. Lalu ayahmu menghilang, dan petanya ikut hilang.”</p>\n\n        <p>“Kau tahu tentang ekspedisi itu?”</p>\n\n        <p>Kael tidak menjawab langsung. Ia membuka lengan mantelnya, memperlihatkan bekas luka panjang yang membentang dari pergelangan tangan hingga siku.</p>\n\n        <p>“Aku ikut dalam ekspedisi terakhir,” katanya. “Ayahmu menyelamatkan hidupku. Aku berutang padanya.”</p>\n\n        <p>Ilaria menatap luka itu.</p>\n\n        <p>Di luar, lentera biru mulai menjauh. Kael menunggu sampai cahayanya hilang di balik tikungan, lalu menarik Ilaria bangkit.</p>\n\n        <p>“Kita tidak bisa kembali ke rumah malam ini. Mereka akan menunggu.”</p>\n\n        <p>“Nyonya Elsen—”</p>\n\n        <p>“Dia tahu apa yang harus dilakukan.”</p>\n\n        <p>Ilaria ingin membantah, tetapi Kael sudah bergerak menuju ujung jalan. Dengan berat hati, ia mengikuti.</p>\n\n        <p>Mereka menyusuri lorong-lorong yang tidak pernah tercatat di peta kota. Kael berjalan seperti orang yang telah menghafal setiap sudut Vharen. Ia melewati gudang-gudang tua, menembus halaman belakang yang dipenuhi jemuran, lalu berhenti di depan sebuah bangunan rendah yang hampir menempel ke dinding benteng kota.</p>\n\n        <p>Di atas pintunya terdapat ukiran kompas yang sudah nyaris hilang dimakan cuaca.</p>\n\n        <p>“Gudang kartografi lama,” kata Kael. “Tidak digunakan sejak biro ayahmu pindah.”</p>\n\n        <p>Ia mendorong pintu hingga terbuka.</p>\n\n        <p>Udara di dalam berbau debu, kertas lapuk, dan minyak kayu. Cahaya dari jalan hanya cukup untuk memperlihatkan tumpukan rak kosong serta meja gambar yang ditutupi kain putih.</p>\n\n        <p>Kael menutup pintu, lalu menyalakan lampu kecil dari dalam tasnya.</p>\n\n        <p>Ilaria meletakkan tabung logam di atas meja. Tangannya masih gemetar ketika ia membuka tutupnya.</p>\n\n        <p>Peta itu basah di beberapa bagian.</p>\n\n        <p>Tetapi ketika Kael mengarahkan lampu ke permukaannya, garis biru yang sebelumnya muncul kembali bercahaya.</p>\n\n        <p>Kali ini, garis itu tidak berhenti di tengah lingkaran.</p>\n\n        <p>Ia terus memanjang, membelok tajam ke arah barat, lalu berhenti di sebuah titik kecil yang tidak jauh dari pesisir.</p>\n\n        <p>Di samping titik itu, huruf-huruf tua perlahan terbentuk.</p>\n\n        <p>Ilaria mendekat.</p>\n\n        <p>“Menara Arven,” bacanya.</p>\n\n        <p>Kael mengangkat wajah.</p>\n\n        <p>“Itu mercusuar tua di tanjung utara,” katanya. “Sudah runtuh sebagian. Tidak ada yang tinggal di sana.”</p>\n\n        <p>“Ayahku pernah membawa aku ke sana ketika aku kecil.” Ilaria menelusuri garis peta dengan ujung jari. “Dia bilang menara itu menyimpan bayangan laut.”</p>\n\n        <p>Kael terdiam.</p>\n\n        <p>“Kau ingat jalannya?”</p>\n\n        <p>“Aku ingat bau garam dan tangga yang berputar.” Ia mengangkat bahu. “Tapi mungkin aku bisa menemukannya.”</p>\n\n        <p>Di luar, hujan kembali menghantam atap. Suara itu memenuhi ruangan seperti detak jantung yang tidak teratur.</p>\n\n        <p>Ilaria menatap peta itu lebih lama. Untuk pertama kalinya setelah tujuh tahun, ia merasa ayahnya tidak benar-benar pergi. Lelaki itu meninggalkan sesuatu. Sebuah jalan. Sebuah pesan. Sebuah kemungkinan.</p>\n\n        <p>Namun, di balik rasa haru itu, ada hal lain yang mulai tumbuh.</p>\n\n        <p>Rasa takut.</p>\n\n        <p>“Kael,” katanya pelan. “Kalau ayahku masih hidup, mengapa dia tidak pulang?”</p>\n\n        <p>Kael tidak langsung menjawab. Ia memandang garis biru di peta, lalu ke arah jendela yang diguyur hujan.</p>\n\n        <p>“Mungkin dia tidak bisa,” katanya akhirnya. “Atau mungkin dia sedang menunggu seseorang untuk datang.”</p>\n\n        <p>Ilaria menggulung peta itu.</p>\n\n        <p>“Kalau begitu, kita pergi ke Menara Arven.”</p>\n\n        <p>Kael mengangguk.</p>\n\n        <p>“Sebelum fajar. Setelah itu, gerbang kota akan dijaga lebih ketat.”</p>\n\n        <p>Ia berjalan ke sudut ruangan dan mengangkat sebuah papan kayu dari lantai. Di bawahnya terdapat rongga sempit berisi dua mantel tebal, seutas tali, dan sebuah kompas kuningan.</p>\n\n        <p>Kompas itu mirip dengan yang ada di dalam tabung ayah Ilaria.</p>\n\n        <p>“Kau menyimpan ini di sini?” tanya Ilaria.</p>\n\n        <p>“Ayahmu yang menyimpannya.” Kael menyerahkan kompas itu. “Dia bilang, suatu hari kau mungkin membutuhkannya.”</p>\n\n        <p>Ilaria menerima benda tersebut.</p>\n\n        <p>Jarum kompas berputar pelan, lalu berhenti.</p>\n\n        <p>Tidak mengarah ke utara.</p>\n\n        <p>Jarum itu menunjuk ke arah peta yang baru saja ia gulung.</p>\n\n        <p>Ilaria mengangkat wajah.</p>\n\n        <p>“Ini tidak mungkin,” bisiknya.</p>\n\n        <p>Kael sudah berdiri di dekat pintu, mengenakan mantelnya.</p>\n\n        <p>“Selamat datang di dunia yang digambar ayahmu,” katanya.</p>\n\n        <p>Ia membuka pintu.</p>\n\n        <p>Angin dan hujan menerpa wajah Ilaria.</p>\n\n        <p>Di kejauhan, lonceng kota berdentang tiga kali.</p>\n\n        <p>Dan di antara suara hujan, terdengar sesuatu yang lain.</p>\n\n        <p>Langkah kaki.</p>\n\n        <p>Banyak langkah kaki.</p>\n\n        <p>Kael mengumpat pelan.</p>\n\n        <p>“Mereka menemukan kita.”</p>\n\n        <p>Ilaria menggenggam kompas di satu tangan dan tabung peta di tangan lainnya.</p>\n\n        <p>“Ke mana?”</p>\n\n        <p>Kael menatap jalan gelap di depan mereka, lalu ke arah benteng kota yang menjulang di sisi kanan.</p>\n\n        <p>“Ke atas,” katanya.</p>\n\n        <p>Mereka berlari menembus hujan.</p>\n\n        <p class=\"chapter-continued\">Bersambung...</p>"
+    },
+    {
+      "id": "putri-bab-3",
+      "novelId": "putri-sang-kartografer",
+      "number": 3,
+      "title": "Kota yang Tidak Bernama",
+      "date": "2026-10-19",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-4",
+      "novelId": "putri-sang-kartografer",
+      "number": 4,
+      "title": "Jejak di Tepi Dermaga",
+      "date": "2026-10-22",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-5",
+      "novelId": "putri-sang-kartografer",
+      "number": 5,
+      "title": "Pemandu Bermata Kelabu",
+      "date": "2026-10-26",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-6",
+      "novelId": "putri-sang-kartografer",
+      "number": 6,
+      "title": "Surat dari Ayah",
+      "date": "2026-10-29",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-7",
+      "novelId": "putri-sang-kartografer",
+      "number": 7,
+      "title": "Garis yang Tidak Pernah Ada",
+      "date": "2026-11-02",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-8",
+      "novelId": "putri-sang-kartografer",
+      "number": 8,
+      "title": "Lembah Bisu",
+      "date": "2026-11-04",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-9",
+      "novelId": "putri-sang-kartografer",
+      "number": 9,
+      "title": "Kompas yang Bernyanyi",
+      "date": "2026-11-06",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-10",
+      "novelId": "putri-sang-kartografer",
+      "number": 10,
+      "title": "Di Bawah Langit Utara",
+      "date": "2026-11-07",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-11",
+      "novelId": "putri-sang-kartografer",
+      "number": 11,
+      "title": "Pintu di Ujung Peta",
+      "date": "2026-11-08",
+      "published": false,
+      "content": ""
+    },
+    {
+      "id": "putri-bab-12",
+      "novelId": "putri-sang-kartografer",
+      "number": 12,
+      "title": "Putri Sang Kartografer",
+      "date": "2026-11-09",
+      "published": false,
+      "content": ""
+    }
+  ],
+  "home": {
+    "spotlight": "orbit-kesunyian",
+    "latest": [
+      "oke",
+      "putri-sang-kartografer",
+      "orbit-kesunyian",
+      "surat-surat-dari-pesisir",
+      "rumah-di-bukit-lentera",
+      "meja-hari-minggu"
+    ],
+    "trending": [
+      "putri-sang-kartografer",
+      "surat-surat-dari-pesisir",
+      "garam-dan-kayu-manis"
+    ]
+  },
+  "submissions": [
+    {
+      "id": "sub-3",
+      "name": "Sekar Ayu",
+      "email": "sekar.ayu@email.com",
+      "phone": "0821 9988 7766",
+      "novelTitle": "Sepuluh Menit Sebelum Pulang",
+      "chapter": "Bab 1 - Lampu Kuning",
+      "message": "Ini kumpulan cerita pendek tentang pekerja lintas kota. Saya lampirkan satu bab pembuka untuk dinilai.",
+      "date": "2026-11-07T11:42:00",
+      "status": "dibaca"
+    }
+  ],
+  "comments": [
+    {
+      "id": "com-1",
+      "novelId": "putri-sang-kartografer",
+      "name": "Klara Mendhuta",
+      "message": "Tinta yang bergerak sendiri di peta Liora benar-benar bikin merinding. Menunggu bab berikutnya rasanya lama sekali!",
+      "date": "2026-11-09T20:15:00"
+    },
+    {
+      "id": "com-2",
+      "novelId": "putri-sang-kartografer",
+      "name": "Dimas Arya",
+      "message": "Vharen terasa seperti kota yang benar-benar hidup. Tidak sabar mengetahui siapa yang mengirim gulungan peta itu.",
+      "date": "2026-11-08T14:32:00"
+    },
+    {
+      "id": "com-3",
+      "novelId": "putri-sang-kartografer",
+      "name": "Ratri Widyaningrum",
+      "message": "Bacaannya tenang tapi penuh teka-teki. Teori saya: jalur yang tak tercatat itu menuju rumah masa kecil ayahnya.",
+      "date": "2026-11-07T09:48:00"
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+.reading-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line);
+  background: rgba(247, 241, 230, 0.84);
+  backdrop-filter: blur(16px);
+}
+
+.reading-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 68px;
+  padding-block: 12px;
+}
+
+.reading-brand .brand-mark {
+  width: 30px;
+  height: 30px;
+}
+
+.reading-brand .brand-name {
+  font-size: 1.12rem;
+}
+
+.reading-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.reading-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.reading-back:hover {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.reading-back .icon,
+.chapter-btn .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.chapter-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(57, 35, 21, 0.04);
+}
+
+.chapter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.chapter-btn:hover {
+  color: var(--ink);
+  background: rgba(36, 28, 22, 0.06);
+}
+
+.chapter-btn--next {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.chapter-btn--next:hover {
+  background: var(--accent-deep);
+  color: var(--cream);
+}
+
+.chapter-btn.is-disabled {
+  color: var(--muted);
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.reading {
+  padding: clamp(42px, 7vw, 90px) 0 clamp(72px, 10vw, 120px);
+}
+
+.chapter {
+  width: min(calc(100% - 40px), 760px);
+  margin-inline: auto;
+}
+
+.chapter-header {
+  margin-bottom: clamp(34px, 4.5vw, 50px);
+  padding-bottom: clamp(30px, 4vw, 44px);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.chapter-series {
+  color: var(--accent-deep);
+  font-family: var(--font-sans);
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.chapter-author {
+  margin-top: 9px;
+  color: var(--muted);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.chapter-title {
+  margin-top: clamp(14px, 2.5vw, 22px);
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 5vw, 3.35rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.chapter-body {
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: clamp(1.06rem, 1.15vw, 1.16rem);
+  line-height: 1.95;
+}
+
+.chapter-body p {
+  margin: 0 0 1.4em;
+}
+
+.chapter-body p:last-child {
+  margin-bottom: 0;
+}
+
+.chapter-opening::first-letter {
+  float: left;
+  margin: 0.07em 0.11em 0 0;
+  color: var(--accent-deep);
+  font-size: 3.1em;
+  font-weight: 500;
+  line-height: 0.72;
+}
+
+.chapter-epigraph {
+  margin: 0 0 clamp(30px, 4vw, 44px);
+  padding: clamp(20px, 3vw, 28px) clamp(22px, 4vw, 34px);
+  border-left: 2px solid var(--accent);
+  background: rgba(251, 247, 239, 0.72);
+  color: var(--ink);
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.chapter-epigraph p {
+  margin: 0;
+}
+
+.chapter-note {
+  color: var(--accent-deep);
+  font-style: italic;
+}
+
+.chapter-letter {
+  margin: clamp(28px, 4vw, 40px) 0;
+  padding: clamp(24px, 4vw, 36px) clamp(22px, 4vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px rgba(57, 35, 21, 0.05);
+}
+
+.chapter-letter p {
+  margin-bottom: 1.2em;
+}
+
+.chapter-letter p:last-child {
+  margin-bottom: 0;
+}
+
+.chapter-letter .letter-signature {
+  margin-top: 1.6em;
+  color: var(--ink);
+  font-style: italic;
+  text-align: right;
+}
+
+.chapter-continued {
+  margin-top: 2em !important;
+  color: var(--accent-deep);
+  font-style: italic;
+  text-align: center;
+}
+
+.chapter-end {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: min(calc(100% - 40px), 760px);
+  margin: clamp(52px, 8vw, 84px) auto 0;
+  padding-top: clamp(28px, 4vw, 40px);
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 760px) {
+  .reading-bar {
+    position: static;
+  }
+
+  .reading-bar-inner {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .reading-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 520px) {
+  .reading-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .reading-back {
+    justify-content: center;
+  }
+
+  .chapter-controls {
+    justify-content: center;
+  }
+
+  .chapter-btn {
+    flex: 1;
+  }
+
+  .chapter-end {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chapter,
+  .chapter-end {
+    width: calc(100% - 32px);
+  }
+}

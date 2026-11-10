@@ -1,0 +1,210 @@
+.donate-hero {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(48px, 8vw, 94px) 0 clamp(26px, 4vw, 42px);
+  overflow: hidden;
+}
+
+.donate-hero::before {
+  content: "";
+  position: absolute;
+  top: -180px;
+  right: -120px;
+  z-index: -1;
+  width: clamp(320px, 42vw, 560px);
+  height: clamp(320px, 42vw, 560px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 190, 158, 0.34), transparent 66%);
+  pointer-events: none;
+}
+
+.donate-title {
+  margin-top: 16px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4.4rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.donate-title em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.donate-lead {
+  max-width: 62ch;
+  margin-top: 18px;
+  color: var(--ink-soft);
+  font-size: clamp(0.96rem, 1.1vw, 1.08rem);
+  line-height: 1.7;
+}
+
+.donate-lead + .donate-lead {
+  margin-top: 10px;
+}
+
+.donate-slogan {
+  margin-top: 22px;
+  color: var(--accent-deep);
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.donate-options {
+  padding: clamp(28px, 4vw, 52px) 0 clamp(8px, 2vw, 16px);
+}
+
+.donate-options-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.donate-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2.4vw, 30px);
+  margin-top: clamp(20px, 3vw, 32px);
+}
+
+.donate-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(24px, 3vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: clamp(20px, 2.4vw, 28px);
+  background: linear-gradient(180deg, rgba(251, 247, 239, 0.78), rgba(251, 247, 239, 0.4));
+  box-shadow: 0 18px 44px rgba(57, 35, 21, 0.07);
+}
+
+.donate-method {
+  color: var(--accent);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.donate-bank {
+  margin-top: 10px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.donate-number {
+  margin-top: 12px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.6vw, 2.05rem);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.donate-holder {
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.donate-btn {
+  min-height: 46px;
+  margin-top: 22px;
+  padding: 0 20px;
+  font-size: 0.8rem;
+}
+
+.donate-btn.is-copied {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.donate-btn.is-copied:hover {
+  transform: none;
+}
+
+.donate-copy-status {
+  min-height: 1.2em;
+  margin-top: 10px;
+  color: var(--accent-deep);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.donate-note {
+  margin-top: clamp(20px, 3vw, 30px);
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.donate-impact {
+  padding: clamp(44px, 6vw, 76px) 0 clamp(72px, 10vw, 128px);
+}
+
+.donate-impact-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.donate-impact-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2.4vw, 30px);
+  margin-top: clamp(20px, 3vw, 32px);
+  padding: 0;
+  list-style: none;
+}
+
+.donate-impact-list li {
+  padding: clamp(20px, 2.6vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: clamp(18px, 2vw, 24px);
+  background: rgba(251, 247, 239, 0.6);
+}
+
+.donate-impact-list h3 {
+  margin-bottom: 10px;
+  color: var(--ink);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.donate-impact-list p {
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .donate-grid,
+  .donate-impact-list {
+    grid-template-columns: 1fr;
+  }
+
+  .donate-card {
+    max-width: 520px;
+  }
+}

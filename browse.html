@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jelajahi Koleksi — Connvel</title>
+  <meta name="description" content="Telusuri katalog novel web Connvel — cerita fantasi, fiksi ilmiah, roman, misteri, dan potongan kehidupan yang dikurasi untuk pembaca yang mencari dunia berikutnya.">
+  <meta name="theme-color" content="#F6F0E5">
+  <meta property="og:title" content="Jelajahi Koleksi — Connvel">
+  <meta property="og:description" content="Telusuri katalog novel web Connvel — cerita yang dikurasi untuk pembaca yang mencari dunia berikutnya.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/sections.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/browse.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lompat ke konten</a>
+
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-spark" viewBox="0 0 24 24">
+      <path d="M12 1.8c.7 5.5 4.7 9.5 10.2 10.2-5.5.7-9.5 4.7-10.2 10.2C11.3 16.7 7.3 12.7 1.8 12 7.3 11.3 11.3 7.3 12 1.8Z"/>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M4.5 12h15M13.5 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+      <path d="M7 17 17 7M8 7h9v9"/>
+    </symbol>
+    <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+      <path d="M14.5 6 8.5 12l6 6"/>
+    </symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+      <path d="m9.5 6 6 6-6 6"/>
+    </symbol>
+    <symbol id="icon-bookmark" viewBox="0 0 24 24">
+      <path d="M6.5 4h11a1 1 0 0 1 1 1v15.5l-6.5-4.4-6.5 4.4V5a1 1 0 0 1 1-1Z"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="m5 12.5 4.5 4.5L19 7"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Connvel — beranda">
+          <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+            <rect width="36" height="36" rx="11" fill="currentColor"/>
+            <path d="M9.5 12.3c3.3-1.4 5.9-1.1 8.5 1 2.6-2.1 5.2-2.4 8.5-1v11.5c-3.3-1.2-5.9-.9-8.5 1.2-2.6-2.1-5.2-2.4-8.5-1.2V12.3Z" fill="#F7F1E6"/>
+            <path d="M18 13.2v11.4" stroke="#B45A3A" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        <span class="brand-name">Connvel<span class="brand-dot">.</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Utama">
+        <a class="nav-link" href="index.html">Beranda</a>
+        <a class="nav-link is-active" href="browse.html" aria-current="page">Jelajahi</a>
+        <a class="nav-link" href="novelis/ruang-tulis.html">Menulis</a>
+        <a class="nav-link" href="tentang/about.html">Tentang Connvel</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="login-link" href="#">Masuk</a>
+        <a class="btn btn-primary btn-small" href="index.html#community">
+          Daftar
+          <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+        </a>
+      </div>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="menu-label">Menu</span>
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
+    <nav class="mobile-nav" aria-label="Navigasi utama seluler">
+      <a href="index.html"><span>01</span>Beranda</a>
+      <a href="browse.html"><span>02</span>Jelajahi</a>
+      <a href="novelis/ruang-tulis.html"><span>03</span>Menulis</a>
+      <a href="tentang/about.html"><span>04</span>Tentang Connvel</a>
+    </nav>
+    <div class="mobile-menu-foot">
+      <div class="mobile-actions">
+        <a class="login-link" href="#">Masuk</a>
+        <a class="btn btn-primary" href="index.html#community">
+          Daftar
+          <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+        </a>
+      </div>
+      <p class="mobile-motto">Cerita yang menghubungkan dunia.</p>
+    </div>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <section class="browse-hero" aria-labelledby="browse-title">
+      <div class="container">
+        <p class="eyebrow" data-reveal>
+          <svg class="icon icon-spark" aria-hidden="true"><use href="#icon-spark"/></svg>
+          Katalog kurasi Connvel
+        </p>
+        <h1 class="browse-title" id="browse-title" data-reveal>Jelajahi <em>koleksi</em> cerita kami.</h1>
+        <p class="browse-lead" data-reveal>Dari kerajaan yang hilang dari peta hingga percakapan sunyi di meja makan, setiap cerita di Connvel dipilih dengan hati. Telusuri katalog, temukan genre yang paling membuatmu penasaran, lalu biarkan satu bab membawamu lebih jauh.</p>
+      </div>
+    </section>
+
+    <section class="browse-catalog" id="katalog" aria-labelledby="catalog-title">
+      <div class="container">
+        <h2 id="catalog-title" class="sr-only">Daftar novel</h2>
+
+        <div class="browse-toolbar" data-reveal>
+          <div class="browse-search">
+            <svg class="browse-search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m16.5 16.5 4 4"/>
+            </svg>
+            <label class="sr-only" for="browse-search">Cari judul atau penulis</label>
+            <input type="search" id="browse-search" name="search" placeholder="Cari judul atau penulis…" autocomplete="off">
+          </div>
+
+          <div class="browse-filters">
+            <label class="sr-only" for="browse-genre">Filter genre</label>
+            <span class="browse-select">
+              <select id="browse-genre">
+                <option value="all">Semua Genre</option>
+                <option value="fantasi">Fantasi</option>
+                <option value="fiksi-ilmiah">Fiksi Ilmiah</option>
+                <option value="roman">Roman</option>
+                <option value="misteri">Misteri</option>
+                <option value="potongan-kehidupan">Potongan Kehidupan</option>
+                <option value="sejarah">Sejarah</option>
+              </select>
+            </span>
+
+            <label class="sr-only" for="browse-sort">Urutkan cerita</label>
+            <span class="browse-select">
+              <select id="browse-sort">
+                <option value="populer">Terpopuler</option>
+                <option value="terbaru">Terbaru</option>
+                <option value="judul">Judul A–Z</option>
+              </select>
+            </span>
+          </div>
+        </div>
+
+        <p class="browse-count" id="browse-count" aria-live="polite">7 cerita</p>
+
+        <div class="browse-list" id="novel-list">
+          <article class="novel-row-item" data-reveal data-novel-id="putri-sang-kartografer" data-genre="fantasi" data-title="Putri Sang Kartografer" data-author="Alya Prameswari" data-chapters="24" data-popularity="128000" data-date="2026-10-24">
+            <a class="novel-cover" href="novel/putri-sang-kartografer.html" aria-label="Baca Putri Sang Kartografer">
+              <img src="assets/images/cover-cartographer.jpg" alt="Danau alpine biru kehijauan yang dikelilingi pegunungan bersalju saat senja" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Fantasi</p>
+              <h3 class="novel-title"><a href="novel/putri-sang-kartografer.html">Putri Sang Kartografer</a></h3>
+              <p class="book-author">oleh Alya Prameswari</p>
+              <p class="novel-synopsis">Di kota yang menghapus namanya sendiri dari peta, seorang pembuat peta menemukan garis menuju rumah yang tak pernah ada. Ia harus memilih antara melanjutkan warisan ayahnya atau menggambar dunia yang sepenuhnya baru.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">24 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status">Sedang Berjalan</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="novel/putri-sang-kartografer.html#daftar-bab">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="novel-row-item" data-reveal data-novel-id="orbit-kesunyian" data-genre="fiksi-ilmiah" data-title="Orbit Kesunyian" data-author="Kenji Arata" data-chapters="31" data-popularity="96000" data-date="2026-10-18">
+            <a class="novel-cover" href="#" aria-label="Baca Orbit Kesunyian">
+              <img src="assets/images/cover-orbit.jpg" alt="Langit malam penuh bintang yang memudar ke cakrawala ungu" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Fiksi Ilmiah</p>
+              <h3 class="novel-title"><a href="#">Orbit Kesunyian</a></h3>
+              <p class="book-author">oleh Kenji Arata</p>
+              <p class="novel-synopsis">Sepuluh tahun setelah stasiun terakhir kehilangan sinyal, seorang teknisi mendengar suara dari orbit yang seharusnya kosong. Pesan itu menyebut namanya, dan memintanya untuk kembali.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">31 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status">Sedang Berjalan</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="#">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="novel-row-item" data-reveal data-novel-id="surat-surat-dari-pesisir" data-genre="roman" data-title="Surat-Surat dari Pesisir" data-author="Elena Voss" data-chapters="42" data-popularity="210000" data-date="2026-09-30">
+            <a class="novel-cover" href="#" aria-label="Baca Surat-Surat dari Pesisir">
+              <img src="assets/images/cover-letters.jpg" alt="Buku terbuka dengan kacamata baca dan kopi di atas linen lembut" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Roman</p>
+              <h3 class="novel-title"><a href="#">Surat-Surat dari Pesisir</a></h3>
+              <p class="book-author">oleh Elena Voss</p>
+              <p class="novel-synopsis">Setiap surat yang tiba di rumah pesisir itu ditulis dua puluh tahun lalu. Ketika seorang perempuan memutuskan untuk membalasnya, masa lalu dan masa kini mulai saling menjawab.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">42 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status is-complete">Tamat</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="#">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="novel-row-item" data-reveal data-novel-id="rumah-di-bukit-lentera" data-genre="misteri" data-title="Rumah di Bukit Lentera" data-author="Rania Aldebaran" data-chapters="18" data-popularity="74000" data-date="2026-10-27">
+            <a class="novel-cover" href="#" aria-label="Baca Rumah di Bukit Lentera">
+              <img src="assets/images/cover-lantern.jpg" alt="Lorong perpustakaan redup dengan lampu gantung hangat" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Misteri</p>
+              <h3 class="novel-title"><a href="#">Rumah di Bukit Lentera</a></h3>
+              <p class="book-author">oleh Rania Aldebaran</p>
+              <p class="novel-synopsis">Rumah itu hanya menyala pada malam-malam tertentu, dan tak ada yang pernah melihat penghuninya. Seorang jurnalis memutuskan untuk mengetuk pintunya, meski surat wasiat lama memintanya untuk tidak pernah datang.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">18 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status">Sedang Berjalan</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="#">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="novel-row-item" data-reveal data-novel-id="meja-hari-minggu" data-genre="potongan-kehidupan" data-title="Meja Hari Minggu" data-author="Mira Halim" data-chapters="16" data-popularity="58000" data-date="2026-08-22">
+            <a class="novel-cover" href="#" aria-label="Baca Meja Hari Minggu">
+              <img src="assets/images/cover-sunday.jpg" alt="Sudut ruang makan apartemen yang disinari matahari dengan kursi berlengan merah dan lantai kayu terang" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Potongan Kehidupan</p>
+              <h3 class="novel-title"><a href="#">Meja Hari Minggu</a></h3>
+              <p class="book-author">oleh Mira Halim</p>
+              <p class="novel-synopsis">Di meja makan yang sama, sebuah keluarga belajar bahwa beberapa percakapan butuh bertahun-tahun untuk selesai. Cerita tenang tentang pulang, kehilangan, dan makanan yang selalu tersisa untuk seseorang.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">16 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status is-complete">Tamat</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="#">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="novel-row-item" data-reveal data-novel-id="garam-dan-kayu-manis" data-genre="sejarah" data-title="Garam &amp; Kayu Manis" data-author="Theo Mahendra" data-chapters="37" data-popularity="134000" data-date="2026-09-12">
+            <a class="novel-cover" href="#" aria-label="Baca Garam dan Kayu Manis">
+              <img src="assets/images/cover-salt.jpg" alt="Rak buku kayu setinggi langit-langit penuh buku tua dalam cahaya hangat" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Sejarah</p>
+              <h3 class="novel-title"><a href="#">Garam &amp; Kayu Manis</a></h3>
+              <p class="book-author">oleh Theo Mahendra</p>
+              <p class="novel-synopsis">Abad ke-17, seorang juru masak pelabuhan menyimpan resep yang bisa mengubah nasib sebuah kerajaan. Rasa dan rahasia bercampur dalam perjalanan dari dapur kecil ke meja istana.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">37 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status">Sedang Berjalan</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="#">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="novel-row-item" data-reveal data-novel-id="lumut-dan-cahaya-bulan" data-genre="fantasi" data-title="Lumut &amp; Cahaya Bulan" data-author="Wren Ashby" data-chapters="22" data-popularity="42000" data-date="2026-07-05">
+            <a class="novel-cover" href="#" aria-label="Baca Lumut dan Cahaya Bulan">
+              <img src="assets/images/cover-moss.jpg" alt="Buku terbuka tergeletak di atas hamparan lumut di antara dedaunan musim gugur" width="700" height="1050" loading="lazy">
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Fantasi Hangat</p>
+              <h3 class="novel-title"><a href="#">Lumut &amp; Cahaya Bulan</a></h3>
+              <p class="book-author">oleh Wren Ashby</p>
+              <p class="novel-synopsis">Seorang penjaga hutan menemukan buku yang tumbuh di antara akar, dan setiap halaman menuliskan sesuatu yang belum terjadi. Ia mulai membaca dengan hati-hati, karena beberapa kalimat terdengar seperti doa.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters">22 Bab</span>
+                <span class="stat-divider" aria-hidden="true">·</span>
+                <span class="novel-status is-complete">Tamat</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="#">
+                Baca Bab 1
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <p class="browse-empty" id="browse-empty" hidden>Belum ada cerita yang cocok dengan pencarianmu. Coba kata kunci atau genre lain.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="index.html" aria-label="Connvel — beranda">
+          <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+            <rect width="36" height="36" rx="11" fill="currentColor"/>
+            <path d="M9.5 12.3c3.3-1.4 5.9-1.1 8.5 1 2.6-2.1 5.2-2.4 8.5-1v11.5c-3.3-1.2-5.9-.9-8.5 1.2-2.6-2.1-5.2-2.4-8.5-1.2V12.3Z" fill="#241C16"/>
+            <path d="M18 13.2v11.4" stroke="#E9BE9E" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span class="brand-name">Connvel<span class="brand-dot">.</span></span>
+        </a>
+        <p class="footer-tagline">Connvel bukan hanya tentang halaman dan kata-kata. Ini tentang cerita yang mempertemukan imajinasi, penulis, dan pembaca dalam satu dunia.</p>
+      </div>
+
+      <nav class="footer-col" aria-label="Community">
+        <h3>Community</h3>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+        <a href="#">X</a>
+      </nav>
+
+      <nav class="footer-col" aria-label="Platform">
+        <h3>Platform</h3>
+        <a href="index.html">Beranda</a>
+        <a href="browse.html">Jelajahi</a>
+        <a href="novelis/ruang-tulis.html">Menulis</a>
+        <a href="tentang/about.html">Tentang Connvel</a>
+      </nav>
+
+      <nav class="footer-col" aria-label="Support us">
+        <h3>Support us</h3>
+        <a href="donate.html">Donate</a>
+      </nav>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2026 Connvel. Dibuat untuk pembaca, di mana pun.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/connvel-store.js" defer></script>
+  <script src="assets/js/site-sync.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/browse.js" defer></script>
+</body>
+</html>

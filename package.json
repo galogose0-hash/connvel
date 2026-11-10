@@ -1,0 +1,15 @@
+{
+  "name": "connvel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Connvel reading platform with a zero-dependency admin backend.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node server/seed.js",
+    "check": "node --check server.js && node --check server/render.js && node --check server/seed.js && node --check assets/js/dashboard.js && node --check assets/js/site-sync.js && node --check assets/js/novel.js && node --check assets/js/browse.js && node --check assets/js/connvel-store.js && node --check assets/js/donate.js && node --check assets/js/ruang-tulis.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

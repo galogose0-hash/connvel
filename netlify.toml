@@ -1,0 +1,8 @@
+[build]
+  command = "node build-netlify.js"
+  publish = "netlify-site"
+
+[[redirects]]
+  from = "/api/state"
+  to = "/api/state.json"
+  status = 200

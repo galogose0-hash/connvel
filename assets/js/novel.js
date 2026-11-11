@@ -285,7 +285,7 @@
         setCommentStatus("Komentarmu sudah terkirim. Terima kasih sudah berbagi!", "success");
       }).catch(function () {
         acceptComment(fallback, true);
-        setCommentStatus("Backend sedang offline. Komentarmu disimpan di browser.", "success");
+        setCommentStatus("Komentarmu tersimpan di browser ini. Terima kasih sudah berbagi!", "success");
       });
     });
 

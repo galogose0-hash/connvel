@@ -93,15 +93,23 @@
     pill.classList.toggle("is-offline", !serverActive);
     pill.innerHTML = '<span aria-hidden="true"></span> ' + (serverActive ? "Mode server" : "Backend offline");
     note.textContent = serverActive
-      ? "Mode server: perubahan disimpan ke data/connvel.json dan file HTML dibuat otomatis."
+      ? "Mode server: perubahan tersimpan ke penyimpanan daring (Netlify Blobs atau data/connvel.json saat lokal)."
       : "Mode lokal: backend tidak aktif. Jalankan npm start agar perubahan menulis file HTML.";
   }
 
   function apiRequest(method, payload) {
+    var session = getSession();
+    var headers = {};
+    if (payload) {
+      headers["Content-Type"] = "application/json";
+    }
+    if (session && session.token) {
+      headers["Authorization"] = "Bearer " + session.token;
+    }
     return window.fetch(API_STATE_URL, {
       method: method,
       cache: "no-store",
-      headers: payload ? { "Content-Type": "application/json" } : {},
+      headers: headers,
       body: payload ? JSON.stringify(payload) : undefined
     }).then(function (response) {
       return response.text().then(function (text) {
@@ -112,7 +120,9 @@
           body = {};
         }
         if (!response.ok) {
-          throw new Error(body.error || "Server mengembalikan status " + response.status + ".");
+          var failure = new Error(body.error || "Server mengembalikan status " + response.status + ".");
+          failure.statusCode = response.status;
+          throw failure;
         }
         return body;
       });
@@ -125,6 +135,10 @@
       setMode(true);
       mirrorState();
     }).catch(function (error) {
+      if (error && error.statusCode === 401) {
+        logout();
+        return;
+      }
       DATA = hydrateData(window.ConnvelStore ? window.ConnvelStore.load() : EMPTY_DATA);
       setMode(false);
       showToast("Backend belum aktif. Jalankan npm start untuk membuat file HTML.");
@@ -287,6 +301,11 @@
       }
       return true;
     }).catch(function (error) {
+      if (error && error.statusCode === 401) {
+        showToast("Sesi kunci admin berakhir. Silakan masuk kembali.");
+        window.setTimeout(logout, 1200);
+        return false;
+      }
       showToast("Gagal menyimpan ke server: " + error.message);
       return false;
     });

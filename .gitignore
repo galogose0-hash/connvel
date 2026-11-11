@@ -1,3 +1,5 @@
 netlify-site/
 .netlify/
 node_modules/
+netlify/functions/shared/seed-state.mjs
+package-lock.json

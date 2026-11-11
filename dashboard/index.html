@@ -40,18 +40,13 @@
       <form class="auth-card" id="login-form" novalidate>
         <p class="eyebrow">Admin Connvel</p>
         <h2>Masuk ke Dashboard</h2>
-        <p class="auth-lead">Gunakan kredensial admin untuk mengelola cerita, bab, dan rilisan Connvel.</p>
+        <p class="auth-lead">Masukkan kunci admin Connvel untuk mengelola cerita, bab, dan rilisan.</p>
 
         <div class="dash-field">
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" autocomplete="username" spellcheck="false" placeholder="Masukkan username" required>
-        </div>
-
-        <div class="dash-field">
-          <label for="password">Password</label>
+          <label for="admin-key">Kunci Admin</label>
           <div class="password-wrap">
-            <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Masukkan password" required>
-            <button class="password-toggle" type="button" id="password-toggle" aria-label="Tampilkan password" aria-controls="password">
+            <input type="password" id="admin-key" name="admin-key" autocomplete="off" spellcheck="false" placeholder="Masukkan kunci admin" required>
+            <button class="password-toggle" type="button" id="password-toggle" aria-label="Tampilkan kunci" aria-controls="admin-key">
               <span data-password-label>Lihat</span>
             </button>
           </div>
@@ -64,7 +59,7 @@
           <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"/></svg>
         </button>
 
-        <p class="auth-note">Akses terbatas untuk owner Connvel. Sesi berakhir otomatis setelah 8 jam.</p>
+        <p class="auth-note">Kunci diatur lewat variabel lingkungan CONNVEL_ADMIN_TOKEN di Netlify. Sesi berakhir otomatis setelah 8 jam.</p>
       </form>
 
       <a class="auth-back" href="../index.html">

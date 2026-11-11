@@ -8,9 +8,12 @@
     "start": "node server.js",
     "seed": "node server/seed.js",
     "build:netlify": "node build-netlify.js",
-    "check": "node --check server.js && node --check server/render.js && node --check server/seed.js && node --check build-netlify.js && node --check assets/js/dashboard.js && node --check assets/js/site-sync.js && node --check assets/js/novel.js && node --check assets/js/browse.js && node --check assets/js/connvel-store.js && node --check assets/js/donate.js && node --check assets/js/ruang-tulis.js"
+    "check": "node --check server.js && node --check server/render.js && node --check server/normalize.js && node --check server/seed.js && node --check build-netlify.js && node --check netlify/functions/api.mjs && node --check netlify/functions/pages.mjs && node --check netlify/functions/shared/state.mjs && node --check assets/js/dashboard.js && node --check assets/js/dashboard-login.js && node --check assets/js/site-sync.js && node --check assets/js/novel.js && node --check assets/js/browse.js && node --check assets/js/connvel-store.js && node --check assets/js/donate.js && node --check assets/js/ruang-tulis.js"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.9"
   }
 }

@@ -3,6 +3,19 @@
   publish = "netlify-site"
 
 [[redirects]]
-  from = "/api/state"
-  to = "/api/state.json"
+  from = "/api/*"
+  to = "/.netlify/functions/api"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/novel/*"
+  to = "/.netlify/functions/pages"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/ceritanovel/*"
+  to = "/.netlify/functions/pages"
+  status = 200
+  force = true

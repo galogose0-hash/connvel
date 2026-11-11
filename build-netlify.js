@@ -2,18 +2,17 @@
 
 var fs = require("fs");
 var path = require("path");
+var normalizeState = require("./server/normalize").normalizeState;
 
 var ROOT = __dirname;
 var DATA_FILE = path.join(ROOT, "data", "connvel.json");
 var OUT_DIR = path.join(ROOT, "netlify-site");
+var FUNCTIONS_SHARED_DIR = path.join(ROOT, "netlify", "functions", "shared");
+var SEED_FILE = path.join(FUNCTIONS_SHARED_DIR, "seed-state.mjs");
 
 var ROOT_FILES = ["index.html", "browse.html", "donate.html"];
-var COPY_DIRS = ["novelis", "tentang", "novel", "ceritanovel"];
-var ASSETS_SKIP = [
-  "js/dashboard.js",
-  "js/dashboard-login.js",
-  "css/dashboard.css"
-];
+var COPY_DIRS = ["novelis", "tentang", "dashboard"];
+var ASSETS_SKIP = [];
 
 function readState() {
   var raw;
@@ -29,35 +28,6 @@ function readState() {
     console.error("Berkas data/connvel.json tidak valid: " + error.message);
     process.exit(1);
   }
-}
-
-function publicNovel(novel) {
-  return {
-    id: novel.id,
-    title: novel.title,
-    author: novel.author,
-    genre: novel.genre,
-    status: novel.status,
-    chapters: novel.chapters,
-    visible: novel.visible !== false,
-    poster: novel.poster,
-    synopsis: novel.synopsis
-  };
-}
-
-function buildPublicState(state) {
-  var novels = (Array.isArray(state.novels) ? state.novels : [])
-    .filter(function (novel) {
-      return novel && novel.visible !== false;
-    })
-    .map(publicNovel);
-
-  return {
-    novels: novels,
-    home: state.home && typeof state.home === "object" ? state.home : {},
-    comments: Array.isArray(state.comments) ? state.comments : [],
-    submissions: []
-  };
 }
 
 function relativePath(baseDir, filePath) {
@@ -96,9 +66,20 @@ function countFiles(dir) {
   return total;
 }
 
+function writeSeedState(state) {
+  fs.mkdirSync(FUNCTIONS_SHARED_DIR, { recursive: true });
+  var seed = normalizeState(state);
+  fs.writeFileSync(
+    SEED_FILE,
+    "export default " + JSON.stringify(seed, null, 2) + ";\n",
+    "utf8"
+  );
+  return seed;
+}
+
 function main() {
   var state = readState();
-  var publicState = buildPublicState(state);
+  var seed = writeSeedState(state);
 
   fs.rmSync(OUT_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -124,18 +105,13 @@ function main() {
     path.join(ROOT, "assets")
   );
 
-  fs.mkdirSync(path.join(OUT_DIR, "api"), { recursive: true });
-  fs.writeFileSync(
-    path.join(OUT_DIR, "api", "state.json"),
-    JSON.stringify(publicState, null, 2) + "\n",
-    "utf8"
-  );
-
-  console.log("Situs publik Connvel berhasil dibangun di netlify-site/.");
-  console.log("- Novel tampil: " + publicState.novels.length);
-  console.log("- Komentar tampil: " + publicState.comments.length);
-  console.log("- Kiriman penulis tidak disertakan (hanya untuk dashboard lokal).");
-  console.log("- Total berkas: " + countFiles(OUT_DIR));
+  console.log("Situs Connvel berhasil dibangun di netlify-site/.");
+  console.log("- Novel: " + seed.novels.length + " (halaman novel dan bab dilayani oleh Netlify Functions)");
+  console.log("- Bab: " + seed.chapters.length);
+  console.log("- Komentar: " + seed.comments.length);
+  console.log("- Kiriman penulis: " + seed.submissions.length + " (ikut seed awal Blobs)");
+  console.log("- Seed Functions: " + path.relative(ROOT, SEED_FILE));
+  console.log("- Total berkas statis: " + countFiles(OUT_DIR));
 }
 
 main();

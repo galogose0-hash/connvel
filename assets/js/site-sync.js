@@ -97,7 +97,7 @@
 
   function posterFor(novel) {
     if (!novel || !novel.poster) {
-      return "assets/images/hero-reading.jpg";
+      return "assets/images/connvel-book.jpg";
     }
     if (novel.poster.indexOf("data:") === 0) {
       return novel.poster;

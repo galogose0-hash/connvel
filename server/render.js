@@ -130,7 +130,7 @@ function descriptionFor(value, limit) {
 function posterPath(novel) {
   var poster = String((novel && novel.poster) || "").replace(/\\/g, "/");
   if (!poster) {
-    return "assets/images/hero-reading.jpg";
+    return "assets/images/connvel-book.jpg";
   }
   if (poster.indexOf("data:") === 0) {
     return poster;

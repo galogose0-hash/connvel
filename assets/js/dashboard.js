@@ -176,6 +176,35 @@
     return id;
   }
 
+  function selectedGenres(container) {
+    return $$('input[type="checkbox"]:checked', container).map(function (input) {
+      return input.value;
+    });
+  }
+
+  function setSelectedGenres(container, value) {
+    var selected = String(value || "").split(",").map(function (item) {
+      return item.trim();
+    }).filter(Boolean);
+
+    $$('input[type="checkbox"]', container).forEach(function (input) {
+      input.checked = selected.indexOf(input.value) !== -1;
+    });
+  }
+
+  function joinGenres(values) {
+    var seen = {};
+    var result = [];
+    values.forEach(function (value) {
+      var genre = String(value || "").trim();
+      if (genre && !seen[genre]) {
+        seen[genre] = true;
+        result.push(genre);
+      }
+    });
+    return result.join(", ");
+  }
+
   function toDate(value) {
     if (!value) {
       return null;
@@ -660,7 +689,7 @@
       controls.forEach(function (control) { control.disabled = true; });
       $("#novel-title").value = "";
       $("#novel-author").value = "";
-      $("#novel-genre").value = "Fantasi";
+      setSelectedGenres($("#novel-genre"), "Fantasi");
       $("#novel-status").value = "Ongoing";
       $("#novel-chapters").value = "";
       $("#novel-synopsis").value = "";
@@ -676,7 +705,7 @@
     controls.forEach(function (control) { control.disabled = false; });
     $("#novel-title").value = novel.title;
     $("#novel-author").value = novel.author;
-    $("#novel-genre").value = novel.genre;
+    setSelectedGenres($("#novel-genre"), novel.genre);
     $("#novel-status").value = novel.status || "Ongoing";
     $("#novel-chapters").value = novel.chapters || 0;
     $("#novel-synopsis").value = novel.synopsis || "";
@@ -1114,6 +1143,7 @@
       event.preventDefault();
       var title = $("#new-novel-title").value.trim();
       var author = $("#new-novel-author").value.trim();
+      var genre = joinGenres(selectedGenres($("#new-novel-genre")));
       var error = $("#novel-form-error");
 
       if (!title || !author) {
@@ -1123,11 +1153,17 @@
         return;
       }
 
+      if (!genre) {
+        error.textContent = "Pilih minimal satu genre.";
+        error.classList.add("is-visible");
+        return;
+      }
+
       var novel = {
         id: uniqueNovelId(title),
         title: title,
         author: author,
-        genre: $("#new-novel-genre").value,
+        genre: genre,
         status: $("#new-novel-status").value,
         chapters: Math.max(0, parseInt($("#new-novel-chapters").value, 10) || 0),
         visible: true,
@@ -1167,9 +1203,15 @@
 
       var title = $("#novel-title").value.trim();
       var author = $("#novel-author").value.trim();
+      var genre = joinGenres(selectedGenres($("#novel-genre")));
       if (!title || !author) {
         setStatus($("#novel-status-message"), "Judul dan penulis wajib diisi.", "novel");
         (!title ? $("#novel-title") : $("#novel-author")).focus();
+        return;
+      }
+
+      if (!genre) {
+        setStatus($("#novel-status-message"), "Pilih minimal satu genre.", "novel");
         return;
       }
 
@@ -1184,7 +1226,7 @@
 
       novel.title = title;
       novel.author = author;
-      novel.genre = $("#novel-genre").value;
+      novel.genre = genre;
       novel.status = $("#novel-status").value;
       novel.chapters = Math.max(0, parseInt($("#novel-chapters").value, 10) || 0);
       novel.synopsis = $("#novel-synopsis").value.trim();

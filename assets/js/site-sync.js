@@ -68,6 +68,12 @@
       .replace(/^-+|-+$/g, "");
   }
 
+  function genreTokens(value) {
+    return String(value || "").split(",").map(function (item) {
+      return slugify(item);
+    }).filter(Boolean).join(" ");
+  }
+
   function normalize(value) {
     return String(value || "")
       .toLowerCase()
@@ -296,7 +302,7 @@
 
     row.setAttribute("data-title", novel.title);
     row.setAttribute("data-author", novel.author);
-    row.setAttribute("data-genre", slugify(novel.genre));
+    row.setAttribute("data-genre", genreTokens(novel.genre));
     row.setAttribute("data-chapters", String(Number(novel.chapters) || 0));
 
     setText(row.querySelector(".novel-genre"), novel.genre);
@@ -343,7 +349,7 @@
     var row = document.createElement("article");
     row.className = "novel-row-item";
     row.setAttribute("data-novel-id", novel.id);
-    row.setAttribute("data-genre", slugify(novel.genre));
+    row.setAttribute("data-genre", genreTokens(novel.genre));
     row.setAttribute("data-title", novel.title);
     row.setAttribute("data-author", novel.author);
     row.setAttribute("data-chapters", String(Number(novel.chapters) || 0));

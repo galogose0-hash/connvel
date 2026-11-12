@@ -352,16 +352,16 @@
                   <label for="novel-author">Penulis</label>
                   <input type="text" id="novel-author" name="author" required>
                 </div>
-                <div class="dash-field">
-                  <label for="novel-genre">Genre</label>
-                  <select id="novel-genre" name="genre">
-                    <option>Fantasi</option>
-                    <option>Fiksi Ilmiah</option>
-                    <option>Roman</option>
-                    <option>Misteri</option>
-                    <option>Potongan Kehidupan</option>
-                    <option>Sejarah</option>
-                  </select>
+                <div class="dash-field form-field--full">
+                  <span class="dash-field-label" id="novel-genre-label">Genre (bisa pilih lebih dari satu)</span>
+                  <div class="genre-options" id="novel-genre" role="group" aria-labelledby="novel-genre-label">
+                    <label class="genre-option"><input type="checkbox" name="genre" value="Fantasi"><span>Fantasi</span></label>
+                    <label class="genre-option"><input type="checkbox" name="genre" value="Fiksi Ilmiah"><span>Fiksi Ilmiah</span></label>
+                    <label class="genre-option"><input type="checkbox" name="genre" value="Roman"><span>Roman</span></label>
+                    <label class="genre-option"><input type="checkbox" name="genre" value="Misteri"><span>Misteri</span></label>
+                    <label class="genre-option"><input type="checkbox" name="genre" value="Potongan Kehidupan"><span>Potongan Kehidupan</span></label>
+                    <label class="genre-option"><input type="checkbox" name="genre" value="Sejarah"><span>Sejarah</span></label>
+                  </div>
                 </div>
                 <div class="dash-field">
                   <label for="novel-status">Status</label>
@@ -502,16 +502,16 @@
           <label for="new-novel-author">Penulis</label>
           <input type="text" id="new-novel-author" name="author" required>
         </div>
-        <div class="dash-field">
-          <label for="new-novel-genre">Genre</label>
-          <select id="new-novel-genre" name="genre">
-            <option>Fantasi</option>
-            <option>Fiksi Ilmiah</option>
-            <option>Roman</option>
-            <option>Misteri</option>
-            <option>Potongan Kehidupan</option>
-            <option>Sejarah</option>
-          </select>
+        <div class="dash-field form-field--full">
+          <span class="dash-field-label" id="new-novel-genre-label">Genre (bisa pilih lebih dari satu)</span>
+          <div class="genre-options" id="new-novel-genre" role="group" aria-labelledby="new-novel-genre-label">
+            <label class="genre-option"><input type="checkbox" name="genre" value="Fantasi" checked><span>Fantasi</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Fiksi Ilmiah"><span>Fiksi Ilmiah</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Roman"><span>Roman</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Misteri"><span>Misteri</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Potongan Kehidupan"><span>Potongan Kehidupan</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Sejarah"><span>Sejarah</span></label>
+          </div>
         </div>
         <div class="dash-field">
           <label for="new-novel-status">Status</label>

@@ -46,7 +46,8 @@
     items.forEach(function (item) {
       var haystack = readText(item, "data-title") + " " + readText(item, "data-author");
       var matchesTerm = !term || haystack.indexOf(term) !== -1;
-      var matchesGenre = genre === "all" || item.getAttribute("data-genre") === genre;
+      var itemGenres = (item.getAttribute("data-genre") || "").split(/\s+/);
+      var matchesGenre = genre === "all" || itemGenres.indexOf(genre) !== -1;
       var show = matchesTerm && matchesGenre;
 
       item.hidden = !show;

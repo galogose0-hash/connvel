@@ -215,6 +215,12 @@
       "garam-dan-kayu-manis"
     ]
   },
+  "announcement": {
+    "title": "Selamat datang di halaman Pengumuman Connvel",
+    "body": "Halaman ini akan memuat kabar terbaru seputar Connvel, jadwal rilis, dan informasi penting lainnya untuk pembaca.\n\nNantikan pembaruan berikutnya.",
+    "date": "2026-11-13",
+    "visible": true
+  },
   "submissions": [
     {
       "id": "sub-3",

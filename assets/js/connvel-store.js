@@ -209,6 +209,12 @@
         "garam-dan-kayu-manis"
       ]
     },
+    announcement: {
+      title: "Selamat datang di halaman Pengumuman Connvel",
+      body: "Halaman ini akan memuat kabar terbaru seputar Connvel, jadwal rilis, dan informasi penting lainnya untuk pembaca.\n\nNantikan pembaruan berikutnya.",
+      date: "2026-11-13",
+      visible: true
+    },
     submissions: [
       {
         id: "sub-1",
@@ -285,6 +291,9 @@
         novels: Array.isArray(data.novels) ? data.novels : clone(defaults.novels),
         chapters: Array.isArray(data.chapters) ? data.chapters : clone(defaults.chapters),
         home: Object.assign({}, defaults.home, data.home || {}),
+        announcement: data.announcement && typeof data.announcement === "object"
+          ? Object.assign({}, defaults.announcement, data.announcement)
+          : clone(defaults.announcement),
         submissions: Array.isArray(data.submissions) ? data.submissions : clone(defaults.submissions),
         comments: Array.isArray(data.comments) ? data.comments : clone(defaults.comments)
       };

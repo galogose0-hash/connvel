@@ -13,13 +13,15 @@
     katalog: { label: "Kelola Katalog", title: "Kelola Katalog" },
     novel: { label: "Novel & Bab", title: "Novel & Bab" },
     "kotak-masuk": { label: "Kotak Masuk Penulis", title: "Kotak Masuk Penulis" },
-    komentar: { label: "Kelola Komentar", title: "Komentar Pembaca" }
+    komentar: { label: "Kelola Komentar", title: "Komentar Pembaca" },
+    pengumuman: { label: "Pengumuman", title: "Kelola Pengumuman" }
   };
 
   var EMPTY_DATA = {
     novels: [],
     chapters: [],
     home: { spotlight: "", latest: [], trending: [] },
+    announcement: { title: "", body: "", date: "", visible: true },
     submissions: [],
     comments: []
   };
@@ -33,6 +35,7 @@
   var toastTimer = null;
   var homeStatusTimer = null;
   var novelStatusTimer = null;
+  var announcementStatusTimer = null;
 
   function $(selector, root) {
     return (root || document).querySelector(selector);
@@ -76,6 +79,7 @@
       novels: Array.isArray(source.novels) ? source.novels : [],
       chapters: Array.isArray(source.chapters) ? source.chapters : [],
       home: Object.assign({ spotlight: "", latest: [], trending: [] }, source.home || {}),
+      announcement: Object.assign({ title: "", body: "", date: "", visible: true }, source.announcement || {}),
       submissions: Array.isArray(source.submissions) ? source.submissions : [],
       comments: Array.isArray(source.comments) ? source.comments : []
     };
@@ -357,6 +361,13 @@
         element.classList.remove("is-visible");
       }, 3600);
     }
+    if (timerName === "announcement") {
+      window.clearTimeout(announcementStatusTimer);
+      announcementStatusTimer = window.setTimeout(function () {
+        element.textContent = "";
+        element.classList.remove("is-visible");
+      }, 3600);
+    }
   }
 
   function getSession() {
@@ -434,6 +445,8 @@
       renderInbox();
     } else if (view === "komentar") {
       renderComments();
+    } else if (view === "pengumuman") {
+      renderAnnouncement();
     }
 
     closeSidebar();
@@ -921,6 +934,14 @@
     $("#comment-form-error").classList.remove("is-visible");
   }
 
+  function renderAnnouncement() {
+    var announcement = DATA.announcement || {};
+    $("#announcement-title").value = announcement.title || "";
+    $("#announcement-date").value = announcement.date || todayISO();
+    $("#announcement-body").value = announcement.body || "";
+    $("#announcement-visible").checked = announcement.visible !== false;
+  }
+
   function renderAll() {
     renderSummary();
     renderHome();
@@ -928,6 +949,7 @@
     renderNovelSelect();
     renderInbox();
     renderComments();
+    renderAnnouncement();
   }
 
   function openDialog(dialog) {
@@ -1076,6 +1098,45 @@
         renderSummary();
       } else {
         DATA.home = previousHome;
+      }
+    });
+
+    $("#announcement-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      var title = $("#announcement-title").value.trim();
+      var date = $("#announcement-date").value;
+      var body = $("#announcement-body").value.trim();
+
+      if (!title) {
+        setStatus($("#announcement-status"), "Judul pengumuman wajib diisi.", "announcement");
+        $("#announcement-title").focus();
+        return;
+      }
+      if (!date) {
+        setStatus($("#announcement-status"), "Tanggal pengumuman wajib diisi.", "announcement");
+        $("#announcement-date").focus();
+        return;
+      }
+      if (!body) {
+        setStatus($("#announcement-status"), "Isi pengumuman wajib diisi.", "announcement");
+        $("#announcement-body").focus();
+        return;
+      }
+
+      var previousAnnouncement = Object.assign({}, DATA.announcement);
+      DATA.announcement = {
+        title: title,
+        body: body,
+        date: date,
+        visible: $("#announcement-visible").checked
+      };
+
+      if (await commit("Pengumuman tersimpan.")) {
+        setStatus($("#announcement-status"), "Pengumuman tersimpan dan tersinkron ke halaman publik.", "announcement");
+        renderAnnouncement();
+      } else {
+        DATA.announcement = previousAnnouncement;
+        renderAnnouncement();
       }
     });
 

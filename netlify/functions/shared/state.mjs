@@ -86,9 +86,20 @@ export function sanitizeState(state) {
       };
     });
 
+  var announcement = source.announcement && typeof source.announcement === "object"
+    ? source.announcement
+    : null;
+
   return {
     novels: novels,
     home: source.home && typeof source.home === "object" ? source.home : {},
+    announcement: announcement && announcement.visible !== false && String(announcement.title || "").trim()
+      ? {
+        title: String(announcement.title || "").trim(),
+        body: String(announcement.body || "").trim(),
+        date: String(announcement.date || "").slice(0, 10)
+      }
+      : null,
     comments: Array.isArray(source.comments) ? source.comments : [],
     submissions: []
   };

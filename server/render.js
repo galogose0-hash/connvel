@@ -180,9 +180,7 @@ function siteHeader() {
     '<a class="nav-link" href="../tentang/about.html">Tentang Connvel</a>' +
     "</nav>" +
     '<div class="header-actions">' +
-    '<a class="login-link" href="#">Masuk</a>' +
-    '<a class="btn btn-primary btn-small" href="../index.html#community">Daftar ' +
-    '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg></a>' +
+    '<a class="btn btn-primary btn-small" href="../info/index.html">Pengumuman</a>' +
     "</div>" +
     '<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">' +
     '<span class="menu-label">Menu</span><span class="menu-icon" aria-hidden="true"><span></span><span></span></span>' +
@@ -195,9 +193,7 @@ function siteHeader() {
     '<a href="../tentang/about.html"><span>04</span>Tentang Connvel</a>' +
     "</nav>" +
     '<div class="mobile-menu-foot"><div class="mobile-actions">' +
-    '<a class="login-link" href="#">Masuk</a>' +
-    '<a class="btn btn-primary" href="../index.html#community">Daftar ' +
-    '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg></a>' +
+    '<a class="btn btn-primary" href="../info/index.html">Pengumuman</a>' +
     '</div><p class="mobile-motto">Cerita yang menghubungkan dunia.</p></div></div>';
 }
 

@@ -11,7 +11,7 @@ var FUNCTIONS_SHARED_DIR = path.join(ROOT, "netlify", "functions", "shared");
 var SEED_FILE = path.join(FUNCTIONS_SHARED_DIR, "seed-state.mjs");
 
 var ROOT_FILES = ["index.html", "browse.html", "donate.html"];
-var COPY_DIRS = ["novelis", "tentang", "dashboard"];
+var COPY_DIRS = ["novelis", "tentang", "dashboard", "info"];
 var ASSETS_SKIP = [];
 
 function readState() {

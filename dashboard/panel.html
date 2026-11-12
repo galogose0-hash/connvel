@@ -57,6 +57,11 @@
       <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H9l-5 4v-4.5A2.5 2.5 0 0 1 2 14.5z"/>
       <path d="M8 9.5h8M8 12.5h5"/>
     </symbol>
+    <symbol id="dash-icon-megaphone" viewBox="0 0 24 24">
+      <path d="M4 10v4h3l9 4V6l-9 4z"/>
+      <path d="M7 14v5h3v-4"/>
+      <path d="M18 9a3 3 0 0 1 0 6"/>
+    </symbol>
     <symbol id="dash-icon-logout" viewBox="0 0 24 24">
       <path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5"/>
       <path d="M14 8l4 4-4 4"/>
@@ -147,6 +152,10 @@
         <button class="dash-nav-item" type="button" data-view="komentar">
           <svg class="icon" aria-hidden="true"><use href="#dash-icon-chat"/></svg>
           <span>Kelola Komentar</span>
+        </button>
+        <button class="dash-nav-item" type="button" data-view="pengumuman">
+          <svg class="icon" aria-hidden="true"><use href="#dash-icon-megaphone"/></svg>
+          <span>Pengumuman</span>
         </button>
       </nav>
 
@@ -476,6 +485,68 @@
 
           <div class="submission-list" id="dash-comment-list"></div>
           <p class="empty-state" id="comment-empty" hidden>Belum ada komentar pada filter ini.</p>
+        </section>
+
+        <section class="dash-view" id="view-pengumuman" data-view-panel="pengumuman" hidden>
+          <div class="view-intro view-intro--split">
+            <div>
+              <p class="eyebrow">Halaman publik</p>
+              <h2>Tulis kabar yang <span class="serif-accent">layak dibaca lebih dulu</span>.</h2>
+              <p>Pengumuman ini tampil di halaman Pengumuman Connvel. Perubahan langsung tersinkron setelah disimpan.</p>
+            </div>
+            <a class="btn btn-outline btn-small" href="../info/index.html" target="_blank" rel="noopener">
+              Buka Halaman
+              <svg class="icon" aria-hidden="true"><use href="#dash-icon-arrow"/></svg>
+            </a>
+          </div>
+
+          <form class="dash-form" id="announcement-form">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <p class="dash-kicker">Pengumuman aktif</p>
+                  <h2>Kabar untuk Pembaca</h2>
+                  <p class="dash-card-copy">Isi judul, tanggal, dan kabar yang ingin disampaikan ke halaman publik.</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="dash-field form-field--full">
+                  <label for="announcement-title">Judul pengumuman</label>
+                  <input type="text" id="announcement-title" name="title" required>
+                </div>
+                <div class="dash-field">
+                  <label for="announcement-date">Tanggal</label>
+                  <input type="date" id="announcement-date" name="date" required>
+                </div>
+                <div class="dash-field">
+                  <span class="dash-field-label">Status tampil</span>
+                  <label class="switch-field">
+                    <span class="switch">
+                      <input type="checkbox" id="announcement-visible" name="visible">
+                      <span class="switch-track"></span>
+                    </span>
+                    <span>
+                      <strong>Tampilkan di halaman publik</strong>
+                      <small>Matikan untuk menyembunyikan pengumuman sementara.</small>
+                    </span>
+                  </label>
+                </div>
+                <div class="dash-field form-field--full">
+                  <label for="announcement-body">Isi pengumuman</label>
+                  <textarea id="announcement-body" name="body" rows="9" required></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">
+                  <svg class="icon" aria-hidden="true"><use href="#dash-icon-check"/></svg>
+                  Simpan Pengumuman
+                </button>
+                <p class="form-status" id="announcement-status" role="status" aria-live="polite"></p>
+              </div>
+            </div>
+          </form>
         </section>
       </main>
     </div>

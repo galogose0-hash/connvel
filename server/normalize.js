@@ -187,6 +187,10 @@ function normalizeState(raw) {
     });
   });
 
+  var announcementSource = source.announcement && typeof source.announcement === "object"
+    ? source.announcement
+    : {};
+
   return {
     novels: novels,
     chapters: chapters,
@@ -194,6 +198,12 @@ function normalizeState(raw) {
       spotlight: spotlight,
       latest: latest,
       trending: trending
+    },
+    announcement: {
+      title: String(announcementSource.title || "").trim(),
+      body: String(announcementSource.body || "").trim(),
+      date: String(announcementSource.date || "").slice(0, 10),
+      visible: announcementSource.visible !== false
     },
     submissions: submissions,
     comments: comments

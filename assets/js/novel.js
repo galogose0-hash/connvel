@@ -242,6 +242,11 @@
         return;
       }
 
+      if (!novelId) {
+        setCommentStatus("Halaman novel tidak dikenali. Muat ulang lalu coba lagi.", "error");
+        return;
+      }
+
       if (nameInput) {
         nameInput.removeAttribute("aria-invalid");
       }
@@ -276,14 +281,28 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ novelId: novelId, name: name, message: value })
       }).then(function (response) {
-        if (!response.ok) {
-          throw new Error("Gagal mengirim komentar.");
-        }
-        return response.json();
+        return response.text().then(function (text) {
+          var body = {};
+          try {
+            body = text ? JSON.parse(text) : {};
+          } catch (error) {
+            body = {};
+          }
+          if (!response.ok) {
+            var failure = new Error(body.error || "Gagal mengirim komentar.");
+            failure.status = response.status;
+            throw failure;
+          }
+          return body;
+        });
       }).then(function (payload) {
         acceptComment(payload && payload.comment ? payload.comment : fallback, false);
         setCommentStatus("Komentarmu sudah terkirim. Terima kasih sudah berbagi!", "success");
-      }).catch(function () {
+      }).catch(function (error) {
+        if (error && error.status) {
+          setCommentStatus(error.message || "Komentar gagal disimpan. Coba lagi.", "error");
+          return;
+        }
         acceptComment(fallback, true);
         setCommentStatus("Komentarmu tersimpan di browser ini. Terima kasih sudah berbagi!", "success");
       });

@@ -17,11 +17,11 @@ export async function openStore() {
   if (storeFactory) {
     return await storeFactory();
   }
-  return await getStore(STORE_NAME);
+  return await getStore({ name: STORE_NAME, consistency: "strong" });
 }
 
 export async function readState(store) {
-  var raw = await store.get(STATE_KEY);
+  var raw = await store.get(STATE_KEY, { consistency: "strong" });
   if (raw) {
     try {
       return JSON.parse(raw);

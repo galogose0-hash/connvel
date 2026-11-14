@@ -74,6 +74,191 @@
     }
   }
 
+  function looksLikeHtml(value) {
+    return /<\/?(p|blockquote|div|span|em|strong|br|h[1-6]|mark|hr)\b/i.test(String(value || ""));
+  }
+
+  function textToEditorHtml(value) {
+    var content = String(value || "").trim();
+    if (!content) {
+      return "";
+    }
+    return content.split(/\n\s*\n/).map(function (paragraph) {
+      return "<p>" + escapeHtml(paragraph.trim()).replace(/\n/g, "<br>") + "</p>";
+    }).join("");
+  }
+
+  function editorPreviewHtml(value) {
+    var content = String(value || "").trim();
+    if (!content) {
+      return "";
+    }
+    return looksLikeHtml(content) ? content : textToEditorHtml(content);
+  }
+
+  var CHAPTER_FORMATS = {
+    opening: {
+      block: true,
+      before: '<p class="chapter-opening">',
+      after: "</p>",
+      placeholder: "Tulis paragraf pembuka yang kuat di sini."
+    },
+    epigraph: {
+      block: true,
+      before: '<blockquote class="chapter-epigraph">\n  <p>',
+      after: "</p>\n</blockquote>",
+      placeholder: "Tulis kutipan pembuka di sini."
+    },
+    note: {
+      block: true,
+      before: '<p class="chapter-note">',
+      after: "</p>",
+      placeholder: "Tulis catatan penting di sini."
+    },
+    card: {
+      block: true,
+      before: '<div class="chapter-card">\n  <p class="chapter-card-label">Catatan</p>\n  <p>',
+      after: "</p>\n</div>",
+      placeholder: "Tulis isi kartu di sini."
+    },
+    "quote-card": {
+      block: true,
+      before: '<div class="chapter-card chapter-card--quote">\n  <p class="chapter-card-label">Kutipan</p>\n  <blockquote>',
+      after: "</blockquote>\n</div>",
+      placeholder: "Tulis kutipan yang ingin ditonjolkan."
+    },
+    letter: {
+      block: true,
+      before: '<div class="chapter-letter">\n  <p>',
+      after: '</p>\n  <p class="letter-signature">— Nama</p>\n</div>',
+      placeholder: "Tulis isi surat di sini."
+    },
+    divider: {
+      block: true,
+      selection: false,
+      before: '<div class="chapter-divider" role="separator"><span></span></div>',
+      after: "",
+      placeholder: ""
+    },
+    continued: {
+      block: true,
+      before: '<p class="chapter-continued">',
+      after: "</p>",
+      placeholder: "Bersambung..."
+    },
+    accent: {
+      block: false,
+      before: '<span class="chapter-accent">',
+      after: "</span>",
+      placeholder: "teks berwarna"
+    },
+    muted: {
+      block: false,
+      before: '<span class="chapter-muted">',
+      after: "</span>",
+      placeholder: "teks redup"
+    },
+    highlight: {
+      block: false,
+      before: '<span class="chapter-highlight">',
+      after: "</span>",
+      placeholder: "teks disorot"
+    },
+    strong: {
+      block: false,
+      before: "<strong>",
+      after: "</strong>",
+      placeholder: "teks tebal"
+    },
+    em: {
+      block: false,
+      before: "<em>",
+      after: "</em>",
+      placeholder: "teks miring"
+    }
+  };
+
+  function insertChapterFormat(textarea, format) {
+    var spec = CHAPTER_FORMATS[format];
+    if (!spec) {
+      return;
+    }
+
+    var value = textarea.value;
+    var start = textarea.selectionStart;
+    var end = textarea.selectionEnd;
+    var selected = value.slice(start, end);
+    var content = selected || spec.placeholder || "";
+    var insertAt = start;
+
+    if (spec.block && selected) {
+      content = contentToText(selected).replace(/\n/g, "<br>");
+    }
+    if (spec.selection === false) {
+      insertAt = end;
+      content = "";
+    }
+
+    var leading = "";
+    var trailing = "";
+    if (spec.block) {
+      if (insertAt > 0 && !/\n\s*\n$/.test(value.slice(0, insertAt))) {
+        leading = "\n\n";
+      }
+      if (end < value.length && !/^\s*\n\s*\n/.test(value.slice(end))) {
+        trailing = "\n\n";
+      }
+    }
+
+    var inserted = leading + spec.before + content + spec.after + trailing;
+    textarea.value = value.slice(0, insertAt) + inserted + value.slice(end);
+    textarea.focus();
+
+    var contentStart = insertAt + leading.length + spec.before.length;
+    textarea.setSelectionRange(contentStart, contentStart + content.length);
+    updateEditorPreview(textarea.id);
+  }
+
+  function updateEditorPreview(id) {
+    var textarea = document.getElementById(id);
+    var preview = document.querySelector('[data-editor-preview="' + id + '"]');
+    if (!textarea || !preview) {
+      return;
+    }
+    var html = editorPreviewHtml(textarea.value);
+    preview.innerHTML = html;
+    preview.classList.toggle("is-empty", !html);
+  }
+
+  function initChapterEditorTools() {
+    $$("[data-editor-toolbar]").forEach(function (toolbar) {
+      toolbar.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-chapter-format]");
+        if (!button || !toolbar.contains(button)) {
+          return;
+        }
+        var id = toolbar.getAttribute("data-editor-toolbar");
+        var textarea = document.getElementById(id);
+        if (!textarea) {
+          return;
+        }
+        insertChapterFormat(textarea, button.getAttribute("data-chapter-format"));
+      });
+    });
+
+    $$("[data-editor-preview]").forEach(function (preview) {
+      var id = preview.getAttribute("data-editor-preview");
+      var textarea = document.getElementById(id);
+      if (!textarea) {
+        return;
+      }
+      textarea.addEventListener("input", function () {
+        updateEditorPreview(id);
+      });
+      updateEditorPreview(id);
+    });
+  }
+
   function sortAnnouncements(list) {
     return list.map(function (item, index) {
       return { item: item, index: index };
@@ -1088,6 +1273,7 @@
     $("#chapter-form-error").textContent = "";
     $("#chapter-form-error").classList.remove("is-visible");
     $("#chapter-dialog-title").textContent = novel ? "Tambah Bab - " + novel.title : "Tambah Bab";
+    updateEditorPreview("new-chapter-content");
   }
 
   function openChapterEditor(chapter) {
@@ -1098,10 +1284,11 @@
     $("#chapter-editor-subtitle").textContent = (novel ? novel.title : "Novel") + " · " + chapter.title;
     $("#chapter-editor-title-field").value = chapter.title;
     $("#chapter-editor-date").value = chapter.date || "";
-    $("#chapter-editor-content").value = contentToText(chapter.content);
+    $("#chapter-editor-content").value = chapter.content || "";
     $("#chapter-editor-published").checked = Boolean(chapter.published);
     $("#chapter-editor-error").textContent = "";
     $("#chapter-editor-error").classList.remove("is-visible");
+    updateEditorPreview("chapter-editor-content");
 
     openDialog($("#chapter-editor-dialog"));
     window.setTimeout(function () { $("#chapter-editor-content").focus(); }, 30);
@@ -1112,9 +1299,12 @@
     $("#chapter-editor-form").reset();
     $("#chapter-editor-error").textContent = "";
     $("#chapter-editor-error").classList.remove("is-visible");
+    updateEditorPreview("chapter-editor-content");
   }
 
   function initEvents() {
+    initChapterEditorTools();
+
     $$("[data-view]").forEach(function (button) {
       button.addEventListener("click", function () {
         setView(button.getAttribute("data-view"));

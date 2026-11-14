@@ -25,6 +25,7 @@
   </script>
   <link rel="stylesheet" href="../assets/css/styles.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/read.css">
 </head>
 <body class="dashboard-body">
   <a class="skip-link" href="#dash-main">Lewati ke konten</a>
@@ -683,7 +684,29 @@
         </div>
         <div class="dash-field form-field--full">
           <label for="new-chapter-content">Isi naskah</label>
+          <div class="editor-toolbar" data-editor-toolbar="new-chapter-content" role="toolbar" aria-label="Format naskah">
+            <div class="editor-toolbar-group">
+              <button class="editor-tool" type="button" data-chapter-format="opening" title="Paragraf dengan huruf awal besar">Pembuka</button>
+              <button class="editor-tool" type="button" data-chapter-format="epigraph" title="Kutipan pembuka">Kutipan</button>
+              <button class="editor-tool" type="button" data-chapter-format="note" title="Catatan miring berwarna">Catatan</button>
+              <button class="editor-tool" type="button" data-chapter-format="card" title="Kartu catatan">Kartu</button>
+              <button class="editor-tool" type="button" data-chapter-format="quote-card" title="Kartu kutipan">Kartu kutipan</button>
+              <button class="editor-tool" type="button" data-chapter-format="letter" title="Blok surat dengan tanda tangan">Surat</button>
+              <button class="editor-tool" type="button" data-chapter-format="divider" title="Garis pemisah adegan">Pemisah</button>
+              <button class="editor-tool" type="button" data-chapter-format="continued" title="Penanda bersambung">Bersambung</button>
+            </div>
+            <div class="editor-toolbar-group">
+              <button class="editor-tool" type="button" data-chapter-format="accent" title="Teks berwarna aksen">Teks warna</button>
+              <button class="editor-tool" type="button" data-chapter-format="muted" title="Teks redup">Redup</button>
+              <button class="editor-tool" type="button" data-chapter-format="highlight" title="Teks disorot">Sorot</button>
+              <button class="editor-tool" type="button" data-chapter-format="strong" title="Teks tebal"><strong>Tebal</strong></button>
+              <button class="editor-tool" type="button" data-chapter-format="em" title="Teks miring"><em>Miring</em></button>
+            </div>
+          </div>
           <textarea id="new-chapter-content" name="content" rows="7" placeholder="Tempel atau tulis isi bab di sini..."></textarea>
+          <p class="editor-hint">Gunakan tombol format untuk menyisipkan kartu, kutipan, warna teks, dan lainnya. Pratinjau diperbarui otomatis.</p>
+          <div class="editor-preview-head"><span>Pratinjau</span><small>HTML ringan</small></div>
+          <div class="editor-preview chapter-body" data-editor-preview="new-chapter-content" aria-live="polite"></div>
         </div>
         <div class="dash-field form-field--full">
           <label class="switch-field" for="new-chapter-published">
@@ -735,8 +758,29 @@
         </div>
         <div class="dash-field form-field--full">
           <label for="chapter-editor-content">Isi naskah</label>
+          <div class="editor-toolbar" data-editor-toolbar="chapter-editor-content" role="toolbar" aria-label="Format naskah">
+            <div class="editor-toolbar-group">
+              <button class="editor-tool" type="button" data-chapter-format="opening" title="Paragraf dengan huruf awal besar">Pembuka</button>
+              <button class="editor-tool" type="button" data-chapter-format="epigraph" title="Kutipan pembuka">Kutipan</button>
+              <button class="editor-tool" type="button" data-chapter-format="note" title="Catatan miring berwarna">Catatan</button>
+              <button class="editor-tool" type="button" data-chapter-format="card" title="Kartu catatan">Kartu</button>
+              <button class="editor-tool" type="button" data-chapter-format="quote-card" title="Kartu kutipan">Kartu kutipan</button>
+              <button class="editor-tool" type="button" data-chapter-format="letter" title="Blok surat dengan tanda tangan">Surat</button>
+              <button class="editor-tool" type="button" data-chapter-format="divider" title="Garis pemisah adegan">Pemisah</button>
+              <button class="editor-tool" type="button" data-chapter-format="continued" title="Penanda bersambung">Bersambung</button>
+            </div>
+            <div class="editor-toolbar-group">
+              <button class="editor-tool" type="button" data-chapter-format="accent" title="Teks berwarna aksen">Teks warna</button>
+              <button class="editor-tool" type="button" data-chapter-format="muted" title="Teks redup">Redup</button>
+              <button class="editor-tool" type="button" data-chapter-format="highlight" title="Teks disorot">Sorot</button>
+              <button class="editor-tool" type="button" data-chapter-format="strong" title="Teks tebal"><strong>Tebal</strong></button>
+              <button class="editor-tool" type="button" data-chapter-format="em" title="Teks miring"><em>Miring</em></button>
+            </div>
+          </div>
           <textarea id="chapter-editor-content" name="content" rows="20" placeholder="Tulis atau tempel isi bab di sini..."></textarea>
-          <p class="editor-hint">Pisahkan paragraf dengan satu baris kosong. Perubahan langsung ditulis ke file bab setelah disimpan.</p>
+          <p class="editor-hint">Pisahkan paragraf dengan satu baris kosong. Tombol format menyisipkan HTML ringan; pratinjau di bawah diperbarui otomatis.</p>
+          <div class="editor-preview-head"><span>Pratinjau</span><small>HTML ringan</small></div>
+          <div class="editor-preview chapter-body" data-editor-preview="chapter-editor-content" aria-live="polite"></div>
         </div>
         <div class="dash-field form-field--full">
           <label class="switch-field" for="chapter-editor-published">

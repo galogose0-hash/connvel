@@ -29,6 +29,7 @@
   var selectedNovelId = "";
   var currentView = "ringkasan";
   var pendingPoster = "";
+  var editingNovelId = "";
   var editingChapterId = "";
   var editingCommentId = "";
   var editingAnnouncementId = "";
@@ -1052,6 +1053,8 @@
         '<td><span class="status-pill ' + (novel.visible ? "is-live" : "is-hidden") + '">' +
         (novel.visible ? "Tampil" : "Disembunyikan") + "</span></td>" +
         '<td><div class="row-actions">' +
+        '<button class="icon-button" type="button" data-edit-novel="' + escapeHtml(novel.id) + '" aria-label="Edit ' + escapeHtml(novel.title) + '">' +
+        '<svg class="icon" aria-hidden="true"><use href="#dash-icon-edit"/></svg></button>' +
         '<button class="table-action" type="button" data-toggle-novel="' + escapeHtml(novel.id) + '">' +
         (novel.visible ? "Sembunyikan" : "Tampilkan") + "</button>" +
         '<button class="icon-button icon-button--danger" type="button" data-delete-novel="' + escapeHtml(novel.id) + '" aria-label="Hapus ' + escapeHtml(novel.title) + '">' +
@@ -1420,6 +1423,15 @@
     }
   }
 
+  function setNovelDialogMode(novel) {
+    var editing = Boolean(novel);
+    editingNovelId = editing ? novel.id : "";
+    $("#novel-dialog-kicker").textContent = editing ? "Edit novel" : "Katalog baru";
+    $("#novel-dialog-title").textContent = editing ? "Edit Novel" : "Tambah Novel Baru";
+    $("#novel-submit-label").textContent = editing ? "Simpan Perubahan" : "Simpan Novel";
+    $("#novel-submit-icon").setAttribute("href", editing ? "#dash-icon-check" : "#dash-icon-plus");
+  }
+
   function resetNovelForm() {
     $("#novel-form").reset();
     $("#new-novel-type").value = "Novel";
@@ -1429,6 +1441,29 @@
     pendingPoster = "";
     $("#new-novel-poster").value = "";
     resetPosterPreview();
+    setNovelDialogMode(null);
+  }
+
+  function openNovelDialog(novel) {
+    resetNovelForm();
+
+    if (novel) {
+      setNovelDialogMode(novel);
+      $("#new-novel-title").value = novel.title || "";
+      $("#new-novel-author").value = novel.author || "";
+      setSelectedGenres($("#new-novel-genre"), novel.genre);
+      $("#new-novel-status").value = novel.status || "Ongoing";
+      $("#new-novel-type").value = novel.type || "Novel";
+      $("#new-novel-chapters").value = String(novel.chapters || 0);
+      $("#new-novel-synopsis").value = novel.synopsis || "";
+      pendingPoster = novel.poster || "";
+      if (pendingPoster) {
+        showPosterPreview(posterSrc(novel));
+      }
+    }
+
+    openDialog($("#novel-dialog"));
+    window.setTimeout(function () { $("#new-novel-title").focus(); }, 30);
   }
 
   function resetChapterForm() {
@@ -1666,9 +1701,7 @@
     $("#catalog-search").addEventListener("input", renderCatalog);
 
     $("#add-novel-button").addEventListener("click", function () {
-      resetNovelForm();
-      openDialog($("#novel-dialog"));
-      window.setTimeout(function () { $("#new-novel-title").focus(); }, 30);
+      openNovelDialog(null);
     });
 
     $$("[data-close-dialog]").forEach(function (button) {
@@ -1740,6 +1773,35 @@
       if (!genre) {
         error.textContent = "Pilih minimal satu genre.";
         error.classList.add("is-visible");
+        return;
+      }
+
+      var editingNovel = editingNovelId ? novelById(editingNovelId) : null;
+      if (editingNovelId && !editingNovel) {
+        error.textContent = "Novel yang diedit tidak ditemukan. Muat ulang halaman.";
+        error.classList.add("is-visible");
+        return;
+      }
+
+      if (editingNovel) {
+        var previousNovel = Object.assign({}, editingNovel);
+        editingNovel.title = title;
+        editingNovel.author = author;
+        editingNovel.genre = genre;
+        editingNovel.type = $("#new-novel-type").value;
+        editingNovel.status = $("#new-novel-status").value;
+        editingNovel.chapters = Math.max(0, parseInt($("#new-novel-chapters").value, 10) || 0);
+        editingNovel.poster = pendingPoster;
+        editingNovel.synopsis = $("#new-novel-synopsis").value.trim();
+
+        if (!await commit('Novel "' + editingNovel.title + '" diperbarui.')) {
+          Object.assign(editingNovel, previousNovel);
+          return;
+        }
+
+        closeDialog($("#novel-dialog"));
+        renderAll();
+        setView("katalog", false);
         return;
       }
 
@@ -2018,6 +2080,15 @@
     });
 
     $("#novel-table-body").addEventListener("click", async function (event) {
+      var edit = event.target.closest("[data-edit-novel]");
+      if (edit) {
+        var editNovel = novelById(edit.getAttribute("data-edit-novel"));
+        if (editNovel) {
+          openNovelDialog(editNovel);
+        }
+        return;
+      }
+
       var toggle = event.target.closest("[data-toggle-novel]");
       if (toggle) {
         var novel = novelById(toggle.getAttribute("data-toggle-novel"));

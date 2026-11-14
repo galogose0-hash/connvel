@@ -296,7 +296,7 @@
             <div>
               <p class="eyebrow">Katalog</p>
               <h2>Rapikan rak cerita <span class="serif-accent">Connvel</span>.</h2>
-              <p>Tambah novel baru, atur status tampil, dan pastikan katalog tetap terasa seperti rak yang sengaja disusun.</p>
+              <p>Tambah novel baru, sunting detail, atur status tampil, dan pastikan katalog tetap terasa seperti rak yang sengaja disusun.</p>
             </div>
             <button class="btn btn-primary" type="button" id="add-novel-button">
               <svg class="icon" aria-hidden="true"><use href="#dash-icon-plus"/></svg>
@@ -579,7 +579,7 @@
     <form id="novel-form" class="dialog-form" novalidate>
       <div class="dialog-head">
         <div>
-          <p class="dash-kicker">Katalog baru</p>
+          <p class="dash-kicker" id="novel-dialog-kicker">Katalog baru</p>
           <h2 id="novel-dialog-title">Tambah Novel Baru</h2>
         </div>
         <button class="dialog-close" type="button" data-close-dialog aria-label="Tutup dialog">
@@ -650,8 +650,8 @@
       <div class="dialog-actions">
         <button class="btn btn-outline btn-small" type="button" data-close-dialog>Batal</button>
         <button class="btn btn-primary btn-small" type="submit">
-          <svg class="icon" aria-hidden="true"><use href="#dash-icon-plus"/></svg>
-          Simpan Novel
+          <svg class="icon" aria-hidden="true"><use id="novel-submit-icon" href="#dash-icon-plus"/></svg>
+          <span id="novel-submit-label">Simpan Novel</span>
         </button>
       </div>
     </form>

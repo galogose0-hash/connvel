@@ -95,6 +95,11 @@
     gap: 16px;
   }
 
+  .mobile-write-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
   .mobile-actions .login-link {
     font-size: 0.96rem;
   }
@@ -316,6 +321,18 @@
 
   .newsletter h2 {
     font-size: clamp(1.95rem, 7.6vw, 2.75rem);
+  }
+
+  .write-cta {
+    position: relative;
+    z-index: 2;
+    margin-top: 24px;
+  }
+
+  .write-cta .btn {
+    width: 100%;
+    min-height: 54px;
+    justify-content: center;
   }
 
   .newsletter-ring,

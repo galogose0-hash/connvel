@@ -160,6 +160,14 @@
   margin-bottom: 0;
 }
 
+.chapter-body > div:not([class]) {
+  margin: 0 0 1.4em;
+}
+
+.chapter-body > div:not([class]):last-child {
+  margin-bottom: 0;
+}
+
 .chapter-opening::first-letter {
   float: left;
   margin: 0.07em 0.11em 0 0;

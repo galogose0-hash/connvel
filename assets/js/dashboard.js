@@ -57,18 +57,12 @@
 
   function contentToText(value) {
     var content = String(value || "");
-    if (!/<\/?(p|blockquote|div|span|em|strong|br)\b/i.test(content)) {
+    if (!/<\/?(p|blockquote|div|span|em|strong|br|h[1-6]|mark|hr)\b/i.test(content)) {
       return content.trim();
     }
     try {
       var doc = new DOMParser().parseFromString(content, "text/html");
-      var blocks = Array.prototype.slice.call(doc.body.querySelectorAll("p, .letter-signature, .chapter-continued"));
-      if (!blocks.length) {
-        return (doc.body.textContent || "").trim();
-      }
-      return blocks.map(function (block) {
-        return (block.textContent || "").replace(/\s+/g, " ").trim();
-      }).filter(Boolean).join("\n\n");
+      return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
     } catch (error) {
       return content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     }
@@ -88,7 +82,7 @@
     }).join("");
   }
 
-  function editorPreviewHtml(value) {
+  function chapterContentHtml(value) {
     var content = String(value || "").trim();
     if (!content) {
       return "";
@@ -96,166 +90,343 @@
     return looksLikeHtml(content) ? content : textToEditorHtml(content);
   }
 
-  var CHAPTER_FORMATS = {
-    opening: {
-      block: true,
-      before: '<p class="chapter-opening">',
-      after: "</p>",
-      placeholder: "Tulis paragraf pembuka yang kuat di sini."
-    },
-    epigraph: {
-      block: true,
-      before: '<blockquote class="chapter-epigraph">\n  <p>',
-      after: "</p>\n</blockquote>",
-      placeholder: "Tulis kutipan pembuka di sini."
-    },
-    note: {
-      block: true,
-      before: '<p class="chapter-note">',
-      after: "</p>",
-      placeholder: "Tulis catatan penting di sini."
-    },
-    card: {
-      block: true,
-      before: '<div class="chapter-card">\n  <p class="chapter-card-label">Catatan</p>\n  <p>',
-      after: "</p>\n</div>",
-      placeholder: "Tulis isi kartu di sini."
-    },
-    "quote-card": {
-      block: true,
-      before: '<div class="chapter-card chapter-card--quote">\n  <p class="chapter-card-label">Kutipan</p>\n  <blockquote>',
-      after: "</blockquote>\n</div>",
-      placeholder: "Tulis kutipan yang ingin ditonjolkan."
-    },
-    letter: {
-      block: true,
-      before: '<div class="chapter-letter">\n  <p>',
-      after: '</p>\n  <p class="letter-signature">— Nama</p>\n</div>',
-      placeholder: "Tulis isi surat di sini."
-    },
-    divider: {
-      block: true,
-      selection: false,
-      before: '<div class="chapter-divider" role="separator"><span></span></div>',
-      after: "",
-      placeholder: ""
-    },
-    continued: {
-      block: true,
-      before: '<p class="chapter-continued">',
-      after: "</p>",
-      placeholder: "Bersambung..."
-    },
+  var INLINE_FORMATS = {
     accent: {
-      block: false,
-      before: '<span class="chapter-accent">',
-      after: "</span>",
+      tag: "span",
+      className: "chapter-accent",
       placeholder: "teks berwarna"
     },
     muted: {
-      block: false,
-      before: '<span class="chapter-muted">',
-      after: "</span>",
+      tag: "span",
+      className: "chapter-muted",
       placeholder: "teks redup"
     },
     highlight: {
-      block: false,
-      before: '<span class="chapter-highlight">',
-      after: "</span>",
+      tag: "span",
+      className: "chapter-highlight",
       placeholder: "teks disorot"
     },
     strong: {
-      block: false,
-      before: "<strong>",
-      after: "</strong>",
+      tag: "strong",
+      className: "",
       placeholder: "teks tebal"
     },
     em: {
-      block: false,
-      before: "<em>",
-      after: "</em>",
+      tag: "em",
+      className: "",
       placeholder: "teks miring"
     }
   };
 
-  function insertChapterFormat(textarea, format) {
-    var spec = CHAPTER_FORMATS[format];
-    if (!spec) {
-      return;
+  var BLOCK_FORMATS = {
+    opening: {
+      tag: "p",
+      className: "chapter-opening",
+      placeholder: "Tulis paragraf pembuka yang kuat di sini."
+    },
+    epigraph: {
+      tag: "blockquote",
+      className: "chapter-epigraph",
+      innerTag: "p",
+      placeholder: "Tulis kutipan pembuka di sini."
+    },
+    note: {
+      tag: "p",
+      className: "chapter-note",
+      placeholder: "Tulis catatan penting di sini."
+    },
+    card: {
+      tag: "div",
+      className: "chapter-card",
+      innerTag: "p",
+      label: "Catatan",
+      placeholder: "Tulis isi kartu di sini."
+    },
+    "quote-card": {
+      tag: "div",
+      className: "chapter-card chapter-card--quote",
+      innerTag: "blockquote",
+      label: "Kutipan",
+      placeholder: "Tulis kutipan yang ingin ditonjolkan."
+    },
+    letter: {
+      tag: "div",
+      className: "chapter-letter",
+      innerTag: "p",
+      signature: "— Nama",
+      placeholder: "Tulis isi surat di sini."
+    },
+    continued: {
+      tag: "p",
+      className: "chapter-continued",
+      placeholder: "Bersambung..."
+    },
+    divider: {
+      divider: true
     }
+  };
 
-    var value = textarea.value;
-    var start = textarea.selectionStart;
-    var end = textarea.selectionEnd;
-    var selected = value.slice(start, end);
-    var content = selected || spec.placeholder || "";
-    var insertAt = start;
-
-    if (spec.block && selected) {
-      content = contentToText(selected).replace(/\n/g, "<br>");
-    }
-    if (spec.selection === false) {
-      insertAt = end;
-      content = "";
-    }
-
-    var leading = "";
-    var trailing = "";
-    if (spec.block) {
-      if (insertAt > 0 && !/\n\s*\n$/.test(value.slice(0, insertAt))) {
-        leading = "\n\n";
-      }
-      if (end < value.length && !/^\s*\n\s*\n/.test(value.slice(end))) {
-        trailing = "\n\n";
-      }
-    }
-
-    var inserted = leading + spec.before + content + spec.after + trailing;
-    textarea.value = value.slice(0, insertAt) + inserted + value.slice(end);
-    textarea.focus();
-
-    var contentStart = insertAt + leading.length + spec.before.length;
-    textarea.setSelectionRange(contentStart, contentStart + content.length);
-    updateEditorPreview(textarea.id);
+  function setEditorEmptyState(editor) {
+    var hasContent = editor.textContent.trim() !== "" ||
+      Boolean(editor.querySelector("img, .chapter-divider"));
+    editor.classList.toggle("is-empty", !hasContent);
   }
 
-  function updateEditorPreview(id) {
-    var textarea = document.getElementById(id);
-    var preview = document.querySelector('[data-editor-preview="' + id + '"]');
-    if (!textarea || !preview) {
+  function rememberEditorSelection(editor) {
+    var selection = window.getSelection();
+    if (!selection || !selection.rangeCount) {
       return;
     }
-    var html = editorPreviewHtml(textarea.value);
-    preview.innerHTML = html;
-    preview.classList.toggle("is-empty", !html);
+    var range = selection.getRangeAt(0);
+    if (editor.contains(range.commonAncestorContainer)) {
+      editor._savedRange = range.cloneRange();
+    }
+  }
+
+  function editorRange(editor) {
+    var selection = window.getSelection();
+    if (selection && selection.rangeCount) {
+      var range = selection.getRangeAt(0);
+      if (editor.contains(range.commonAncestorContainer)) {
+        return range;
+      }
+    }
+    if (editor._savedRange) {
+      var saved = editor._savedRange.cloneRange();
+      if (editor.contains(saved.commonAncestorContainer)) {
+        return saved;
+      }
+    }
+    var fallback = document.createRange();
+    fallback.selectNodeContents(editor);
+    fallback.collapse(false);
+    return fallback;
+  }
+
+  function focusEditorRange(editor, range) {
+    editor.focus();
+    var selection = window.getSelection();
+    if (!selection) {
+      return;
+    }
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function selectNodeContents(node) {
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    var selection = window.getSelection();
+    if (!selection) {
+      return;
+    }
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function editorBlock(editor, range) {
+    var node = range.startContainer;
+    if (node.nodeType === 3) {
+      node = node.parentNode;
+    }
+    while (node && node !== editor) {
+      if (/^(P|DIV|BLOCKQUOTE|H[1-6]|LI)$/.test(node.tagName)) {
+        return node;
+      }
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  function applyInlineFormat(editor, spec) {
+    var range = editorRange(editor);
+    focusEditorRange(editor, range);
+    range = editorRange(editor);
+
+    var wrapper = document.createElement(spec.tag);
+    if (spec.className) {
+      wrapper.className = spec.className;
+    }
+
+    if (range.collapsed) {
+      wrapper.textContent = spec.placeholder;
+      range.insertNode(wrapper);
+    } else {
+      wrapper.appendChild(range.extractContents());
+      range.insertNode(wrapper);
+    }
+
+    editor.normalize();
+    editor.focus();
+    selectNodeContents(wrapper);
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
+  function createBlockWrapper(spec) {
+    var wrapper = document.createElement(spec.tag);
+    if (spec.className) {
+      wrapper.className = spec.className;
+    }
+
+    var host = wrapper;
+    if (spec.label) {
+      var label = document.createElement("p");
+      label.className = "chapter-card-label";
+      label.textContent = spec.label;
+      wrapper.appendChild(label);
+    }
+    if (spec.innerTag) {
+      host = document.createElement(spec.innerTag);
+      wrapper.appendChild(host);
+    }
+
+    return { wrapper: wrapper, host: host };
+  }
+
+  function insertDivider(editor, range) {
+    var divider = document.createElement("div");
+    divider.className = "chapter-divider";
+    divider.setAttribute("role", "separator");
+    divider.appendChild(document.createElement("span"));
+
+    var block = editorBlock(editor, range);
+    if (block && editor.contains(block) && block.parentNode) {
+      block.parentNode.insertBefore(divider, block.nextSibling);
+    } else {
+      editor.appendChild(divider);
+    }
+
+    var caret = document.createRange();
+    caret.setStartAfter(divider);
+    caret.collapse(true);
+    focusEditorRange(editor, caret);
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
+  function applyBlockFormat(editor, spec) {
+    if (spec.divider) {
+      insertDivider(editor, editorRange(editor));
+      return;
+    }
+
+    var range = editorRange(editor);
+    focusEditorRange(editor, range);
+    range = editorRange(editor);
+
+    var block = editorBlock(editor, range);
+    var built = createBlockWrapper(spec);
+    var host = built.host;
+
+    if (block && editor.contains(block)) {
+      while (block.firstChild) {
+        host.appendChild(block.firstChild);
+      }
+      block.parentNode.replaceChild(built.wrapper, block);
+    } else {
+      editor.appendChild(built.wrapper);
+    }
+
+    var hadContent = host.textContent.trim() !== "";
+    if (!hadContent) {
+      host.innerHTML = "";
+      host.textContent = spec.placeholder || "";
+    }
+
+    if (spec.signature) {
+      var signature = document.createElement("p");
+      signature.className = "letter-signature";
+      signature.textContent = spec.signature;
+      built.wrapper.appendChild(signature);
+    }
+
+    editor.focus();
+    if (hadContent) {
+      var caret = document.createRange();
+      caret.selectNodeContents(host);
+      caret.collapse(false);
+      focusEditorRange(editor, caret);
+    } else {
+      selectNodeContents(host);
+    }
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
+  function applyChapterFormat(editor, format) {
+    var inline = INLINE_FORMATS[format];
+    if (inline) {
+      applyInlineFormat(editor, inline);
+      return;
+    }
+    var block = BLOCK_FORMATS[format];
+    if (block) {
+      applyBlockFormat(editor, block);
+    }
+  }
+
+  function setEditorContent(editor, value) {
+    editor.innerHTML = chapterContentHtml(value);
+    editor._savedRange = null;
+    setEditorEmptyState(editor);
+  }
+
+  function getEditorContent(editor) {
+    setEditorEmptyState(editor);
+    if (editor.classList.contains("is-empty")) {
+      return "";
+    }
+    return editor.innerHTML.replace(/\r\n/g, "\n").trim();
   }
 
   function initChapterEditorTools() {
+    try {
+      document.execCommand("defaultParagraphSeparator", false, "p");
+    } catch (error) {
+      error = null;
+    }
+
+    var editors = $$("[data-chapter-editor]");
+
+    editors.forEach(function (editor) {
+      editor.addEventListener("input", function () {
+        setEditorEmptyState(editor);
+        rememberEditorSelection(editor);
+      });
+      editor.addEventListener("keyup", function () {
+        rememberEditorSelection(editor);
+      });
+      editor.addEventListener("mouseup", function () {
+        rememberEditorSelection(editor);
+      });
+      editor.addEventListener("focus", function () {
+        rememberEditorSelection(editor);
+      });
+      editor.addEventListener("blur", function () {
+        rememberEditorSelection(editor);
+      });
+      setEditorEmptyState(editor);
+    });
+
+    document.addEventListener("selectionchange", function () {
+      editors.forEach(rememberEditorSelection);
+    });
+
     $$("[data-editor-toolbar]").forEach(function (toolbar) {
+      toolbar.addEventListener("mousedown", function (event) {
+        if (event.target.closest("[data-chapter-format]")) {
+          event.preventDefault();
+        }
+      });
       toolbar.addEventListener("click", function (event) {
         var button = event.target.closest("[data-chapter-format]");
         if (!button || !toolbar.contains(button)) {
           return;
         }
-        var id = toolbar.getAttribute("data-editor-toolbar");
-        var textarea = document.getElementById(id);
-        if (!textarea) {
+        var editor = document.getElementById(toolbar.getAttribute("data-editor-toolbar"));
+        if (!editor) {
           return;
         }
-        insertChapterFormat(textarea, button.getAttribute("data-chapter-format"));
+        applyChapterFormat(editor, button.getAttribute("data-chapter-format"));
       });
-    });
-
-    $$("[data-editor-preview]").forEach(function (preview) {
-      var id = preview.getAttribute("data-editor-preview");
-      var textarea = document.getElementById(id);
-      if (!textarea) {
-        return;
-      }
-      textarea.addEventListener("input", function () {
-        updateEditorPreview(id);
-      });
-      updateEditorPreview(id);
     });
   }
 
@@ -1273,7 +1444,7 @@
     $("#chapter-form-error").textContent = "";
     $("#chapter-form-error").classList.remove("is-visible");
     $("#chapter-dialog-title").textContent = novel ? "Tambah Bab - " + novel.title : "Tambah Bab";
-    updateEditorPreview("new-chapter-content");
+    setEditorContent($("#new-chapter-content"), "");
   }
 
   function openChapterEditor(chapter) {
@@ -1284,11 +1455,10 @@
     $("#chapter-editor-subtitle").textContent = (novel ? novel.title : "Novel") + " · " + chapter.title;
     $("#chapter-editor-title-field").value = chapter.title;
     $("#chapter-editor-date").value = chapter.date || "";
-    $("#chapter-editor-content").value = chapter.content || "";
+    setEditorContent($("#chapter-editor-content"), chapter.content);
     $("#chapter-editor-published").checked = Boolean(chapter.published);
     $("#chapter-editor-error").textContent = "";
     $("#chapter-editor-error").classList.remove("is-visible");
-    updateEditorPreview("chapter-editor-content");
 
     openDialog($("#chapter-editor-dialog"));
     window.setTimeout(function () { $("#chapter-editor-content").focus(); }, 30);
@@ -1299,7 +1469,7 @@
     $("#chapter-editor-form").reset();
     $("#chapter-editor-error").textContent = "";
     $("#chapter-editor-error").classList.remove("is-visible");
-    updateEditorPreview("chapter-editor-content");
+    setEditorContent($("#chapter-editor-content"), "");
   }
 
   function initEvents() {
@@ -1712,7 +1882,7 @@
         title: title,
         date: date,
         published: $("#new-chapter-published").checked,
-        content: $("#new-chapter-content").value.trim()
+        content: getEditorContent($("#new-chapter-content"))
       };
 
       DATA.chapters.push(chapter);
@@ -1767,7 +1937,7 @@
 
       chapter.title = title;
       chapter.date = date;
-      chapter.content = $("#chapter-editor-content").value.replace(/\r\n/g, "\n").trim();
+      chapter.content = getEditorContent($("#chapter-editor-content"));
       chapter.published = $("#chapter-editor-published").checked;
 
       if (!await commit("Naskah Bab " + chapter.number + " tersimpan.")) {

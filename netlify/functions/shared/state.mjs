@@ -78,6 +78,7 @@ export function sanitizeState(state) {
         title: novel.title,
         author: novel.author,
         genre: novel.genre,
+        type: novel.type === "Cerpen" ? "Cerpen" : "Novel",
         status: novel.status,
         chapters: novel.chapters,
         visible: true,

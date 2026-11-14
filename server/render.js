@@ -46,6 +46,10 @@ function statusLabel(novel) {
   return novel.status === "Completed" ? "Tamat" : "Sedang Berjalan";
 }
 
+function typeLabel(novel) {
+  return novel.type === "Cerpen" ? "Cerpen" : "Novel";
+}
+
 function looksLikeHtml(value) {
   return /<\/?(p|blockquote|div|span|em|strong|br|h[1-6])\b/i.test(String(value || ""));
 }
@@ -299,7 +303,8 @@ function renderNovelPage(novel, chapters) {
     '<p class="novel-detail-author">oleh <a href="#">' + escapeHtml(novel.author) + "</a></p>" +
     '<dl class="novel-facts">' +
     '<div class="novel-fact"><dt>Total Bab</dt><dd>' + escapeHtml(totalChapters) + " Bab</dd></div>" +
-    '<div class="novel-fact"><dt>Status</dt><dd>' + escapeHtml(statusLabel(novel)) + "</dd></div></dl>" +
+    '<div class="novel-fact"><dt>Status</dt><dd>' + escapeHtml(statusLabel(novel)) + "</dd></div>" +
+    '<div class="novel-fact"><dt>Jenis Karangan</dt><dd>' + escapeHtml(typeLabel(novel)) + "</dd></div></dl>" +
     '<div class="novel-synopsis"><h2>Sinopsis</h2>' + renderParagraphs(novel.synopsis) + "</div>" +
     '<div class="novel-detail-cta">' + cta +
     '<a class="text-link" href="#diskusi">Lihat diskusi pembaca <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"/></svg></a>' +

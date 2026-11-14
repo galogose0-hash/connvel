@@ -42,6 +42,7 @@ function normalizeState(raw) {
       title: title,
       author: String(candidate.author || "").trim(),
       genre: String(candidate.genre || "Fantasi").trim(),
+      type: String(candidate.type || "").trim().toLowerCase() === "cerpen" ? "Cerpen" : "Novel",
       status: candidate.status === "Completed" ? "Completed" : "Ongoing",
       chapters: Math.max(0, toInteger(candidate.chapters, 0)),
       visible: candidate.visible !== false,

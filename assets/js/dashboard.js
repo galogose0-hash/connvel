@@ -742,6 +742,7 @@
       $("#novel-author").value = "";
       setSelectedGenres($("#novel-genre"), "Fantasi");
       $("#novel-status").value = "Ongoing";
+      $("#novel-type").value = "Novel";
       $("#novel-chapters").value = "";
       $("#novel-synopsis").value = "";
       $("#chapter-subtitle").textContent = "Tambahkan novel terlebih dahulu untuk mengelola bab.";
@@ -758,6 +759,7 @@
     $("#novel-author").value = novel.author;
     setSelectedGenres($("#novel-genre"), novel.genre);
     $("#novel-status").value = novel.status || "Ongoing";
+    $("#novel-type").value = novel.type || "Novel";
     $("#novel-chapters").value = novel.chapters || 0;
     $("#novel-synopsis").value = novel.synopsis || "";
     $("#novel-status-message").textContent = "";
@@ -1064,6 +1066,7 @@
 
   function resetNovelForm() {
     $("#novel-form").reset();
+    $("#new-novel-type").value = "Novel";
     $("#new-novel-chapters").value = "0";
     $("#novel-form-error").textContent = "";
     $("#novel-form-error").classList.remove("is-visible");
@@ -1385,6 +1388,7 @@
         title: title,
         author: author,
         genre: genre,
+        type: $("#new-novel-type").value,
         status: $("#new-novel-status").value,
         chapters: Math.max(0, parseInt($("#new-novel-chapters").value, 10) || 0),
         visible: true,
@@ -1440,6 +1444,7 @@
         title: novel.title,
         author: novel.author,
         genre: novel.genre,
+        type: novel.type,
         status: novel.status,
         chapters: novel.chapters,
         synopsis: novel.synopsis
@@ -1448,6 +1453,7 @@
       novel.title = title;
       novel.author = author;
       novel.genre = genre;
+      novel.type = $("#novel-type").value;
       novel.status = $("#novel-status").value;
       novel.chapters = Math.max(0, parseInt($("#novel-chapters").value, 10) || 0);
       novel.synopsis = $("#novel-synopsis").value.trim();

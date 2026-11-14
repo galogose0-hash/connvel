@@ -10,6 +10,7 @@
         title: "Putri Sang Kartografer",
         author: "Alya Prameswari",
         genre: "Fantasi",
+        type: "Novel",
         status: "Ongoing",
         chapters: 24,
         visible: true,

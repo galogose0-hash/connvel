@@ -15,72 +15,6 @@
         visible: true,
         poster: "assets/images/cover-cartographer.jpg",
         synopsis: "Seorang pembuat peta muda menemukan jalur yang tidak pernah tercatat di peta mana pun, dan rahasia lama kota pelabuhan Vharen mulai terbuka."
-      },
-      {
-        id: "orbit-kesunyian",
-        title: "Orbit Kesunyian",
-        author: "Kenji Arata",
-        genre: "Fiksi Ilmiah",
-        status: "Ongoing",
-        chapters: 31,
-        visible: true,
-        poster: "assets/images/cover-orbit.jpg",
-        synopsis: "Di stasiun luar angkasa yang sunyi, seorang teknisi menerima pesan dari orbit yang seharusnya kosong."
-      },
-      {
-        id: "surat-surat-dari-pesisir",
-        title: "Surat-Surat dari Pesisir",
-        author: "Elena Voss",
-        genre: "Roman",
-        status: "Completed",
-        chapters: 42,
-        visible: true,
-        poster: "assets/images/cover-letters.jpg",
-        synopsis: "Tujuh puluh surat tanpa penerima membawa seorang arsiparis kembali ke pesisir yang ia tinggalkan bertahun-tahun lalu."
-      },
-      {
-        id: "rumah-di-bukit-lentera",
-        title: "Rumah di Bukit Lentera",
-        author: "Rania Aldebaran",
-        genre: "Misteri",
-        status: "Ongoing",
-        chapters: 18,
-        visible: true,
-        poster: "assets/images/cover-lantern.jpg",
-        synopsis: "Sebuah rumah tua di bukit menyalakan lentera setiap malam untuk seseorang yang tak pernah pulang."
-      },
-      {
-        id: "meja-hari-minggu",
-        title: "Meja Hari Minggu",
-        author: "Mira Halim",
-        genre: "Potongan Kehidupan",
-        status: "Completed",
-        chapters: 16,
-        visible: true,
-        poster: "assets/images/cover-sunday.jpg",
-        synopsis: "Kisah-kisah kecil yang tumbuh di sekitar meja makan keluarga pada hari Minggu."
-      },
-      {
-        id: "garam-dan-kayu-manis",
-        title: "Garam & Kayu Manis",
-        author: "Theo Mahendra",
-        genre: "Sejarah",
-        status: "Completed",
-        chapters: 37,
-        visible: true,
-        poster: "assets/images/cover-salt.jpg",
-        synopsis: "Di kota pelabuhan abad ke-18, seorang juru masak menyimpan resep yang bisa mengubah arah sejarah."
-      },
-      {
-        id: "lumut-dan-cahaya-bulan",
-        title: "Lumut & Cahaya Bulan",
-        author: "Wren Ashby",
-        genre: "Fantasi",
-        status: "Ongoing",
-        chapters: 22,
-        visible: true,
-        poster: "assets/images/cover-moss.jpg",
-        synopsis: "Di hutan yang bernapas, seorang penjaga cahaya bulan menemukan jejak yang bukan milik manusia."
       }
     ],
     chapters: [
@@ -196,17 +130,10 @@
     home: {
       spotlight: "putri-sang-kartografer",
       latest: [
-        "putri-sang-kartografer",
-        "orbit-kesunyian",
-        "surat-surat-dari-pesisir",
-        "rumah-di-bukit-lentera",
-        "meja-hari-minggu",
-        "garam-dan-kayu-manis"
+        "putri-sang-kartografer"
       ],
       trending: [
-        "putri-sang-kartografer",
-        "surat-surat-dari-pesisir",
-        "garam-dan-kayu-manis"
+        "putri-sang-kartografer"
       ]
     },
     announcements: [

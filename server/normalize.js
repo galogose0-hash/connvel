@@ -187,9 +187,56 @@ function normalizeState(raw) {
     });
   });
 
-  var announcementSource = source.announcement && typeof source.announcement === "object"
+  var legacyAnnouncement = source.announcement && typeof source.announcement === "object"
     ? source.announcement
-    : {};
+    : null;
+  var announcementCandidates = Array.isArray(source.announcements)
+    ? source.announcements
+    : legacyAnnouncement
+      ? [legacyAnnouncement]
+      : [];
+
+  var usedAnnouncementIds = {};
+  var announcements = [];
+
+  announcementCandidates.forEach(function (candidate, index) {
+    if (!candidate || typeof candidate !== "object") {
+      return;
+    }
+    var title = String(candidate.title || "").trim();
+    if (!title) {
+      return;
+    }
+    var desiredId = String(candidate.id || "").trim() || "ann-" + (index + 1);
+    var id = desiredId;
+    var suffix = 2;
+    while (usedAnnouncementIds[id]) {
+      id = desiredId + "-" + suffix;
+      suffix += 1;
+    }
+    usedAnnouncementIds[id] = true;
+
+    announcements.push({
+      id: id,
+      title: title,
+      body: String(candidate.body || "").trim(),
+      date: String(candidate.date || "").slice(0, 10),
+      visible: candidate.visible !== false
+    });
+  });
+
+  announcements.sort(function (a, b) {
+    if (a.date === b.date) {
+      return 0;
+    }
+    if (!a.date) {
+      return 1;
+    }
+    if (!b.date) {
+      return -1;
+    }
+    return a.date < b.date ? 1 : -1;
+  });
 
   return {
     novels: novels,
@@ -199,12 +246,7 @@ function normalizeState(raw) {
       latest: latest,
       trending: trending
     },
-    announcement: {
-      title: String(announcementSource.title || "").trim(),
-      body: String(announcementSource.body || "").trim(),
-      date: String(announcementSource.date || "").slice(0, 10),
-      visible: announcementSource.visible !== false
-    },
+    announcements: announcements,
     submissions: submissions,
     comments: comments
   };

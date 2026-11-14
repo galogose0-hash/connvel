@@ -69,29 +69,23 @@
           <p class="eyebrow">Ruang kabar Connvel</p>
           <h1 class="info-title" id="info-title">Pengumuman <span class="serif-accent">dari Connvel.</span></h1>
           <p class="info-lead">Kabar terbaru, jadwal rilis, dan informasi penting untuk pembaca Connvel. Halaman ini diperbarui langsung dari dashboard redaksi.</p>
-
-          <div class="info-clock-card" role="timer" aria-live="off">
-            <span class="info-clock-label">Waktu Indonesia Barat · WIB</span>
-            <strong class="info-clock-time" id="clock-time">--:--:--</strong>
-            <span class="info-clock-date" id="clock-date">Memuat tanggal...</span>
-          </div>
+          <p class="info-hint">Pengumuman terbaru terbuka di paling atas. Gulir daftar dan klik judul lama untuk membaca isinya.</p>
         </div>
 
-        <article class="info-announcement" id="announcement-card" aria-labelledby="announcement-title" data-reveal>
+        <section class="info-board" aria-labelledby="announcement-heading" data-reveal>
           <div class="info-card-top">
-            <span class="info-badge">Pengumuman</span>
-            <time class="info-date" id="announcement-date"></time>
+            <h2 class="info-badge" id="announcement-heading">Pengumuman</h2>
+            <span class="info-count" id="announcement-count"></span>
           </div>
 
-          <h2 id="announcement-title">Memuat pengumuman...</h2>
-          <div class="info-body" id="announcement-body"></div>
+          <div class="info-list" id="announcement-list"></div>
           <p class="info-empty" id="announcement-empty" hidden>Belum ada pengumuman untuk saat ini. Silakan kembali lagi nanti.</p>
 
           <div class="info-footer">
             <span>Connvel · Cerita yang menghubungkan dunia.</span>
             <a href="../index.html">Kembali ke Beranda</a>
           </div>
-        </article>
+        </section>
       </div>
     </section>
   </main>

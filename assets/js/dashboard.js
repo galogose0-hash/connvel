@@ -21,7 +21,7 @@
     novels: [],
     chapters: [],
     home: { spotlight: "", latest: [], trending: [] },
-    announcement: { title: "", body: "", date: "", visible: true },
+    announcements: [],
     submissions: [],
     comments: []
   };
@@ -31,6 +31,7 @@
   var pendingPoster = "";
   var editingChapterId = "";
   var editingCommentId = "";
+  var editingAnnouncementId = "";
   var apiAvailable = false;
   var toastTimer = null;
   var homeStatusTimer = null;
@@ -73,13 +74,50 @@
     }
   }
 
+  function sortAnnouncements(list) {
+    return list.map(function (item, index) {
+      return { item: item, index: index };
+    }).sort(function (a, b) {
+      if (a.item.date === b.item.date) {
+        return a.index - b.index;
+      }
+      if (!a.item.date) {
+        return 1;
+      }
+      if (!b.item.date) {
+        return -1;
+      }
+      return a.item.date < b.item.date ? 1 : -1;
+    }).map(function (entry) {
+      return entry.item;
+    });
+  }
+
+  function hydrateAnnouncements(source) {
+    var list = Array.isArray(source.announcements) ? source.announcements : [];
+    if (!list.length && source.announcement && typeof source.announcement === "object" && source.announcement.title) {
+      list = [Object.assign({ id: "ann-1" }, source.announcement)];
+    }
+    return sortAnnouncements(list.filter(function (item) {
+      return item && typeof item === "object" && String(item.title || "").trim();
+    }).map(function (item, index) {
+      return {
+        id: String(item.id || "").trim() || "ann-" + (index + 1),
+        title: String(item.title || "").trim(),
+        body: String(item.body || "").trim(),
+        date: String(item.date || "").slice(0, 10),
+        visible: item.visible !== false
+      };
+    }));
+  }
+
   function hydrateData(raw) {
     var source = raw && typeof raw === "object" ? raw : {};
     return {
       novels: Array.isArray(source.novels) ? source.novels : [],
       chapters: Array.isArray(source.chapters) ? source.chapters : [],
       home: Object.assign({ spotlight: "", latest: [], trending: [] }, source.home || {}),
-      announcement: Object.assign({ title: "", body: "", date: "", visible: true }, source.announcement || {}),
+      announcements: hydrateAnnouncements(source),
       submissions: Array.isArray(source.submissions) ? source.submissions : [],
       comments: Array.isArray(source.comments) ? source.comments : []
     };
@@ -934,12 +972,68 @@
     $("#comment-form-error").classList.remove("is-visible");
   }
 
+  function announcementById(id) {
+    return (DATA.announcements || []).find(function (item) {
+      return item.id === id;
+    }) || null;
+  }
+
+  function renderAnnouncementList() {
+    var list = sortAnnouncements(DATA.announcements || []);
+
+    $("#announcement-list").innerHTML = list.map(function (item) {
+      var isVisible = item.visible !== false;
+      return '<article class="submission-card' + (isVisible ? " is-new" : "") + '">' +
+        '<div class="submission-head">' +
+        '<div class="submission-title">' +
+        '<span class="status-pill ' + (isVisible ? "is-new" : "is-read") + '">' + (isVisible ? "Tampil" : "Disembunyikan") + "</span>" +
+        "<h3>" + escapeHtml(item.title) + "</h3>" +
+        "</div>" +
+        '<time datetime="' + escapeHtml(item.date) + '">' + escapeHtml(formatDate(item.date) || "Tanpa tanggal") + "</time>" +
+        "</div>" +
+        '<p class="submission-message">' + escapeHtml(item.body) + "</p>" +
+        '<div class="submission-actions">' +
+        '<button class="btn btn-outline btn-small" type="button" data-edit-announcement="' + escapeHtml(item.id) + '">' +
+        '<svg class="icon" aria-hidden="true"><use href="#dash-icon-edit"/></svg> Edit</button>' +
+        '<button class="table-action table-action--danger" type="button" data-delete-announcement="' + escapeHtml(item.id) + '">Hapus</button>' +
+        "</div>" +
+        "</article>";
+    }).join("");
+
+    $("#announcement-empty").hidden = list.length !== 0;
+  }
+
+  function fillAnnouncementForm(item) {
+    editingAnnouncementId = item.id;
+    $("#announcement-title").value = item.title || "";
+    $("#announcement-date").value = item.date || todayISO();
+    $("#announcement-body").value = item.body || "";
+    $("#announcement-visible").checked = item.visible !== false;
+    $("#announcement-editor-kicker").textContent = "Sunting pengumuman";
+    $("#announcement-editor-title").textContent = "Perbarui Kabar";
+    $("#announcement-submit-label").textContent = "Simpan Perubahan";
+    $("#announcement-cancel").hidden = false;
+  }
+
+  function resetAnnouncementForm() {
+    editingAnnouncementId = "";
+    $("#announcement-form").reset();
+    $("#announcement-date").value = todayISO();
+    $("#announcement-visible").checked = true;
+    $("#announcement-editor-kicker").textContent = "Pengumuman baru";
+    $("#announcement-editor-title").textContent = "Kabar untuk Pembaca";
+    $("#announcement-submit-label").textContent = "Tambah Pengumuman";
+    $("#announcement-cancel").hidden = true;
+  }
+
   function renderAnnouncement() {
-    var announcement = DATA.announcement || {};
-    $("#announcement-title").value = announcement.title || "";
-    $("#announcement-date").value = announcement.date || todayISO();
-    $("#announcement-body").value = announcement.body || "";
-    $("#announcement-visible").checked = announcement.visible !== false;
+    renderAnnouncementList();
+    var editing = announcementById(editingAnnouncementId);
+    if (editing) {
+      fillAnnouncementForm(editing);
+    } else {
+      resetAnnouncementForm();
+    }
   }
 
   function renderAll() {
@@ -1106,6 +1200,7 @@
       var title = $("#announcement-title").value.trim();
       var date = $("#announcement-date").value;
       var body = $("#announcement-body").value.trim();
+      var visible = $("#announcement-visible").checked;
 
       if (!title) {
         setStatus($("#announcement-status"), "Judul pengumuman wajib diisi.", "announcement");
@@ -1123,21 +1218,86 @@
         return;
       }
 
-      var previousAnnouncement = Object.assign({}, DATA.announcement);
-      DATA.announcement = {
-        title: title,
-        body: body,
-        date: date,
-        visible: $("#announcement-visible").checked
-      };
+      var previousAnnouncements = DATA.announcements.map(function (item) {
+        return Object.assign({}, item);
+      });
+      var target = announcementById(editingAnnouncementId);
+      var message;
 
-      if (await commit("Pengumuman tersimpan.")) {
-        setStatus($("#announcement-status"), "Pengumuman tersimpan dan tersinkron ke halaman publik.", "announcement");
+      if (target) {
+        target.title = title;
+        target.body = body;
+        target.date = date;
+        target.visible = visible;
+        message = "Pengumuman diperbarui dan tersinkron ke halaman publik.";
+      } else {
+        DATA.announcements.unshift({
+          id: "ann-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 6),
+          title: title,
+          body: body,
+          date: date,
+          visible: visible
+        });
+        message = "Pengumuman ditambahkan dan tersinkron ke halaman publik.";
+      }
+
+      if (await commit(message)) {
+        editingAnnouncementId = "";
+        setStatus($("#announcement-status"), message, "announcement");
         renderAnnouncement();
       } else {
-        DATA.announcement = previousAnnouncement;
+        DATA.announcements = previousAnnouncements;
         renderAnnouncement();
       }
+    });
+
+    $("#announcement-list").addEventListener("click", async function (event) {
+      var editButton = event.target.closest("[data-edit-announcement]");
+      if (editButton) {
+        var announcement = announcementById(editButton.getAttribute("data-edit-announcement"));
+        if (announcement) {
+          fillAnnouncementForm(announcement);
+          $("#announcement-form").scrollIntoView({ behavior: "smooth", block: "start" });
+          window.setTimeout(function () {
+            $("#announcement-title").focus();
+          }, 260);
+        }
+        return;
+      }
+
+      var remove = event.target.closest("[data-delete-announcement]");
+      if (!remove) {
+        return;
+      }
+      var targetAnnouncement = announcementById(remove.getAttribute("data-delete-announcement"));
+      if (!targetAnnouncement) {
+        return;
+      }
+      if (!window.confirm('Hapus pengumuman "' + targetAnnouncement.title + '"?')) {
+        return;
+      }
+
+      var previousAnnouncements = DATA.announcements.map(function (item) {
+        return Object.assign({}, item);
+      });
+      DATA.announcements = DATA.announcements.filter(function (item) {
+        return item.id !== targetAnnouncement.id;
+      });
+
+      if (await commit("Pengumuman dihapus.")) {
+        if (editingAnnouncementId === targetAnnouncement.id) {
+          editingAnnouncementId = "";
+        }
+        renderAnnouncement();
+      } else {
+        DATA.announcements = previousAnnouncements;
+        renderAnnouncement();
+      }
+    });
+
+    $("#announcement-cancel").addEventListener("click", function () {
+      resetAnnouncementForm();
+      $("#announcement-title").focus();
     });
 
     $("#catalog-search").addEventListener("input", renderCatalog);

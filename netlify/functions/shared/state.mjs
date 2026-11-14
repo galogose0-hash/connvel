@@ -24,7 +24,7 @@ export async function readState(store) {
   var raw = await store.get(STATE_KEY, { consistency: "strong" });
   if (raw) {
     try {
-      return JSON.parse(raw);
+      return normalizeState(JSON.parse(raw));
     } catch (error) {
       /* Data rusak ditimpa ulang dari seed di bawah. */
     }
@@ -86,20 +86,32 @@ export function sanitizeState(state) {
       };
     });
 
-  var announcement = source.announcement && typeof source.announcement === "object"
-    ? source.announcement
-    : null;
+  var announcementSource = Array.isArray(source.announcements)
+    ? source.announcements
+    : source.announcement && typeof source.announcement === "object"
+      ? [source.announcement]
+      : [];
+
+  var announcements = announcementSource
+    .filter(function (announcement) {
+      return announcement &&
+        typeof announcement === "object" &&
+        announcement.visible !== false &&
+        String(announcement.title || "").trim();
+    })
+    .map(function (announcement) {
+      return {
+        id: String(announcement.id || ""),
+        title: String(announcement.title || "").trim(),
+        body: String(announcement.body || "").trim(),
+        date: String(announcement.date || "").slice(0, 10)
+      };
+    });
 
   return {
     novels: novels,
     home: source.home && typeof source.home === "object" ? source.home : {},
-    announcement: announcement && announcement.visible !== false && String(announcement.title || "").trim()
-      ? {
-        title: String(announcement.title || "").trim(),
-        body: String(announcement.body || "").trim(),
-        date: String(announcement.date || "").slice(0, 10)
-      }
-      : null,
+    announcements: announcements,
     comments: Array.isArray(source.comments) ? source.comments : [],
     submissions: []
   };

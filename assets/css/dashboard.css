@@ -953,6 +953,10 @@
   background: var(--surface);
 }
 
+.dash-card--spaced {
+  margin-top: 20px;
+}
+
 .dash-card-head {
   display: flex;
   align-items: flex-start;

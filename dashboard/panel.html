@@ -504,9 +504,9 @@
             <div class="dash-card">
               <div class="dash-card-head">
                 <div>
-                  <p class="dash-kicker">Pengumuman aktif</p>
-                  <h2>Kabar untuk Pembaca</h2>
-                  <p class="dash-card-copy">Isi judul, tanggal, dan kabar yang ingin disampaikan ke halaman publik.</p>
+                  <p class="dash-kicker" id="announcement-editor-kicker">Pengumuman baru</p>
+                  <h2 id="announcement-editor-title">Kabar untuk Pembaca</h2>
+                  <p class="dash-card-copy">Tambahkan beberapa pengumuman. Yang terbaru otomatis tampil paling atas di halaman publik.</p>
                 </div>
               </div>
 
@@ -541,12 +541,26 @@
               <div class="form-actions">
                 <button class="btn btn-primary" type="submit">
                   <svg class="icon" aria-hidden="true"><use href="#dash-icon-check"/></svg>
-                  Simpan Pengumuman
+                  <span id="announcement-submit-label">Tambah Pengumuman</span>
                 </button>
+                <button class="btn btn-outline" type="button" id="announcement-cancel" hidden>Batal Edit</button>
                 <p class="form-status" id="announcement-status" role="status" aria-live="polite"></p>
               </div>
             </div>
           </form>
+
+          <div class="dash-card dash-card--spaced">
+            <div class="dash-card-head">
+              <div>
+                <p class="dash-kicker">Daftar pengumuman</p>
+                <h2>Kabar yang Sudah Terbit</h2>
+                <p class="dash-card-copy">Pengumuman terbaru berada di paling atas. Sunting atau hapus kapan saja.</p>
+              </div>
+            </div>
+
+            <div class="submission-list" id="announcement-list"></div>
+            <p class="empty-state" id="announcement-empty" hidden>Belum ada pengumuman. Tambahkan kabar pertama untuk pembaca.</p>
+          </div>
         </section>
       </main>
     </div>

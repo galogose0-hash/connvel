@@ -1,109 +1,131 @@
 (function () {
   "use strict";
 
-  var timeElement = document.getElementById("clock-time");
-  var dateElement = document.getElementById("clock-date");
-  var card = document.getElementById("announcement-card");
-  var titleElement = document.getElementById("announcement-title");
-  var dateLabel = document.getElementById("announcement-date");
-  var bodyElement = document.getElementById("announcement-body");
+  var listElement = document.getElementById("announcement-list");
+  var countElement = document.getElementById("announcement-count");
   var emptyElement = document.getElementById("announcement-empty");
 
-  function setClock() {
-    var now = new Date();
-    var timeParts = new Intl.DateTimeFormat("id-ID", {
-      timeZone: "Asia/Jakarta",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hourCycle: "h23"
-    }).formatToParts(now);
-    var values = {};
-
-    timeParts.forEach(function (part) {
-      if (part.type !== "literal") {
-        values[part.type] = part.value;
+  function sortNewestFirst(list) {
+    return list.map(function (item, index) {
+      return { item: item, index: index };
+    }).sort(function (a, b) {
+      if (a.item.date === b.item.date) {
+        return a.index - b.index;
       }
+      if (!a.item.date) {
+        return 1;
+      }
+      if (!b.item.date) {
+        return -1;
+      }
+      return a.item.date < b.item.date ? 1 : -1;
+    }).map(function (entry) {
+      return entry.item;
+    });
+  }
+
+  function announcementsFrom(data) {
+    var source = data && typeof data === "object" ? data : {};
+    var list = Array.isArray(source.announcements) ? source.announcements : [];
+
+    if (!list.length && source.announcement && typeof source.announcement === "object" && source.announcement.title) {
+      list = [source.announcement];
+    }
+
+    return sortNewestFirst(list.filter(function (item) {
+      return item && typeof item === "object" && item.visible !== false && String(item.title || "").trim();
+    }).map(function (item, index) {
+      return {
+        id: String(item.id || "").trim() || "ann-" + (index + 1),
+        title: String(item.title || "").trim(),
+        body: String(item.body || "").trim(),
+        date: String(item.date || "").slice(0, 10)
+      };
+    }));
+  }
+
+  function buildEntry(item, index, openIds) {
+    var details = document.createElement("details");
+    details.className = "info-entry" + (index === 0 ? " is-latest" : "");
+    details.setAttribute("data-announcement", item.id);
+    if (index === 0 || openIds[item.id]) {
+      details.open = true;
+    }
+
+    var summary = document.createElement("summary");
+    summary.className = "info-entry-summary";
+
+    var counter = document.createElement("span");
+    counter.className = "info-entry-index";
+    counter.textContent = (index + 1 < 10 ? "0" : "") + (index + 1);
+
+    var main = document.createElement("span");
+    main.className = "info-entry-main";
+
+    var title = document.createElement("span");
+    title.className = "info-entry-title";
+    title.textContent = item.title;
+    main.appendChild(title);
+
+    if (index === 0) {
+      var tag = document.createElement("span");
+      tag.className = "info-entry-tag";
+      tag.textContent = "Terbaru";
+      main.appendChild(tag);
+    }
+
+    var icon = document.createElement("span");
+    icon.className = "info-entry-icon";
+    icon.setAttribute("aria-hidden", "true");
+
+    summary.appendChild(counter);
+    summary.appendChild(main);
+    summary.appendChild(icon);
+
+    var body = document.createElement("div");
+    body.className = "info-entry-body";
+    body.textContent = item.body || "Belum ada isi pengumuman.";
+
+    details.appendChild(summary);
+    details.appendChild(body);
+    return details;
+  }
+
+  function render(data) {
+    var announcements = announcementsFrom(data);
+    var openIds = {};
+
+    Array.prototype.forEach.call(listElement.querySelectorAll("details[open]"), function (entry) {
+      openIds[entry.getAttribute("data-announcement")] = true;
     });
 
-    timeElement.textContent = values.hour + ":" + values.minute + ":" + values.second;
-    dateElement.textContent = new Intl.DateTimeFormat("id-ID", {
-      timeZone: "Asia/Jakarta",
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    }).format(now);
-  }
+    listElement.innerHTML = "";
 
-  function parseDate(value) {
-    var match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ""));
-    if (!match) {
-      return null;
-    }
-    return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
-  }
-
-  function formatDate(value) {
-    var date = parseDate(value);
-    if (!date) {
-      return "";
-    }
-    return new Intl.DateTimeFormat("id-ID", {
-      timeZone: "UTC",
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    }).format(date);
-  }
-
-  function showEmpty() {
-    card.classList.add("is-empty");
-    titleElement.hidden = true;
-    dateLabel.hidden = true;
-    bodyElement.hidden = true;
-    emptyElement.hidden = false;
-  }
-
-  function showAnnouncement(announcement) {
-    card.classList.remove("is-empty");
-    titleElement.hidden = false;
-    dateLabel.hidden = false;
-    bodyElement.hidden = false;
-    emptyElement.hidden = true;
-
-    titleElement.textContent = announcement.title;
-    bodyElement.textContent = announcement.body || "";
-    dateLabel.textContent = formatDate(announcement.date);
-    dateLabel.setAttribute("datetime", announcement.date || "");
-  }
-
-  function applyState(data) {
-    var announcement = data && data.announcement;
-    if (!announcement || announcement.visible === false || !announcement.title) {
-      showEmpty();
+    if (!announcements.length) {
+      listElement.hidden = true;
+      countElement.textContent = "";
+      emptyElement.hidden = false;
       return;
     }
-    showAnnouncement(announcement);
+
+    emptyElement.hidden = true;
+    listElement.hidden = false;
+    countElement.textContent = announcements.length + " kabar";
+
+    announcements.forEach(function (item, index) {
+      listElement.appendChild(buildEntry(item, index, openIds));
+    });
   }
 
   function loadLocalState() {
     try {
-      if (!window.ConnvelStore) {
-        applyState(null);
-        return;
-      }
-      if (!window.localStorage.getItem(window.ConnvelStore.STORAGE_KEY)) {
-        applyState(window.ConnvelStore.load());
-        return;
-      }
-      applyState(window.ConnvelStore.load());
+      render(window.ConnvelStore ? window.ConnvelStore.load() : null);
     } catch (error) {
-      applyState(null);
+      render(null);
     }
   }
 
-  function loadAnnouncement() {
+  function loadAnnouncements() {
     if (!window.fetch) {
       loadLocalState();
       return;
@@ -115,19 +137,16 @@
       }
       return response.json();
     }).then(function (payload) {
-      applyState(payload && payload.state ? payload.state : payload);
+      render(payload && payload.state ? payload.state : payload);
     }).catch(loadLocalState);
   }
 
-  setClock();
-  window.setInterval(setClock, 1000);
-  loadAnnouncement();
-  window.setInterval(loadAnnouncement, 60000);
+  loadAnnouncements();
+  window.setInterval(loadAnnouncements, 60000);
 
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) {
-      setClock();
-      loadAnnouncement();
+      loadAnnouncements();
     }
   });
 

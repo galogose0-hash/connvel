@@ -60,7 +60,7 @@ function readState() {
     error.statusCode = 503;
     throw error;
   }
-  return state;
+  return normalizeState(state);
 }
 
 function writeState(state) {

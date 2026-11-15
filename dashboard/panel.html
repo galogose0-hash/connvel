@@ -16,10 +16,10 @@
         var session = JSON.parse(window.sessionStorage.getItem("connvel_admin_session"));
         if (!session || !session.expiresAt || Date.now() >= session.expiresAt) {
           window.sessionStorage.removeItem("connvel_admin_session");
-          window.location.replace("index.html");
+          window.location.replace("/dashboard/");
         }
       } catch (error) {
-        window.location.replace("index.html");
+        window.location.replace("/dashboard/");
       }
     })();
   </script>

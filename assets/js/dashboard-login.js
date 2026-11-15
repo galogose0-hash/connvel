@@ -20,7 +20,7 @@
   }
 
   if (hasActiveSession()) {
-    window.location.replace("panel.html");
+    window.location.replace("/dashboard/panel.html");
     return;
   }
 
@@ -82,7 +82,7 @@
         loginAt: now,
         expiresAt: now + SESSION_DURATION
       }));
-      window.location.href = "panel.html";
+      window.location.href = "/dashboard/panel.html";
     }).catch(function (error) {
       resetSubmit();
       showError(error.message || "Gagal memeriksa kunci. Pastikan koneksi tersedia.");

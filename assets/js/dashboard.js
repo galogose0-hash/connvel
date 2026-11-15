@@ -775,7 +775,7 @@
 
   function logout() {
     window.sessionStorage.removeItem(SESSION_KEY);
-    window.location.replace("index.html");
+    window.location.replace("/dashboard/");
   }
 
   function openSidebar() {

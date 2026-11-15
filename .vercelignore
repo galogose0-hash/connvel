@@ -1,0 +1,8 @@
+netlify-site/
+.netlify/
+public/
+novel/
+ceritanovel/
+.env
+.env.*
+!.env.example

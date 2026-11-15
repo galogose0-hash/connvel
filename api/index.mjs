@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { normalizeState } from "../../server/normalize.js";
+import { normalizeState } from "../server/normalize.js";
 import {
   openStore,
   readState,
@@ -9,9 +9,9 @@ import {
   sanitizeState,
   persistPosters,
   readPoster
-} from "./shared/state.mjs";
+} from "../server/vercel-state.mjs";
 
-const MAX_BODY = 6 * 1024 * 1024;
+const MAX_BODY = 4 * 1024 * 1024;
 
 function json(payload, status) {
   return new Response(JSON.stringify(payload), {
@@ -34,9 +34,13 @@ function httpError(status, message) {
 }
 
 async function readJsonBody(request) {
+  var declared = Number(request.headers.get("content-length") || 0);
+  if (declared && declared > MAX_BODY) {
+    throw httpError(413, "Data terlalu besar. Maksimal 4 MB.");
+  }
   var raw = await request.text();
   if (raw.length > MAX_BODY) {
-    throw httpError(413, "Data terlalu besar. Maksimal 6 MB.");
+    throw httpError(413, "Data terlalu besar. Maksimal 4 MB.");
   }
   if (!raw || !raw.trim()) {
     throw httpError(400, "Body JSON kosong.");
@@ -158,15 +162,45 @@ async function handleSubmission(request) {
   return json({ submission: submission }, 201);
 }
 
-export default async (request) => {
-  var url;
+async function handlePoster(pathname) {
+  var novelId = pathname.slice("/api/poster/".length);
   try {
-    url = new URL(request.url);
+    novelId = decodeURIComponent(novelId);
+  } catch (error) {
+    return fail(404, "Poster tidak ditemukan.");
+  }
+  var store = await openStore();
+  var poster = await readPoster(store, novelId);
+  if (!poster) {
+    return fail(404, "Poster tidak ditemukan.");
+  }
+  return new Response(poster.stream, {
+    status: 200,
+    headers: {
+      "Content-Type": poster.mime,
+      "Cache-Control": "public, max-age=3600",
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
+}
+
+function resolvePathname(request) {
+  var url = new URL(request.url);
+  try {
+    return decodeURIComponent(url.pathname);
+  } catch (error) {
+    return url.pathname;
+  }
+}
+
+async function handle(request) {
+  var pathname;
+  try {
+    pathname = resolvePathname(request);
   } catch (error) {
     return fail(400, "Alamat tidak valid.");
   }
 
-  var pathname = url.pathname;
   var method = request.method;
 
   try {
@@ -191,28 +225,15 @@ export default async (request) => {
     }
 
     if (method === "GET" && pathname.indexOf("/api/poster/") === 0) {
-      var novelId = pathname.slice("/api/poster/".length);
-      try {
-        novelId = decodeURIComponent(novelId);
-      } catch (error) {
-        return fail(404, "Poster tidak ditemukan.");
-      }
-      var store = await openStore();
-      var poster = await readPoster(store, novelId);
-      if (!poster) {
-        return fail(404, "Poster tidak ditemukan.");
-      }
-      return new Response(poster.bytes, {
-        status: 200,
-        headers: {
-          "Content-Type": poster.mime,
-          "Cache-Control": "public, max-age=3600"
-        }
-      });
+      return await handlePoster(pathname);
     }
 
     return fail(404, "Endpoint API tidak ditemukan.");
   } catch (error) {
     return fail(error.status || 500, error.message || "Kesalahan server.");
   }
+}
+
+export default {
+  fetch: handle
 };

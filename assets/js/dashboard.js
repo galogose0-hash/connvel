@@ -492,7 +492,7 @@
     pill.classList.toggle("is-offline", !serverActive);
     pill.innerHTML = '<span aria-hidden="true"></span> ' + (serverActive ? "Mode server" : "Backend offline");
     note.textContent = serverActive
-      ? "Mode server: perubahan tersimpan ke penyimpanan daring (Netlify Blobs atau data/connvel.json saat lokal)."
+      ? "Mode server: perubahan tersimpan ke penyimpanan daring (Vercel Blob atau data/connvel.json saat lokal)."
       : "Mode lokal: backend tidak aktif. Jalankan npm start agar perubahan menulis file HTML.";
   }
 
@@ -665,7 +665,7 @@
     if (!novel || !novel.poster) {
       return "";
     }
-    if (novel.poster.indexOf("data:") === 0) {
+    if (novel.poster.indexOf("data:") === 0 || novel.poster.charAt(0) === "/") {
       return novel.poster;
     }
     return "../" + novel.poster.replace(/^(\.\.\/)+/, "");

@@ -88,29 +88,6 @@
     });
   }
 
-  function submitViaNetlifyForm(payload) {
-    var body = new URLSearchParams();
-    body.set("form-name", "kiriman-naskah");
-    body.set("bot-field", "");
-    body.set("author_name", payload.name);
-    body.set("email", payload.email);
-    body.set("whatsapp", payload.phone);
-    body.set("novel_title", payload.novelTitle);
-    body.set("chapter_info", payload.chapter);
-    body.set("content", payload.message);
-
-    return window.fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: body.toString()
-    }).then(function (response) {
-      if (!response.ok) {
-        throw new Error("Formulir pengiriman tidak tersedia (status " + response.status + ").");
-      }
-      return response;
-    });
-  }
-
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -128,12 +105,7 @@
     setSending(true);
     setStatus("Mengirim naskah ke redaksi...", "");
 
-    submitToApi(payload).catch(function (error) {
-      if (error && error.fromServer) {
-        throw error;
-      }
-      return submitViaNetlifyForm(payload);
-    }).then(function () {
+    submitToApi(payload).then(function () {
       form.reset();
       setStatus("Naskahmu sudah masuk ke Kotak Masuk Penulis. Redaksi Connvel akan meninjaunya dan menghubungimu lewat email atau WhatsApp.", "success");
     }).catch(function (error) {

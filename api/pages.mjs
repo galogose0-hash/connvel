@@ -1,5 +1,5 @@
-import render from "../../server/render.js";
-import { openStore, readState } from "./shared/state.mjs";
+import render from "../server/render.js";
+import { openStore, readState } from "../server/vercel-state.mjs";
 
 function html(markup) {
   return new Response(markup, {
@@ -32,17 +32,19 @@ function notFound() {
   });
 }
 
-export default async (request) => {
-  var url;
+function resolvePathname(request) {
+  var url = new URL(request.url);
   try {
-    url = new URL(request.url);
+    return decodeURIComponent(url.pathname);
   } catch (error) {
-    return notFound();
+    return url.pathname;
   }
+}
 
+async function handle(request) {
   var pathname;
   try {
-    pathname = decodeURIComponent(url.pathname);
+    pathname = resolvePathname(request);
   } catch (error) {
     return notFound();
   }
@@ -84,4 +86,8 @@ export default async (request) => {
   }
 
   return html(render.renderChapterPage(novel, chapter, chapters));
+}
+
+export default {
+  fetch: handle
 };

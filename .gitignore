@@ -1,5 +1,8 @@
-netlify-site/
-.netlify/
+public/
+.vercel/
 node_modules/
-netlify/functions/shared/seed-state.mjs
+server/seed-state.mjs
 package-lock.json
+.env
+.env.local
+.env.*.local

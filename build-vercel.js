@@ -6,13 +6,12 @@ var normalizeState = require("./server/normalize").normalizeState;
 
 var ROOT = __dirname;
 var DATA_FILE = path.join(ROOT, "data", "connvel.json");
-var OUT_DIR = path.join(ROOT, "netlify-site");
-var FUNCTIONS_SHARED_DIR = path.join(ROOT, "netlify", "functions", "shared");
-var SEED_FILE = path.join(FUNCTIONS_SHARED_DIR, "seed-state.mjs");
+var OUT_DIR = path.join(ROOT, "public");
+var SERVER_DIR = path.join(ROOT, "server");
+var SEED_FILE = path.join(SERVER_DIR, "seed-state.mjs");
 
 var ROOT_FILES = ["index.html", "browse.html", "donate.html"];
 var COPY_DIRS = ["novelis", "tentang", "dashboard", "info"];
-var ASSETS_SKIP = [];
 
 function readState() {
   var raw;
@@ -67,7 +66,7 @@ function countFiles(dir) {
 }
 
 function writeSeedState(state) {
-  fs.mkdirSync(FUNCTIONS_SHARED_DIR, { recursive: true });
+  fs.mkdirSync(SERVER_DIR, { recursive: true });
   var seed = normalizeState(state);
   fs.writeFileSync(
     SEED_FILE,
@@ -101,15 +100,15 @@ function main() {
   copyDirectory(
     path.join(ROOT, "assets"),
     path.join(OUT_DIR, "assets"),
-    ASSETS_SKIP,
+    [],
     path.join(ROOT, "assets")
   );
 
-  console.log("Situs Connvel berhasil dibangun di netlify-site/.");
-  console.log("- Novel: " + seed.novels.length + " (halaman novel dan bab dilayani oleh Netlify Functions)");
+  console.log("Situs Connvel berhasil dibangun di public/.");
+  console.log("- Novel: " + seed.novels.length + " (halaman novel dan bab dilayani oleh Vercel Functions)");
   console.log("- Bab: " + seed.chapters.length);
   console.log("- Komentar: " + seed.comments.length);
-  console.log("- Kiriman penulis: " + seed.submissions.length + " (ikut seed awal Blobs)");
+  console.log("- Kiriman penulis: " + seed.submissions.length + " (ikut seed awal Vercel Blob)");
   console.log("- Seed Functions: " + path.relative(ROOT, SEED_FILE));
   console.log("- Total berkas statis: " + countFiles(OUT_DIR));
 }

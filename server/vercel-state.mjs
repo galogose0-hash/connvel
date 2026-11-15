@@ -1,27 +1,26 @@
-import { getStore } from "@netlify/blobs";
+import { get, put } from "@vercel/blob";
 import seedState from "./seed-state.mjs";
-import { normalizeState } from "../../../server/normalize.js";
+import { normalizeState } from "./normalize.js";
 
-const STORE_NAME = "connvel";
-const STATE_KEY = "state";
-const POSTER_PREFIX = "poster:";
+const STATE_PATHNAME = "connvel/state.json";
+const POSTER_PREFIX = "connvel/posters/";
+const BLOB_ACCESS = "private";
 const MAX_POSTER_BYTES = 4 * 1024 * 1024;
 
-var storeFactory = null;
-
-export function setStoreFactory(factory) {
-  storeFactory = factory;
+export async function openStore() {
+  return { kind: "vercel-blob" };
 }
 
-export async function openStore() {
-  if (storeFactory) {
-    return await storeFactory();
+async function readBlobText(pathname) {
+  var result = await get(pathname, { access: BLOB_ACCESS, useCache: false });
+  if (!result || result.statusCode !== 200 || !result.stream) {
+    return null;
   }
-  return await getStore({ name: STORE_NAME, consistency: "strong" });
+  return await new Response(result.stream).text();
 }
 
 export async function readState(store) {
-  var raw = await store.get(STATE_KEY, { consistency: "strong" });
+  var raw = await readBlobText(STATE_PATHNAME);
   if (raw) {
     try {
       return normalizeState(JSON.parse(raw));
@@ -35,7 +34,12 @@ export async function readState(store) {
 }
 
 export async function writeState(store, state) {
-  await store.set(STATE_KEY, JSON.stringify(state));
+  await put(STATE_PATHNAME, JSON.stringify(state), {
+    access: BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: "application/json"
+  });
 }
 
 export function adminToken() {
@@ -132,7 +136,12 @@ export async function persistPosters(store, state) {
       error.status = 413;
       throw error;
     }
-    await store.set(POSTER_PREFIX + novel.id, poster);
+    await put(POSTER_PREFIX + novel.id, bytes, {
+      access: BLOB_ACCESS,
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: mime
+    });
     novel.poster = "/api/poster/" + novel.id;
   }
 }
@@ -148,16 +157,12 @@ export async function readPoster(store, novelId) {
   if (String(novel.poster || "") !== "/api/poster/" + novelId) {
     return null;
   }
-  var raw = await store.get(POSTER_PREFIX + novelId);
-  if (!raw) {
-    return null;
-  }
-  var match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s.exec(raw);
-  if (!match) {
+  var result = await get(POSTER_PREFIX + novelId, { access: BLOB_ACCESS, useCache: false });
+  if (!result || result.statusCode !== 200 || !result.stream) {
     return null;
   }
   return {
-    mime: match[1].toLowerCase(),
-    bytes: Buffer.from(match[2], "base64")
+    mime: result.blob.contentType || "application/octet-stream",
+    stream: result.stream
   };
 }

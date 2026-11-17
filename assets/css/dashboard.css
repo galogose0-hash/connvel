@@ -2032,6 +2032,22 @@
   pointer-events: none;
 }
 
+.editor-tool--clear {
+  color: var(--accent-deep);
+}
+
+.editor-tool:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.editor-tool:disabled:hover,
+.editor-tool:disabled:focus-visible {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink);
+}
+
 .editor-preview-head {
   display: flex;
   align-items: baseline;

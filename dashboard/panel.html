@@ -702,8 +702,13 @@
               <button class="editor-tool" type="button" data-chapter-format="strong" title="Teks tebal"><strong>Tebal</strong></button>
               <button class="editor-tool" type="button" data-chapter-format="em" title="Teks miring"><em>Miring</em></button>
             </div>
+            <div class="editor-toolbar-group">
+              <button class="editor-tool" type="button" data-editor-action="undo" title="Urungkan (Ctrl+Z)" disabled>Undo</button>
+              <button class="editor-tool" type="button" data-editor-action="redo" title="Ulangi (Ctrl+Y)" disabled>Redo</button>
+              <button class="editor-tool editor-tool--clear" type="button" data-chapter-format="clear" title="Hapus format pada teks terpilih">Hapus format</button>
+            </div>
           </div>
-          <p class="editor-hint">Tulis langsung seperti di halaman baca. Pilih teks untuk warna/tebal/miring, atau letakkan kursor di paragraf untuk kartu dan kutipan.</p>
+          <p class="editor-hint">Tulis langsung seperti di halaman baca. Pilih teks lalu klik Hapus format untuk membatalkan warna, tebal, atau miring. Ctrl+Z / Ctrl+Y untuk undo / redo.</p>
           <div class="editor-preview-head"><span>Naskah &amp; pratinjau</span><small>Tulis langsung di sini</small></div>
           <div class="editor-canvas chapter-body" id="new-chapter-content" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Isi naskah" spellcheck="true" data-chapter-editor data-placeholder="Mulai tulis naskah di sini..."></div>
         </div>
@@ -775,8 +780,13 @@
               <button class="editor-tool" type="button" data-chapter-format="strong" title="Teks tebal"><strong>Tebal</strong></button>
               <button class="editor-tool" type="button" data-chapter-format="em" title="Teks miring"><em>Miring</em></button>
             </div>
+            <div class="editor-toolbar-group">
+              <button class="editor-tool" type="button" data-editor-action="undo" title="Urungkan (Ctrl+Z)" disabled>Undo</button>
+              <button class="editor-tool" type="button" data-editor-action="redo" title="Ulangi (Ctrl+Y)" disabled>Redo</button>
+              <button class="editor-tool editor-tool--clear" type="button" data-chapter-format="clear" title="Hapus format pada teks terpilih">Hapus format</button>
+            </div>
           </div>
-          <p class="editor-hint">Tulis langsung di pratinjau. Pilih teks untuk warna/tebal/miring, atau letakkan kursor di paragraf untuk kartu dan kutipan.</p>
+          <p class="editor-hint">Tulis langsung di pratinjau. Pilih teks lalu klik Hapus format untuk membatalkan warna, tebal, atau miring. Ctrl+Z / Ctrl+Y untuk undo / redo.</p>
           <div class="editor-preview-head"><span>Naskah &amp; pratinjau</span><small>Tulis langsung di sini</small></div>
           <div class="editor-canvas chapter-body" id="chapter-editor-content" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Isi naskah" spellcheck="true" data-chapter-editor data-placeholder="Mulai tulis naskah di sini..."></div>
         </div>

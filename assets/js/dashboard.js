@@ -6,6 +6,8 @@
   var MAX_LATEST = 6;
   var MAX_TRENDING = 3;
   var MAX_POSTER_SIZE = 1.5 * 1024 * 1024;
+  var MAX_HISTORY = 60;
+  var HISTORY_DELAY = 400;
 
   var VIEWS = {
     ringkasan: { label: "Ringkasan", title: "Ringkasan" },
@@ -173,6 +175,129 @@
     editor.classList.toggle("is-empty", !hasContent);
   }
 
+  function ensureHistory(editor) {
+    if (!editor._history) {
+      editor._history = {
+        stack: [editor.innerHTML],
+        index: 0,
+        timer: null,
+        restoring: false
+      };
+    }
+    return editor._history;
+  }
+
+  function historyButton(editor, action) {
+    var toolbar = document.querySelector('[data-editor-toolbar="' + editor.id + '"]');
+    return toolbar ? toolbar.querySelector('[data-editor-action="' + action + '"]') : null;
+  }
+
+  function updateHistoryButtons(editor) {
+    var history = ensureHistory(editor);
+    var undoButton = historyButton(editor, "undo");
+    var redoButton = historyButton(editor, "redo");
+    var canUndo = history.index > 0 || Boolean(history.timer);
+    var canRedo = history.index < history.stack.length - 1;
+
+    if (undoButton) {
+      undoButton.disabled = !canUndo;
+    }
+    if (redoButton) {
+      redoButton.disabled = !canRedo;
+    }
+  }
+
+  function commitHistory(editor) {
+    var history = ensureHistory(editor);
+    if (history.restoring) {
+      return;
+    }
+    if (history.timer) {
+      window.clearTimeout(history.timer);
+      history.timer = null;
+    }
+
+    var html = editor.innerHTML;
+    if (html === history.stack[history.index]) {
+      updateHistoryButtons(editor);
+      return;
+    }
+
+    history.stack = history.stack.slice(0, history.index + 1);
+    history.stack.push(html);
+    if (history.stack.length > MAX_HISTORY) {
+      history.stack.shift();
+    }
+    history.index = history.stack.length - 1;
+    updateHistoryButtons(editor);
+  }
+
+  function scheduleHistory(editor) {
+    var history = ensureHistory(editor);
+    window.clearTimeout(history.timer);
+    history.timer = window.setTimeout(function () {
+      history.timer = null;
+      commitHistory(editor);
+    }, HISTORY_DELAY);
+    updateHistoryButtons(editor);
+  }
+
+  function resetHistory(editor) {
+    var history = ensureHistory(editor);
+    if (history.timer) {
+      window.clearTimeout(history.timer);
+    }
+    editor._history = {
+      stack: [editor.innerHTML],
+      index: 0,
+      timer: null,
+      restoring: false
+    };
+    editor._savedRange = null;
+    updateHistoryButtons(editor);
+  }
+
+  function restoreHistory(editor) {
+    var history = ensureHistory(editor);
+    history.restoring = true;
+    editor.innerHTML = history.stack[history.index];
+    history.restoring = false;
+    editor._savedRange = null;
+    setEditorEmptyState(editor);
+
+    var caret = document.createRange();
+    caret.selectNodeContents(editor);
+    caret.collapse(false);
+    focusEditorRange(editor, caret);
+    updateHistoryButtons(editor);
+  }
+
+  function undoEditor(editor) {
+    var history = ensureHistory(editor);
+    if (history.timer) {
+      commitHistory(editor);
+    }
+    if (history.index <= 0) {
+      updateHistoryButtons(editor);
+      return;
+    }
+    history.index -= 1;
+    restoreHistory(editor);
+  }
+
+  function redoEditor(editor) {
+    var history = ensureHistory(editor);
+    if (history.timer) {
+      commitHistory(editor);
+    }
+    if (history.index >= history.stack.length - 1) {
+      updateHistoryButtons(editor);
+      return;
+    }
+    history.index += 1;
+    restoreHistory(editor);
+  }
+
   function rememberEditorSelection(editor) {
     var selection = window.getSelection();
     if (!selection || !selection.rangeCount) {
@@ -261,6 +386,7 @@
     editor.focus();
     selectNodeContents(wrapper);
     editor.dispatchEvent(new Event("input", { bubbles: true }));
+    commitHistory(editor);
   }
 
   function createBlockWrapper(spec) {
@@ -302,6 +428,7 @@
     caret.collapse(true);
     focusEditorRange(editor, caret);
     editor.dispatchEvent(new Event("input", { bubbles: true }));
+    commitHistory(editor);
   }
 
   function applyBlockFormat(editor, spec) {
@@ -350,9 +477,14 @@
       selectNodeContents(host);
     }
     editor.dispatchEvent(new Event("input", { bubbles: true }));
+    commitHistory(editor);
   }
 
   function applyChapterFormat(editor, format) {
+    if (format === "clear") {
+      clearFormat(editor);
+      return;
+    }
     var inline = INLINE_FORMATS[format];
     if (inline) {
       applyInlineFormat(editor, inline);
@@ -364,10 +496,121 @@
     }
   }
 
+  function rangeIntersectsNode(range, node) {
+    if (!node || !node.parentNode) {
+      return false;
+    }
+    if (typeof range.intersectsNode === "function") {
+      try {
+        return range.intersectsNode(node);
+      } catch (error) {
+        return false;
+      }
+    }
+    if (typeof Range === "undefined") {
+      return false;
+    }
+    var nodeRange = document.createRange();
+    nodeRange.selectNode(node);
+    return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) < 0 &&
+      range.compareBoundaryPoints(Range.START_TO_END, nodeRange) > 0;
+  }
+
+  function unwrapNode(node) {
+    var parent = node.parentNode;
+    if (!parent) {
+      return;
+    }
+    while (node.firstChild) {
+      parent.insertBefore(node.firstChild, node);
+    }
+    parent.removeChild(node);
+  }
+
+  function clearFormat(editor) {
+    var selection = window.getSelection();
+    var range = null;
+
+    if (selection && selection.rangeCount) {
+      var candidate = selection.getRangeAt(0);
+      if (editor.contains(candidate.commonAncestorContainer)) {
+        range = candidate;
+      }
+    }
+
+    if (!range || range.collapsed) {
+      showToast("Pilih kata atau kalimat yang ingin dihapus formatnya dulu.");
+      editor.focus();
+      return;
+    }
+
+    var inlineSelector = "span.chapter-accent, span.chapter-muted, span.chapter-highlight, strong, em, b, i";
+    var blockSelector = ".chapter-opening, .chapter-note, .chapter-card, .chapter-letter, .chapter-epigraph, .chapter-continued";
+
+    var inlines = $$(inlineSelector, editor).filter(function (node) {
+      return rangeIntersectsNode(range, node);
+    });
+    var blocks = $$(blockSelector, editor).filter(function (node) {
+      return rangeIntersectsNode(range, node);
+    });
+    var dividers = $$(".chapter-divider", editor).filter(function (node) {
+      return rangeIntersectsNode(range, node);
+    });
+
+    if (!inlines.length && !blocks.length && !dividers.length) {
+      showToast("Tidak ada format pada teks yang dipilih.");
+      return;
+    }
+
+    inlines.forEach(function (node) {
+      if (node.isConnected && editor.contains(node)) {
+        unwrapNode(node);
+      }
+    });
+
+    blocks.forEach(function (block) {
+      if (!block.isConnected || !editor.contains(block)) {
+        return;
+      }
+      Array.prototype.slice.call(block.children).forEach(function (child) {
+        if (child.classList && (child.classList.contains("chapter-card-label") || child.classList.contains("letter-signature"))) {
+          block.removeChild(child);
+        }
+      });
+      block.classList.remove(
+        "chapter-opening",
+        "chapter-note",
+        "chapter-card",
+        "chapter-card--quote",
+        "chapter-letter",
+        "chapter-epigraph",
+        "chapter-continued"
+      );
+    });
+
+    dividers.forEach(function (divider) {
+      if (divider.isConnected && divider.parentNode) {
+        divider.parentNode.removeChild(divider);
+      }
+    });
+
+    editor.normalize();
+    setEditorEmptyState(editor);
+    editor.dispatchEvent(new Event("input", { bubbles: true }));
+    commitHistory(editor);
+
+    var caret = document.createRange();
+    caret.selectNodeContents(editor);
+    caret.collapse(false);
+    focusEditorRange(editor, caret);
+    showToast("Format pada teks terpilih sudah dihapus.");
+  }
+
   function setEditorContent(editor, value) {
     editor.innerHTML = chapterContentHtml(value);
     editor._savedRange = null;
     setEditorEmptyState(editor);
+    resetHistory(editor);
   }
 
   function getEditorContent(editor) {
@@ -391,6 +634,7 @@
       editor.addEventListener("input", function () {
         setEditorEmptyState(editor);
         rememberEditorSelection(editor);
+        scheduleHistory(editor);
       });
       editor.addEventListener("keyup", function () {
         rememberEditorSelection(editor);
@@ -404,7 +648,21 @@
       editor.addEventListener("blur", function () {
         rememberEditorSelection(editor);
       });
+      editor.addEventListener("keydown", function (event) {
+        if (!(event.ctrlKey || event.metaKey) || event.altKey) {
+          return;
+        }
+        var key = String(event.key || "").toLowerCase();
+        if (key === "z" && !event.shiftKey) {
+          event.preventDefault();
+          undoEditor(editor);
+        } else if (key === "y" || (key === "z" && event.shiftKey)) {
+          event.preventDefault();
+          redoEditor(editor);
+        }
+      });
       setEditorEmptyState(editor);
+      resetHistory(editor);
     });
 
     document.addEventListener("selectionchange", function () {
@@ -413,20 +671,32 @@
 
     $$("[data-editor-toolbar]").forEach(function (toolbar) {
       toolbar.addEventListener("mousedown", function (event) {
-        if (event.target.closest("[data-chapter-format]")) {
+        if (event.target.closest("[data-chapter-format], [data-editor-action]")) {
           event.preventDefault();
         }
       });
       toolbar.addEventListener("click", function (event) {
-        var button = event.target.closest("[data-chapter-format]");
-        if (!button || !toolbar.contains(button)) {
+        var actionButton = event.target.closest("[data-editor-action]");
+        var formatButton = event.target.closest("[data-chapter-format]");
+        if (!actionButton && !formatButton) {
           return;
         }
         var editor = document.getElementById(toolbar.getAttribute("data-editor-toolbar"));
         if (!editor) {
           return;
         }
-        applyChapterFormat(editor, button.getAttribute("data-chapter-format"));
+        if (actionButton && toolbar.contains(actionButton)) {
+          var action = actionButton.getAttribute("data-editor-action");
+          if (action === "undo") {
+            undoEditor(editor);
+          } else if (action === "redo") {
+            redoEditor(editor);
+          }
+          return;
+        }
+        if (formatButton && toolbar.contains(formatButton)) {
+          applyChapterFormat(editor, formatButton.getAttribute("data-chapter-format"));
+        }
       });
     });
   }

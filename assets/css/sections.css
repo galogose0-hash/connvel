@@ -496,7 +496,7 @@
 .pick-cover {
   position: relative;
   flex: 0 0 auto;
-  width: clamp(140px, 12vw, 180px);
+  width: clamp(150px, 13vw, 190px);
   aspect-ratio: 2 / 3;
   overflow: hidden;
   border-radius: 12px;
@@ -513,7 +513,7 @@
 .pick-cover-mid {
   order: 1;
   z-index: 1;
-  margin-right: -26px;
+  margin-right: -30px;
   filter: brightness(0.82) saturate(0.82);
   transform: translateY(10px) rotate(-8deg);
 }
@@ -529,7 +529,7 @@
 .pick-cover-back {
   order: 3;
   z-index: 2;
-  margin-left: -26px;
+  margin-left: -30px;
   filter: brightness(0.92) saturate(0.9);
   transform: translateY(10px) rotate(8deg);
 }
@@ -552,21 +552,21 @@
 
 .pick-note {
   position: absolute;
-  right: 0;
-  bottom: 2%;
+  left: 50%;
+  bottom: 0;
   z-index: 3;
-  width: min(270px, 68%);
+  width: min(300px, 78%);
   padding: 18px 20px;
   border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow);
   color: var(--ink);
-  transform: rotate(2deg);
+  transform: translateX(-50%) rotate(1deg);
   transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .pick-panel:hover .pick-note {
-  transform: rotate(0deg) translateY(-3px);
+  transform: translateX(-50%) translateY(-3px) rotate(0deg);
 }
 
 .pick-note-label {

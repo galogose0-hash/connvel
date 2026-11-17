@@ -289,19 +289,19 @@
   }
 
   .pick-cover {
-    width: clamp(120px, 26vw, 160px);
+    width: clamp(128px, 27vw, 170px);
   }
 
   .pick-cover-mid {
-    margin-right: -20px;
+    margin-right: -22px;
   }
 
   .pick-cover-back {
-    margin-left: -20px;
+    margin-left: -22px;
   }
 
   .pick-note {
-    width: min(240px, 66%);
+    width: min(260px, 72%);
     padding: 15px 17px;
   }
 
@@ -360,19 +360,19 @@
   }
 
   .pick-cover {
-    width: clamp(104px, 28vw, 132px);
+    width: clamp(112px, 29vw, 142px);
   }
 
   .pick-cover-mid {
-    margin-right: -18px;
+    margin-right: -20px;
   }
 
   .pick-cover-back {
-    margin-left: -18px;
+    margin-left: -20px;
   }
 
   .pick-note {
-    width: min(224px, 68%);
+    width: min(236px, 74%);
     padding: 14px 16px;
   }
 
@@ -565,19 +565,19 @@
   }
 
   .pick-cover {
-    width: clamp(92px, 30vw, 112px);
+    width: clamp(98px, 31vw, 120px);
   }
 
   .pick-cover-mid {
-    margin-right: -16px;
+    margin-right: -18px;
   }
 
   .pick-cover-back {
-    margin-left: -16px;
+    margin-left: -18px;
   }
 
   .pick-note {
-    width: 210px;
+    width: min(214px, 72%);
     padding: 12px 14px;
   }
 

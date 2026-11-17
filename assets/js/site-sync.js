@@ -278,20 +278,29 @@
     }
 
     var backdrop = document.querySelector(".pick-cover-back img");
-    if (!backdrop) {
+    var middle = document.querySelector(".pick-cover-mid img");
+    if (!backdrop && !middle) {
       return;
     }
 
     var trending = (home.trending || []).filter(function (id) {
       return visibleIds.indexOf(id) !== -1 && id !== home.spotlight;
     });
-    var backdropNovel = novelById(trending[0]) || visible.find(function (novel) {
-      return novel.id !== home.spotlight;
+    var picks = trending.map(novelById).filter(Boolean);
+    visible.forEach(function (novel) {
+      if (novel.id !== home.spotlight && picks.indexOf(novel) === -1) {
+        picks.push(novel);
+      }
     });
 
-    if (backdropNovel) {
-      backdrop.src = posterFor(backdropNovel);
+    if (backdrop && picks[0]) {
+      backdrop.src = posterFor(picks[0]);
       backdrop.alt = "";
+    }
+
+    if (middle && picks[1]) {
+      middle.src = posterFor(picks[1]);
+      middle.alt = "";
     }
   }
 

@@ -297,6 +297,11 @@
     top: 9%;
   }
 
+  .pick-cover-mid {
+    left: 27%;
+    top: -2%;
+  }
+
   .pick-cover-back {
     right: 3%;
     top: 1%;
@@ -367,6 +372,11 @@
 
   .pick-cover-front {
     top: 7%;
+  }
+
+  .pick-cover-mid {
+    left: 24%;
+    top: -1%;
   }
 
   .pick-cover-back {
@@ -568,6 +578,10 @@
 
   .pick-cover {
     width: 132px;
+  }
+
+  .pick-cover-mid {
+    left: 22%;
   }
 
   .pick-note {

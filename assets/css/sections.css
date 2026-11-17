@@ -505,6 +505,14 @@
   object-fit: cover;
 }
 
+.pick-cover-mid {
+  top: -1%;
+  left: 31%;
+  z-index: 0;
+  filter: brightness(0.82) saturate(0.82);
+  transform: rotate(13deg);
+}
+
 .pick-cover-back {
   top: 2%;
   right: 5%;
@@ -524,6 +532,10 @@
 
 .pick-cover-front img {
   border-radius: 8px;
+}
+
+.pick-panel:hover .pick-cover-mid {
+  transform: rotate(12deg) translateY(-6px);
 }
 
 .pick-panel:hover .pick-cover-back {

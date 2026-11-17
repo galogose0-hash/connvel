@@ -285,26 +285,19 @@
   }
 
   .pick-art {
-    min-height: 380px;
+    min-height: 410px;
   }
 
   .pick-cover {
-    width: clamp(152px, 42vw, 196px);
-  }
-
-  .pick-cover-front {
-    left: 2%;
-    top: 9%;
+    width: clamp(120px, 26vw, 160px);
   }
 
   .pick-cover-mid {
-    left: 27%;
-    top: -2%;
+    margin-right: -20px;
   }
 
   .pick-cover-back {
-    right: 3%;
-    top: 1%;
+    margin-left: -20px;
   }
 
   .pick-note {
@@ -363,24 +356,19 @@
 
 @media (max-width: 600px) {
   .pick-art {
-    min-height: 330px;
+    min-height: 370px;
   }
 
   .pick-cover {
-    width: clamp(134px, 40vw, 164px);
-  }
-
-  .pick-cover-front {
-    top: 7%;
+    width: clamp(104px, 28vw, 132px);
   }
 
   .pick-cover-mid {
-    left: 24%;
-    top: -1%;
+    margin-right: -18px;
   }
 
   .pick-cover-back {
-    top: 0;
+    margin-left: -18px;
   }
 
   .pick-note {
@@ -577,11 +565,15 @@
   }
 
   .pick-cover {
-    width: 132px;
+    width: clamp(92px, 30vw, 112px);
   }
 
   .pick-cover-mid {
-    left: 22%;
+    margin-right: -16px;
+  }
+
+  .pick-cover-back {
+    margin-left: -16px;
   }
 
   .pick-note {

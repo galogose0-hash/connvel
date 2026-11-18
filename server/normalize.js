@@ -197,6 +197,15 @@ function normalizeState(raw) {
       ? [legacyAnnouncement]
       : [];
 
+  function announcementUpdatedAt(candidate) {
+    var updatedAt = String(candidate.updatedAt || "").trim();
+    if (updatedAt) {
+      return updatedAt;
+    }
+    var date = String(candidate.date || "").slice(0, 10);
+    return date ? date + "T00:00:00" : "";
+  }
+
   var usedAnnouncementIds = {};
   var announcements = [];
 
@@ -222,6 +231,7 @@ function normalizeState(raw) {
       title: title,
       body: String(candidate.body || "").trim(),
       date: String(candidate.date || "").slice(0, 10),
+      updatedAt: announcementUpdatedAt(candidate),
       visible: candidate.visible !== false
     });
   });

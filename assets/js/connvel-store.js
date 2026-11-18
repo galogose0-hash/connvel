@@ -143,6 +143,7 @@
         title: "Selamat datang di halaman Pengumuman Connvel",
         body: "Halaman ini akan memuat kabar terbaru seputar Connvel, jadwal rilis, dan informasi penting lainnya untuk pembaca.\n\nNantikan pembaruan berikutnya.",
         date: "2026-11-13",
+        updatedAt: "2026-11-13T10:24:00",
         visible: true
       }
     ],

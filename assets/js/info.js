@@ -24,6 +24,29 @@
     });
   }
 
+  function formatDateTime(value) {
+    var date = new Date(value);
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+    return new Intl.DateTimeFormat("id-ID", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
+  }
+
+  function updatedAtOf(item) {
+    var updatedAt = String(item.updatedAt || "").trim();
+    if (updatedAt) {
+      return updatedAt;
+    }
+    var date = String(item.date || "").slice(0, 10);
+    return date ? date + "T00:00:00" : "";
+  }
+
   function announcementsFrom(data) {
     var source = data && typeof data === "object" ? data : {};
     var list = Array.isArray(source.announcements) ? source.announcements : [];
@@ -39,7 +62,8 @@
         id: String(item.id || "").trim() || "ann-" + (index + 1),
         title: String(item.title || "").trim(),
         body: String(item.body || "").trim(),
-        date: String(item.date || "").slice(0, 10)
+        date: String(item.date || "").slice(0, 10),
+        updatedAt: updatedAtOf(item)
       };
     }));
   }
@@ -62,16 +86,29 @@
     var main = document.createElement("span");
     main.className = "info-entry-main";
 
+    var heading = document.createElement("span");
+    heading.className = "info-entry-heading";
+
     var title = document.createElement("span");
     title.className = "info-entry-title";
     title.textContent = item.title;
-    main.appendChild(title);
+    heading.appendChild(title);
 
     if (index === 0) {
       var tag = document.createElement("span");
       tag.className = "info-entry-tag";
       tag.textContent = "Terbaru";
-      main.appendChild(tag);
+      heading.appendChild(tag);
+    }
+    main.appendChild(heading);
+
+    var formattedUpdate = formatDateTime(item.updatedAt);
+    if (formattedUpdate) {
+      var time = document.createElement("time");
+      time.className = "info-entry-time";
+      time.setAttribute("datetime", item.updatedAt);
+      time.textContent = "Terakhir diperbarui " + formattedUpdate;
+      main.appendChild(time);
     }
 
     var icon = document.createElement("span");

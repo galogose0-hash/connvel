@@ -109,7 +109,8 @@ export function sanitizeState(state) {
         id: String(announcement.id || ""),
         title: String(announcement.title || "").trim(),
         body: String(announcement.body || "").trim(),
-        date: String(announcement.date || "").slice(0, 10)
+        date: String(announcement.date || "").slice(0, 10),
+        updatedAt: String(announcement.updatedAt || "").trim()
       };
     });
 

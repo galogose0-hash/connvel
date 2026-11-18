@@ -733,6 +733,7 @@
         title: String(item.title || "").trim(),
         body: String(item.body || "").trim(),
         date: String(item.date || "").slice(0, 10),
+        updatedAt: String(item.updatedAt || "").trim(),
         visible: item.visible !== false
       };
     }));
@@ -911,9 +912,13 @@
   }
 
   function todayISO() {
+    return nowLocalISO().slice(0, 10);
+  }
+
+  function nowLocalISO() {
     var now = new Date();
     var local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    return local.toISOString().slice(0, 10);
+    return local.toISOString().slice(0, 19);
   }
 
   function novelById(id) {
@@ -1869,6 +1874,7 @@
       var date = $("#announcement-date").value;
       var body = $("#announcement-body").value.trim();
       var visible = $("#announcement-visible").checked;
+      var updatedAt = nowLocalISO();
 
       if (!title) {
         setStatus($("#announcement-status"), "Judul pengumuman wajib diisi.", "announcement");
@@ -1896,6 +1902,7 @@
         target.title = title;
         target.body = body;
         target.date = date;
+        target.updatedAt = updatedAt;
         target.visible = visible;
         message = "Pengumuman diperbarui dan tersinkron ke halaman publik.";
       } else {
@@ -1904,6 +1911,7 @@
           title: title,
           body: body,
           date: date,
+          updatedAt: updatedAt,
           visible: visible
         });
         message = "Pengumuman ditambahkan dan tersinkron ke halaman publik.";

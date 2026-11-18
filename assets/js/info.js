@@ -24,7 +24,7 @@
     });
   }
 
-  function formatDateTime(value) {
+  function formatDate(value) {
     var date = new Date(value);
     if (isNaN(date.getTime())) {
       return "";
@@ -32,9 +32,7 @@
     return new Intl.DateTimeFormat("id-ID", {
       day: "numeric",
       month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+      year: "numeric"
     }).format(date);
   }
 
@@ -102,7 +100,7 @@
     }
     main.appendChild(heading);
 
-    var formattedUpdate = formatDateTime(item.updatedAt);
+    var formattedUpdate = formatDate(item.updatedAt);
     if (formattedUpdate) {
       var time = document.createElement("time");
       time.className = "info-entry-time";

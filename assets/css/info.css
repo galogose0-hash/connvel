@@ -151,7 +151,7 @@
 .info-entry {
   border: 1px solid var(--line);
   border-radius: 18px;
-  background: #fffdf8;
+  background: var(--surface);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .info-entry.is-latest {
-  background: var(--surface);
+  background: #fff;
 }
 
 .info-entry-summary {

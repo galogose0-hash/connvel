@@ -131,7 +131,7 @@
 
   .hero-visual {
     justify-self: center;
-    max-width: 540px;
+    max-width: 620px;
     margin-top: 6px;
   }
 
@@ -235,13 +235,8 @@
   }
 
   .hero-visual {
-    max-width: 460px;
+    max-width: 520px;
     padding: 8px 2px 30px 6px;
-  }
-
-  .hero-arch-line {
-    right: 0;
-    width: 82%;
   }
 
   .float-quote {

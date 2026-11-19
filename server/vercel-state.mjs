@@ -24,7 +24,14 @@ export async function readState(store) {
   var raw = await readBlobText(STATE_PATHNAME);
   if (raw) {
     try {
-      return normalizeState(JSON.parse(raw));
+      var stored = normalizeState(JSON.parse(raw));
+      if (!stored.authors.length) {
+        var defaults = normalizeState(seedState);
+        stored.authors = defaults.authors.map(function (author) {
+          return Object.assign({}, author);
+        });
+      }
+      return stored;
     } catch (error) {
       /* Data rusak ditimpa ulang dari seed di bawah. */
     }

@@ -146,6 +146,10 @@
           <svg class="icon" aria-hidden="true"><use href="#dash-icon-layers"/></svg>
           <span>Novel &amp; Bab</span>
         </button>
+        <button class="dash-nav-item" type="button" data-view="penulis">
+          <svg class="icon" aria-hidden="true"><use href="#dash-icon-book"/></svg>
+          <span>Penulis</span>
+        </button>
         <button class="dash-nav-item" type="button" data-view="kotak-masuk">
           <svg class="icon" aria-hidden="true"><use href="#dash-icon-inbox"/></svg>
           <span>Kotak Masuk Penulis</span>
@@ -453,6 +457,55 @@
               </table>
             </div>
             <p class="empty-state" id="chapter-empty" hidden>Belum ada bab untuk novel ini. Tambahkan bab pertama.</p>
+          </section>
+        </section>
+
+        <section class="dash-view" id="view-penulis" data-view-panel="penulis" hidden>
+          <div class="view-intro view-intro--split">
+            <div>
+              <p class="eyebrow">Kontributor Connvel</p>
+              <h2>Kenali penulis di balik <span class="serif-accent">setiap cerita</span>.</h2>
+              <p>Atur foto profil, nama lengkap, nama pena, genre favorit, latar belakang, dan daftar karya. Perubahan langsung tersinkron ke halaman Katalog Penulis setelah disimpan.</p>
+            </div>
+            <a class="btn btn-outline btn-small" href="../penulis/index.html" target="_blank" rel="noopener">
+              Buka Halaman Penulis
+              <svg class="icon" aria-hidden="true"><use href="#dash-icon-arrow"/></svg>
+            </a>
+          </div>
+
+          <section class="dash-card table-card" aria-labelledby="author-dash-title">
+            <div class="dash-card-head table-card-head">
+              <div>
+                <p class="dash-kicker">Daftar kontributor</p>
+                <h2 id="author-dash-title">Kelola Penulis</h2>
+              </div>
+              <div class="table-head-actions">
+                <label class="search-field" for="author-dash-search">
+                  <svg class="icon" aria-hidden="true"><use href="#dash-icon-search"/></svg>
+                  <input type="search" id="author-dash-search" placeholder="Cari nama atau nama pena..." autocomplete="off">
+                </label>
+                <button class="btn btn-primary btn-small" type="button" id="add-author-button">
+                  <svg class="icon" aria-hidden="true"><use href="#dash-icon-plus"/></svg>
+                  Tambah Penulis
+                </button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Penulis</th>
+                    <th scope="col">Nama Pena</th>
+                    <th scope="col">Genre</th>
+                    <th scope="col">Karya</th>
+                    <th scope="col">Status tampil</th>
+                    <th scope="col"><span class="sr-only">Aksi</span></th>
+                  </tr>
+                </thead>
+                <tbody id="author-table-body"></tbody>
+              </table>
+            </div>
+            <p class="empty-state" id="author-dash-empty" hidden>Belum ada penulis yang cocok dengan pencarian.</p>
           </section>
         </section>
 
@@ -814,6 +867,135 @@
         </button>
       </div>
     </form>
+  </dialog>
+
+  <dialog class="dash-dialog" id="author-dialog" aria-labelledby="author-dialog-title">
+    <form id="author-form" class="dialog-form" novalidate>
+      <div class="dialog-head">
+        <div>
+          <p class="dash-kicker" id="author-dialog-kicker">Penulis baru</p>
+          <h2 id="author-dialog-title">Tambah Penulis</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Tutup dialog">
+          <svg class="icon" aria-hidden="true"><use href="#dash-icon-close"/></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <div class="dash-field">
+          <label for="author-name">Nama lengkap</label>
+          <input type="text" id="author-name" name="name" maxlength="120" required>
+        </div>
+        <div class="dash-field">
+          <label for="author-pen-name">Nama pena</label>
+          <input type="text" id="author-pen-name" name="penName" maxlength="120">
+        </div>
+        <div class="dash-field form-field--full">
+          <span class="dash-field-label" id="author-genre-label">Genre favorit (bisa pilih lebih dari satu)</span>
+          <div class="genre-options" id="author-genre" role="group" aria-labelledby="author-genre-label">
+            <label class="genre-option"><input type="checkbox" name="genre" value="Fantasi"><span>Fantasi</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Fiksi Ilmiah"><span>Fiksi Ilmiah</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Roman"><span>Roman</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Misteri"><span>Misteri</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Potongan Kehidupan"><span>Potongan Kehidupan</span></label>
+            <label class="genre-option"><input type="checkbox" name="genre" value="Sejarah"><span>Sejarah</span></label>
+          </div>
+        </div>
+        <div class="dash-field form-field--full">
+          <label for="author-background">Latar belakang</label>
+          <textarea id="author-background" name="background" rows="5"></textarea>
+        </div>
+        <div class="dash-field form-field--full">
+          <span class="dash-field-label" id="author-works-label">Karya yang sudah ditulis</span>
+          <div class="work-picker" role="group" aria-labelledby="author-works-label">
+            <label class="search-field work-picker-search" for="author-work-search">
+              <svg class="icon" aria-hidden="true"><use href="#dash-icon-search"/></svg>
+              <input type="search" id="author-work-search" placeholder="Cari novel atau cerpen..." autocomplete="off">
+            </label>
+            <div class="work-picker-list novel-check-grid" id="author-work-list"></div>
+            <p class="empty-inline work-picker-empty" id="author-work-empty" hidden>Tidak ada karya yang cocok dengan pencarian.</p>
+            <div class="work-picker-custom">
+              <label class="sr-only" for="author-work-custom">Tambah judul karya lain</label>
+              <input type="text" id="author-work-custom" placeholder="Tambah judul cerpen atau karya lain">
+              <button class="btn btn-outline btn-small" type="button" id="author-work-add">Tambah</button>
+            </div>
+          </div>
+          <input type="hidden" id="author-works" name="works">
+          <p class="dash-field-hint">Centang karya dari katalog atau tambahkan judul lain. Judul yang sama dengan novel akan terhubung otomatis ke halaman novel.</p>
+        </div>
+        <div class="dash-field form-field--full">
+          <label for="author-photo">Foto profil</label>
+          <label class="upload-field" for="author-photo">
+            <span class="upload-preview" id="author-photo-preview">
+              <svg class="icon" aria-hidden="true"><use href="#dash-icon-image"/></svg>
+              <span>Pilih gambar</span>
+            </span>
+            <span class="upload-copy">
+              <strong>Unggah foto profil</strong>
+              <span>JPG, PNG, atau WebP. Pilih gambar lalu atur crop ke 800 × 800 px sebelum disimpan.</span>
+            </span>
+            <input type="file" id="author-photo" accept="image/*">
+          </label>
+        </div>
+        <div class="dash-field form-field--full">
+          <label class="switch-field" for="author-visible">
+            <span class="switch">
+              <input type="checkbox" id="author-visible" name="visible" checked>
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+            <span>
+              <strong>Tampilkan di halaman Penulis</strong>
+              <small>Matikan untuk menyembunyikan profil sementara.</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <p class="dialog-error" id="author-form-error" role="alert" aria-live="polite"></p>
+
+      <div class="dialog-actions">
+        <button class="btn btn-outline btn-small" type="button" data-close-dialog>Batal</button>
+        <button class="btn btn-primary btn-small" type="submit">
+          <svg class="icon" aria-hidden="true"><use href="#dash-icon-check"/></svg>
+          Simpan Penulis
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dash-dialog crop-dialog" id="author-crop-dialog" aria-labelledby="author-crop-title">
+    <div class="crop-inner">
+      <div class="dialog-head">
+        <div>
+          <p class="dash-kicker">Foto profil penulis</p>
+          <h2 id="author-crop-title">Atur Foto Penulis</h2>
+          <p class="dash-card-copy">Geser gambar dan atur zoom agar bagian penting tetap terlihat. Foto akan dipangkas menjadi 800 × 800 px.</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Tutup pemangkas foto">
+          <svg class="icon" aria-hidden="true"><use href="#dash-icon-close"/></svg>
+        </button>
+      </div>
+
+      <div class="crop-stage">
+        <div class="crop-frame">
+          <canvas id="author-crop-canvas" width="800" height="800" aria-label="Pratinjau hasil pemangkasan foto profil"></canvas>
+        </div>
+      </div>
+
+      <div class="crop-control">
+        <label for="author-crop-zoom">Zoom</label>
+        <input type="range" id="author-crop-zoom" min="1" max="3" step="0.05" value="1">
+        <span class="crop-size">800 × 800 px</span>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="btn btn-outline btn-small" type="button" data-close-dialog>Batal</button>
+        <button class="btn btn-primary btn-small" type="button" id="author-crop-apply">
+          <svg class="icon" aria-hidden="true"><use href="#dash-icon-check"/></svg>
+          Gunakan Foto
+        </button>
+      </div>
+    </div>
   </dialog>
 
   <dialog class="dash-dialog" id="comment-dialog" aria-labelledby="comment-dialog-title">

@@ -123,6 +123,32 @@
       "content": ""
     }
   ],
+  "authors": [
+    {
+      "id": "alya-prameswari",
+      "name": "Langlang Sya'ban Deloner Purin",
+      "penName": "Langlang Sya'ban",
+      "genre": "Fantasi, Misteri",
+      "background": "Halo..",
+      "photo": "assets/images/uploads/alya-prameswari-photo.jpg",
+      "works": [
+        "Putri Sang Kartografer"
+      ],
+      "visible": true
+    },
+    {
+      "id": "eris",
+      "name": "Eris'a",
+      "penName": "Eris",
+      "genre": "Roman, Potongan Kehidupan",
+      "background": "halo saya eris",
+      "photo": "assets/images/uploads/eris-photo.jpg",
+      "works": [
+        "Titik Temu di Ujung Lelah"
+      ],
+      "visible": true
+    }
+  ],
   "home": {
     "spotlight": "putri-sang-kartografer",
     "latest": [

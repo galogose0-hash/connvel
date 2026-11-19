@@ -6,6 +6,8 @@
   var MAX_LATEST = 6;
   var MAX_TRENDING = 3;
   var MAX_POSTER_SIZE = 1.5 * 1024 * 1024;
+  var AUTHOR_PHOTO_SIZE = 800;
+  var MAX_AUTHOR_PHOTO_SOURCE_SIZE = 12 * 1024 * 1024;
   var MAX_HISTORY = 60;
   var HISTORY_DELAY = 400;
 
@@ -14,6 +16,7 @@
     beranda: { label: "Kelola Beranda", title: "Kelola Beranda" },
     katalog: { label: "Kelola Katalog", title: "Kelola Katalog" },
     novel: { label: "Novel & Bab", title: "Novel & Bab" },
+    penulis: { label: "Penulis", title: "Kelola Penulis" },
     "kotak-masuk": { label: "Kotak Masuk Penulis", title: "Kotak Masuk Penulis" },
     komentar: { label: "Kelola Komentar", title: "Komentar Pembaca" },
     pengumuman: { label: "Pengumuman", title: "Kelola Pengumuman" }
@@ -22,6 +25,7 @@
   var EMPTY_DATA = {
     novels: [],
     chapters: [],
+    authors: [],
     home: { spotlight: "", latest: [], trending: [] },
     announcements: [],
     submissions: [],
@@ -32,6 +36,23 @@
   var currentView = "ringkasan";
   var pendingPoster = "";
   var editingNovelId = "";
+  var editingAuthorId = "";
+  var pendingAuthorPhoto = "";
+  var authorCustomWorks = [];
+  var authorCrop = {
+    image: null,
+    zoom: 1,
+    scale: 1,
+    x: 0,
+    y: 0,
+    dragging: false,
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    applied: false,
+    previousPhoto: "",
+    previousSource: ""
+  };
   var editingChapterId = "";
   var editingCommentId = "";
   var editingAnnouncementId = "";
@@ -744,6 +765,7 @@
     return {
       novels: Array.isArray(source.novels) ? source.novels : [],
       chapters: Array.isArray(source.chapters) ? source.chapters : [],
+      authors: Array.isArray(source.authors) ? source.authors : [],
       home: Object.assign({ spotlight: "", latest: [], trending: [] }, source.home || {}),
       announcements: hydrateAnnouncements(source),
       submissions: Array.isArray(source.submissions) ? source.submissions : [],
@@ -846,6 +868,20 @@
     return id;
   }
 
+  function uniqueAuthorId(name) {
+    var base = slugify(name) || "penulis";
+    if (base === "index") {
+      base = "penulis";
+    }
+    var id = base;
+    var index = 2;
+    while (DATA.authors.some(function (author) { return author.id === id; })) {
+      id = base + "-" + index;
+      index += 1;
+    }
+    return id;
+  }
+
   function selectedGenres(container) {
     return $$('input[type="checkbox"]:checked', container).map(function (input) {
       return input.value;
@@ -923,6 +959,40 @@
 
   function novelById(id) {
     return DATA.novels.find(function (novel) { return novel.id === id; }) || null;
+  }
+
+  function authorById(id) {
+    return DATA.authors.find(function (author) { return author.id === id; }) || null;
+  }
+
+  function authorSrc(author) {
+    var photo = String((author && author.photo) || "");
+    if (!photo) {
+      return "";
+    }
+    if (photo.indexOf("data:") === 0 || photo.charAt(0) === "/") {
+      return photo;
+    }
+    return "../" + photo.replace(/^(\.\.\/)+/, "");
+  }
+
+  function authorInitials(author) {
+    var source = String((author && author.penName) || (author && author.name) || "?").trim();
+    var parts = source.split(/\s+/).filter(Boolean);
+    if (parts.length > 1) {
+      return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+    }
+    return source.slice(0, 2).toUpperCase() || "?";
+  }
+
+  function authorThumb(author, extraClass) {
+    var classes = "novel-thumb" + (extraClass ? " " + extraClass : "");
+    var photo = authorSrc(author);
+    if (photo) {
+      return '<span class="' + classes + '"><img src="' + escapeHtml(photo) + '" alt=""></span>';
+    }
+    return '<span class="' + classes + ' novel-thumb--fallback" aria-hidden="true">' +
+      escapeHtml(authorInitials(author)) + "</span>";
   }
 
   function chaptersFor(novelId) {
@@ -1111,6 +1181,8 @@
       renderCatalog();
     } else if (view === "novel") {
       renderNovelSelect();
+    } else if (view === "penulis") {
+      renderAuthors();
     } else if (view === "kotak-masuk") {
       renderInbox();
     } else if (view === "komentar") {
@@ -1339,6 +1411,43 @@
     }).join("");
 
     $("#catalog-empty").hidden = novels.length !== 0;
+  }
+
+  function renderAuthors() {
+    var query = $("#author-dash-search").value.trim().toLowerCase();
+    var authors = DATA.authors.filter(function (author) {
+      if (!query) {
+        return true;
+      }
+      return [author.name, author.penName, author.genre, (author.works || []).join(" ")]
+        .join(" ")
+        .toLowerCase()
+        .indexOf(query) !== -1;
+    });
+
+    $("#author-table-body").innerHTML = authors.map(function (author) {
+      var displayName = author.name || author.penName || "Penulis";
+      var works = Array.isArray(author.works) ? author.works : [];
+      return "<tr>" +
+        '<td><div class="novel-cell">' + authorThumb(author) +
+        '<div class="novel-cell-copy"><strong>' + escapeHtml(displayName) + "</strong>" +
+        "<span>Profil penulis</span></div></div></td>" +
+        "<td>" + escapeHtml(author.penName || "—") + "</td>" +
+        '<td><span class="genre-pill">' + escapeHtml(author.genre || "Umum") + "</span></td>" +
+        "<td>" + escapeHtml(works.length) + " karya</td>" +
+        '<td><span class="status-pill ' + (author.visible !== false ? "is-live" : "is-hidden") + '">' +
+        (author.visible !== false ? "Tampil" : "Disembunyikan") + "</span></td>" +
+        '<td><div class="row-actions">' +
+        '<button class="icon-button" type="button" data-edit-author="' + escapeHtml(author.id) + '" aria-label="Edit ' + escapeHtml(displayName) + '">' +
+        '<svg class="icon" aria-hidden="true"><use href="#dash-icon-edit"/></svg></button>' +
+        '<button class="table-action" type="button" data-toggle-author="' + escapeHtml(author.id) + '">' +
+        (author.visible !== false ? "Sembunyikan" : "Tampilkan") + "</button>" +
+        '<button class="icon-button icon-button--danger" type="button" data-delete-author="' + escapeHtml(author.id) + '" aria-label="Hapus ' + escapeHtml(displayName) + '">' +
+        '<svg class="icon" aria-hidden="true"><use href="#dash-icon-trash"/></svg></button>' +
+        "</div></td></tr>";
+    }).join("");
+
+    $("#author-dash-empty").hidden = authors.length !== 0;
   }
 
   function renderNovelSelect() {
@@ -1677,6 +1786,7 @@
     renderHome();
     renderCatalog();
     renderNovelSelect();
+    renderAuthors();
     renderInbox();
     renderComments();
     renderAnnouncement();
@@ -1739,6 +1849,250 @@
 
     openDialog($("#novel-dialog"));
     window.setTimeout(function () { $("#new-novel-title").focus(); }, 30);
+  }
+
+  function setAuthorDialogMode(author) {
+    var editing = Boolean(author);
+    editingAuthorId = editing ? author.id : "";
+    $("#author-dialog-kicker").textContent = editing ? "Edit penulis" : "Penulis baru";
+    $("#author-dialog-title").textContent = editing ? "Edit Penulis" : "Tambah Penulis";
+  }
+
+  function workKey(title) {
+    return String(title || "").trim().toLowerCase();
+  }
+
+  function authorWorkOptionMarkup(title, novel, selected) {
+    var checked = selected.some(function (item) { return workKey(item) === workKey(title); });
+    var thumb = novel
+      ? thumbMarkup(novel, "novel-thumb--check")
+      : '<span class="novel-thumb novel-thumb--check novel-thumb--fallback" aria-hidden="true">' +
+        escapeHtml(String(title || "?").charAt(0).toUpperCase()) + "</span>";
+    var meta = novel
+      ? escapeHtml(novel.author) + " · " + escapeHtml(novel.genre)
+      : "Karya tambahan";
+
+    return '<label class="novel-check' + (checked ? " is-selected" : "") +
+      '" data-title="' + escapeHtml(workKey(title)) + '">' +
+      '<input type="checkbox" value="' + escapeHtml(title) + '"' + (checked ? " checked" : "") + ">" +
+      '<span class="novel-check-body">' + thumb +
+      '<span class="novel-check-copy"><strong>' + escapeHtml(title) + "</strong>" +
+      "<span>" + meta + "</span></span>" +
+      '<span class="novel-check-mark" aria-hidden="true"><svg class="icon"><use href="#dash-icon-check"/></svg></span>' +
+      "</span></label>";
+  }
+
+  function syncAuthorWorksValue() {
+    var container = $("#author-work-list");
+    var selected = $$('input[type="checkbox"]:checked', container).map(function (input) {
+      return input.value;
+    });
+    $("#author-works").value = selected.slice(0, 30).join("\n");
+    $$(".novel-check", container).forEach(function (option) {
+      var input = option.querySelector('input[type="checkbox"]');
+      option.classList.toggle("is-selected", Boolean(input && input.checked));
+    });
+  }
+
+  function applyAuthorWorkFilter() {
+    var term = ($("#author-work-search").value || "").trim().toLowerCase();
+    var visible = 0;
+    $$(".novel-check", $("#author-work-list")).forEach(function (option) {
+      var haystack = (option.getAttribute("data-title") || "") + " " + option.textContent.toLowerCase();
+      var show = !term || haystack.indexOf(term) !== -1;
+      option.hidden = !show;
+      if (show) {
+        visible += 1;
+      }
+    });
+    $("#author-work-empty").hidden = visible !== 0;
+  }
+
+  function renderAuthorWorkPicker(selected) {
+    var selectedTitles = Array.isArray(selected) ? selected : [];
+    var used = {};
+    var options = DATA.novels.filter(function (novel) { return novel.visible !== false; }).map(function (novel) {
+      used[workKey(novel.title)] = true;
+      return authorWorkOptionMarkup(novel.title, novel, selectedTitles);
+    });
+
+    authorCustomWorks.forEach(function (title) {
+      if (used[workKey(title)]) {
+        return;
+      }
+      used[workKey(title)] = true;
+      options.push(authorWorkOptionMarkup(title, null, selectedTitles));
+    });
+
+    $("#author-work-list").innerHTML = options.join("");
+    applyAuthorWorkFilter();
+    syncAuthorWorksValue();
+  }
+
+  function addAuthorWork() {
+    var input = $("#author-work-custom");
+    var title = input.value.trim().slice(0, 140);
+    if (!title) {
+      input.focus();
+      return;
+    }
+
+    var existing = $$('input[type="checkbox"]', $("#author-work-list")).find(function (checkbox) {
+      return workKey(checkbox.value) === workKey(title);
+    });
+
+    if (existing) {
+      existing.checked = true;
+    } else {
+      var selected = $$('input[type="checkbox"]:checked', $("#author-work-list")).map(function (checkbox) {
+        return checkbox.value;
+      });
+      authorCustomWorks.push(title);
+      renderAuthorWorkPicker(selected.concat(title));
+    }
+
+    input.value = "";
+    $("#author-work-search").value = "";
+    applyAuthorWorkFilter();
+    syncAuthorWorksValue();
+    input.focus();
+  }
+
+  function pendingAuthorPreviewSource() {
+    if (!pendingAuthorPhoto) {
+      return "";
+    }
+    if (pendingAuthorPhoto.indexOf("data:") === 0 || pendingAuthorPhoto.charAt(0) === "/") {
+      return pendingAuthorPhoto;
+    }
+    var original = editingAuthorId ? authorById(editingAuthorId) : null;
+    if (original && original.photo === pendingAuthorPhoto) {
+      return authorSrc(original);
+    }
+    return pendingAuthorPhoto.replace(/^(\.\.\/)+/, "");
+  }
+
+  function clampAuthorCropPosition() {
+    if (!authorCrop.image) {
+      return;
+    }
+    var width = authorCrop.image.naturalWidth * authorCrop.scale;
+    var height = authorCrop.image.naturalHeight * authorCrop.scale;
+    authorCrop.x = Math.min(0, Math.max(AUTHOR_PHOTO_SIZE - width, authorCrop.x));
+    authorCrop.y = Math.min(0, Math.max(AUTHOR_PHOTO_SIZE - height, authorCrop.y));
+  }
+
+  function drawAuthorCrop() {
+    var canvas = $("#author-crop-canvas");
+    if (!canvas || !authorCrop.image) {
+      return;
+    }
+    var context = canvas.getContext("2d");
+    context.clearRect(0, 0, AUTHOR_PHOTO_SIZE, AUTHOR_PHOTO_SIZE);
+    context.fillStyle = "#efe5d5";
+    context.fillRect(0, 0, AUTHOR_PHOTO_SIZE, AUTHOR_PHOTO_SIZE);
+    context.drawImage(
+      authorCrop.image,
+      authorCrop.x,
+      authorCrop.y,
+      authorCrop.image.naturalWidth * authorCrop.scale,
+      authorCrop.image.naturalHeight * authorCrop.scale
+    );
+  }
+
+  function openAuthorCrop(dataUrl) {
+    var error = $("#author-form-error");
+    var image = new Image();
+    image.onload = function () {
+      var canvas = $("#author-crop-canvas");
+      canvas.width = AUTHOR_PHOTO_SIZE;
+      canvas.height = AUTHOR_PHOTO_SIZE;
+      authorCrop.image = image;
+      authorCrop.zoom = 1;
+      authorCrop.scale = Math.max(
+        AUTHOR_PHOTO_SIZE / image.naturalWidth,
+        AUTHOR_PHOTO_SIZE / image.naturalHeight
+      );
+      authorCrop.x = (AUTHOR_PHOTO_SIZE - image.naturalWidth * authorCrop.scale) / 2;
+      authorCrop.y = (AUTHOR_PHOTO_SIZE - image.naturalHeight * authorCrop.scale) / 2;
+      authorCrop.previousPhoto = pendingAuthorPhoto;
+      authorCrop.previousSource = pendingAuthorPreviewSource();
+      authorCrop.applied = false;
+      $("#author-crop-zoom").value = "1";
+      clampAuthorCropPosition();
+      drawAuthorCrop();
+      error.textContent = "";
+      error.classList.remove("is-visible");
+      openDialog($("#author-crop-dialog"));
+    };
+    image.onerror = function () {
+      error.textContent = "Foto profil gagal dibaca. Coba gambar lain.";
+      error.classList.add("is-visible");
+      $("#author-photo").value = "";
+    };
+    image.src = dataUrl;
+  }
+
+  function applyAuthorCrop() {
+    var canvas = $("#author-crop-canvas");
+    if (!canvas || !authorCrop.image) {
+      return;
+    }
+    drawAuthorCrop();
+    pendingAuthorPhoto = canvas.toDataURL("image/jpeg", 0.86);
+    resetAuthorPhotoPreview(pendingAuthorPhoto);
+    authorCrop.applied = true;
+    closeDialog($("#author-crop-dialog"));
+  }
+
+  function resetAuthorPhotoPreview(source) {
+    var preview = $("#author-photo-preview");
+    if (source) {
+      preview.classList.add("has-image");
+      preview.innerHTML = '<img src="' + escapeHtml(source) + '" alt="Pratinjau foto profil">';
+    } else {
+      preview.classList.remove("has-image");
+      preview.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#dash-icon-image"/></svg><span>Pilih gambar</span>';
+    }
+  }
+
+  function resetAuthorForm() {
+    $("#author-form").reset();
+    $("#author-form-error").textContent = "";
+    $("#author-form-error").classList.remove("is-visible");
+    pendingAuthorPhoto = "";
+    authorCustomWorks = [];
+    $("#author-photo").value = "";
+    $("#author-work-search").value = "";
+    $("#author-work-custom").value = "";
+    resetAuthorPhotoPreview("");
+    renderAuthorWorkPicker([]);
+    setAuthorDialogMode(null);
+  }
+
+  function openAuthorDialog(author) {
+    resetAuthorForm();
+
+    if (author) {
+      setAuthorDialogMode(author);
+      $("#author-name").value = author.name || "";
+      $("#author-pen-name").value = author.penName || "";
+      setSelectedGenres($("#author-genre"), author.genre);
+      $("#author-background").value = author.background || "";
+      var works = Array.isArray(author.works) ? author.works : [];
+      authorCustomWorks = works.filter(function (title) {
+        return !DATA.novels.some(function (novel) { return workKey(novel.title) === workKey(title); });
+      });
+      renderAuthorWorkPicker(works);
+      $("#author-visible").checked = author.visible !== false;
+      pendingAuthorPhoto = author.photo || "";
+      if (pendingAuthorPhoto) {
+        resetAuthorPhotoPreview(authorSrc(author));
+      }
+    }
+
+    openDialog($("#author-dialog"));
+    window.setTimeout(function () { $("#author-name").focus(); }, 30);
   }
 
   function resetChapterForm() {
@@ -2428,6 +2782,268 @@
           DATA.home = previousData.home;
           selectedNovelId = previousData.selectedNovelId;
         }
+      }
+    });
+
+    $("#author-dash-search").addEventListener("input", renderAuthors);
+
+    $("#add-author-button").addEventListener("click", function () {
+      openAuthorDialog(null);
+    });
+
+    $("#author-work-search").addEventListener("input", applyAuthorWorkFilter);
+
+    $("#author-work-list").addEventListener("change", function (event) {
+      if (!event.target.matches('input[type="checkbox"]')) {
+        return;
+      }
+      var checked = $$('input[type="checkbox"]:checked', this);
+      if (checked.length > 30) {
+        event.target.checked = false;
+        showToast("Maksimal 30 karya untuk satu penulis.");
+        return;
+      }
+      syncAuthorWorksValue();
+    });
+
+    $("#author-work-add").addEventListener("click", addAuthorWork);
+
+    $("#author-work-custom").addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addAuthorWork();
+      }
+    });
+
+    $("#author-photo").addEventListener("change", function () {
+      var file = this.files && this.files[0];
+      var error = $("#author-form-error");
+      error.textContent = "";
+      error.classList.remove("is-visible");
+
+      if (!file) {
+        var original = editingAuthorId ? authorById(editingAuthorId) : null;
+        pendingAuthorPhoto = original ? original.photo || "" : "";
+        resetAuthorPhotoPreview(pendingAuthorPhoto ? authorSrc(original) : "");
+        return;
+      }
+
+      if (file.type.indexOf("image/") !== 0) {
+        error.textContent = "Berkas foto profil harus berupa gambar.";
+        error.classList.add("is-visible");
+        this.value = "";
+        return;
+      }
+
+      if (file.size > MAX_AUTHOR_PHOTO_SOURCE_SIZE) {
+        error.textContent = "Berkas sumber maksimal 12 MB. Foto akan dipangkas menjadi 800 × 800 px sebelum disimpan.";
+        error.classList.add("is-visible");
+        this.value = "";
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function () {
+        openAuthorCrop(reader.result);
+      };
+      reader.onerror = function () {
+        error.textContent = "Foto profil gagal dibaca. Coba gambar lain.";
+        error.classList.add("is-visible");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    $("#author-crop-zoom").addEventListener("input", function () {
+      if (!authorCrop.image) {
+        return;
+      }
+      var nextZoom = parseFloat(this.value) || 1;
+      var centerX = (AUTHOR_PHOTO_SIZE / 2 - authorCrop.x) / authorCrop.scale;
+      var centerY = (AUTHOR_PHOTO_SIZE / 2 - authorCrop.y) / authorCrop.scale;
+      var baseScale = Math.max(
+        AUTHOR_PHOTO_SIZE / authorCrop.image.naturalWidth,
+        AUTHOR_PHOTO_SIZE / authorCrop.image.naturalHeight
+      );
+      authorCrop.zoom = nextZoom;
+      authorCrop.scale = baseScale * nextZoom;
+      authorCrop.x = AUTHOR_PHOTO_SIZE / 2 - centerX * authorCrop.scale;
+      authorCrop.y = AUTHOR_PHOTO_SIZE / 2 - centerY * authorCrop.scale;
+      clampAuthorCropPosition();
+      drawAuthorCrop();
+    });
+
+    $("#author-crop-apply").addEventListener("click", applyAuthorCrop);
+
+    $("#author-crop-dialog").addEventListener("close", function () {
+      if (!authorCrop.applied) {
+        pendingAuthorPhoto = authorCrop.previousPhoto;
+        resetAuthorPhotoPreview(authorCrop.previousSource);
+        $("#author-photo").value = "";
+      }
+      authorCrop.applied = false;
+      authorCrop.image = null;
+    });
+
+    var cropCanvas = $("#author-crop-canvas");
+    cropCanvas.addEventListener("pointerdown", function (event) {
+      if (!authorCrop.image) {
+        return;
+      }
+      authorCrop.dragging = true;
+      authorCrop.pointerId = event.pointerId;
+      authorCrop.startX = event.clientX;
+      authorCrop.startY = event.clientY;
+      cropCanvas.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    });
+
+    cropCanvas.addEventListener("pointermove", function (event) {
+      if (!authorCrop.dragging || event.pointerId !== authorCrop.pointerId) {
+        return;
+      }
+      var rect = cropCanvas.getBoundingClientRect();
+      if (!rect.width) {
+        return;
+      }
+      var ratio = AUTHOR_PHOTO_SIZE / rect.width;
+      authorCrop.x += (event.clientX - authorCrop.startX) * ratio;
+      authorCrop.y += (event.clientY - authorCrop.startY) * ratio;
+      authorCrop.startX = event.clientX;
+      authorCrop.startY = event.clientY;
+      clampAuthorCropPosition();
+      drawAuthorCrop();
+    });
+
+    function stopAuthorCropDrag(event) {
+      if (event.pointerId !== authorCrop.pointerId) {
+        return;
+      }
+      authorCrop.dragging = false;
+      authorCrop.pointerId = null;
+      if (cropCanvas.hasPointerCapture(event.pointerId)) {
+        cropCanvas.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    cropCanvas.addEventListener("pointerup", stopAuthorCropDrag);
+    cropCanvas.addEventListener("pointercancel", stopAuthorCropDrag);
+
+    $("#author-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+      var name = $("#author-name").value.trim();
+      var penName = $("#author-pen-name").value.trim();
+      var genre = joinGenres(selectedGenres($("#author-genre")));
+      var works = $("#author-works").value
+        .split(/\r?\n/)
+        .map(function (work) { return work.trim(); })
+        .filter(Boolean)
+        .slice(0, 30);
+      var error = $("#author-form-error");
+      error.textContent = "";
+      error.classList.remove("is-visible");
+
+      if (!name) {
+        error.textContent = "Nama penulis wajib diisi.";
+        error.classList.add("is-visible");
+        $("#author-name").focus();
+        return;
+      }
+
+      if (!genre) {
+        error.textContent = "Pilih minimal satu genre.";
+        error.classList.add("is-visible");
+        return;
+      }
+
+      var editing = editingAuthorId ? authorById(editingAuthorId) : null;
+      if (editingAuthorId && !editing) {
+        error.textContent = "Penulis yang diedit tidak ditemukan. Muat ulang halaman.";
+        error.classList.add("is-visible");
+        return;
+      }
+
+      var payload = {
+        name: name,
+        penName: penName || name,
+        genre: genre,
+        background: $("#author-background").value.trim(),
+        photo: pendingAuthorPhoto,
+        works: works,
+        visible: $("#author-visible").checked
+      };
+
+      if (editing) {
+        var previousAuthor = Object.assign({}, editing);
+        Object.assign(editing, payload);
+        if (!await commit('Profil "' + editing.name + '" diperbarui.')) {
+          Object.assign(editing, previousAuthor);
+          return;
+        }
+        closeDialog($("#author-dialog"));
+        renderAuthors();
+        renderSummary();
+        return;
+      }
+
+      var author = Object.assign({ id: uniqueAuthorId(penName || name) }, payload);
+      DATA.authors.unshift(author);
+      if (!await commit('Penulis "' + author.name + '" ditambahkan.')) {
+        DATA.authors.shift();
+        return;
+      }
+      closeDialog($("#author-dialog"));
+      renderAuthors();
+      renderSummary();
+    });
+
+    $("#author-table-body").addEventListener("click", async function (event) {
+      var editButton = event.target.closest("[data-edit-author]");
+      if (editButton) {
+        var author = authorById(editButton.getAttribute("data-edit-author"));
+        if (author) {
+          openAuthorDialog(author);
+        }
+        return;
+      }
+
+      var toggle = event.target.closest("[data-toggle-author]");
+      if (toggle) {
+        var target = authorById(toggle.getAttribute("data-toggle-author"));
+        if (!target) {
+          return;
+        }
+        var previousVisible = target.visible;
+        target.visible = target.visible === false;
+        if (await commit('Profil "' + target.name + '" ' + (target.visible ? "ditampilkan." : "disembunyikan."))) {
+          renderAuthors();
+        } else {
+          target.visible = previousVisible;
+        }
+        return;
+      }
+
+      var remove = event.target.closest("[data-delete-author]");
+      if (!remove) {
+        return;
+      }
+      var authorToDelete = authorById(remove.getAttribute("data-delete-author"));
+      if (!authorToDelete) {
+        return;
+      }
+      if (!window.confirm('Hapus profil penulis "' + authorToDelete.name + '"?')) {
+        return;
+      }
+
+      var previousAuthors = DATA.authors.slice();
+      DATA.authors = DATA.authors.filter(function (item) { return item.id !== authorToDelete.id; });
+      if (await commit('Penulis "' + authorToDelete.name + '" dihapus.')) {
+        if (editingAuthorId === authorToDelete.id) {
+          editingAuthorId = "";
+        }
+        renderAuthors();
+        renderSummary();
+      } else {
+        DATA.authors = previousAuthors;
       }
     });
 

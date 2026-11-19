@@ -27,6 +27,10 @@
     {
       "source": "/ceritanovel/(.*)",
       "destination": "/api/pages"
+    },
+    {
+      "source": "/penulis/(.*)",
+      "destination": "/api/pages"
     }
   ],
   "headers": [

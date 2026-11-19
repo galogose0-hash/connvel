@@ -9,6 +9,7 @@ var DATA_FILE = path.join(ROOT, "data", "connvel.json");
 var OUT_DIR = path.join(ROOT, "public");
 var SERVER_DIR = path.join(ROOT, "server");
 var SEED_FILE = path.join(SERVER_DIR, "seed-state.mjs");
+var PENULIS_DIR = path.join(ROOT, "penulis");
 
 var ROOT_FILES = ["index.html", "browse.html", "donate.html"];
 var COPY_DIRS = ["novelis", "tentang", "dashboard", "info"];
@@ -65,9 +66,20 @@ function countFiles(dir) {
   return total;
 }
 
-function writeSeedState(state) {
+async function writeSeedState(state) {
+  var vercelState = await import("./server/vercel-state.mjs");
   fs.mkdirSync(SERVER_DIR, { recursive: true });
   var seed = normalizeState(state);
+  var publicState = vercelState.sanitizeState(seed);
+  var publicPhotos = {};
+  publicState.authors.forEach(function (author) {
+    publicPhotos[author.id] = author.photo;
+  });
+  seed.authors.forEach(function (author) {
+    if (publicPhotos[author.id] !== undefined) {
+      author.photo = publicPhotos[author.id];
+    }
+  });
   fs.writeFileSync(
     SEED_FILE,
     "export default " + JSON.stringify(seed, null, 2) + ";\n",
@@ -76,9 +88,9 @@ function writeSeedState(state) {
   return seed;
 }
 
-function main() {
+async function main() {
   var state = readState();
-  var seed = writeSeedState(state);
+  var seed = await writeSeedState(state);
 
   fs.rmSync(OUT_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -97,6 +109,12 @@ function main() {
     }
   });
 
+  fs.mkdirSync(path.join(OUT_DIR, "penulis"), { recursive: true });
+  var authorCatalog = path.join(PENULIS_DIR, "index.html");
+  if (fs.existsSync(authorCatalog)) {
+    fs.copyFileSync(authorCatalog, path.join(OUT_DIR, "penulis", "index.html"));
+  }
+
   copyDirectory(
     path.join(ROOT, "assets"),
     path.join(OUT_DIR, "assets"),
@@ -107,10 +125,14 @@ function main() {
   console.log("Situs Connvel berhasil dibangun di public/.");
   console.log("- Novel: " + seed.novels.length + " (halaman novel dan bab dilayani oleh Vercel Functions)");
   console.log("- Bab: " + seed.chapters.length);
+  console.log("- Penulis: " + seed.authors.length + " (halaman detail dilayani oleh Vercel Functions)");
   console.log("- Komentar: " + seed.comments.length);
   console.log("- Kiriman penulis: " + seed.submissions.length + " (ikut seed awal Vercel Blob)");
   console.log("- Seed Functions: " + path.relative(ROOT, SEED_FILE));
   console.log("- Total berkas statis: " + countFiles(OUT_DIR));
 }
 
-main();
+main().catch(function (error) {
+  console.error("Gagal membangun situs Connvel: " + error.message);
+  process.exit(1);
+});

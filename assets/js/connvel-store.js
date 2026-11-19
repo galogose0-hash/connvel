@@ -128,6 +128,38 @@
         content: ""
       }
     ],
+    authors: [
+      {
+        id: "alya-prameswari",
+        name: "Alya Prameswari",
+        penName: "Alya P.",
+        genre: "Fantasi",
+        background: "Alya menulis cerita fantasi yang berakar pada kota pelabuhan dan peta-peta lama. Ia percaya setiap tempat yang hilang dari peta menyimpan kisah yang belum selesai diceritakan.",
+        photo: "",
+        works: ["Putri Sang Kartografer"],
+        visible: true
+      },
+      {
+        id: "eris",
+        name: "Eris'a",
+        penName: "Eris",
+        genre: "Roman, Potongan Kehidupan",
+        background: "Eris'a menulis tentang pertemuan-pertemuan kecil yang mengubah hari seseorang. Ceritanya berangkat dari perjalanan lintas kota dan percakapan yang nyaris tak terdengar.",
+        photo: "",
+        works: ["Titik Temu di Ujung Lelah"],
+        visible: true
+      },
+      {
+        id: "sekar-ayu",
+        name: "Sekar Ayu",
+        penName: "Sekar",
+        genre: "Fiksi Ilmiah",
+        background: "Sekar menyukai cerita yang memberi ruang bagi teknologi untuk tetap terasa manusiawi. Ia menulis hari-hari biasa yang tiba-tiba menjadi luar biasa.",
+        photo: "",
+        works: ["Sepuluh Menit Sebelum Pulang"],
+        visible: true
+      }
+    ],
     home: {
       spotlight: "putri-sang-kartografer",
       latest: [
@@ -227,6 +259,7 @@
       return {
         novels: Array.isArray(data.novels) ? data.novels : clone(defaults.novels),
         chapters: Array.isArray(data.chapters) ? data.chapters : clone(defaults.chapters),
+        authors: Array.isArray(data.authors) ? data.authors : clone(defaults.authors),
         home: Object.assign({}, defaults.home, data.home || {}),
         announcements: announcements,
         submissions: Array.isArray(data.submissions) ? data.submissions : clone(defaults.submissions),

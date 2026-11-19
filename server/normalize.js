@@ -115,6 +115,47 @@ function normalizeState(raw) {
     }
   });
 
+  var usedAuthorIds = {};
+  var authors = [];
+
+  (Array.isArray(source.authors) ? source.authors : []).forEach(function (candidate) {
+    if (!candidate || typeof candidate !== "object") {
+      return;
+    }
+    var name = String(candidate.name || "").trim();
+    var penName = String(candidate.penName || "").trim();
+    if (!name && !penName) {
+      return;
+    }
+    var baseId = render.slugify(candidate.id) || render.slugify(penName) || render.slugify(name) || "penulis";
+    if (baseId === "index") {
+      baseId = "penulis";
+    }
+    var id = uniqueId(baseId, usedAuthorIds);
+    var works = [];
+    var seenWorks = {};
+
+    (Array.isArray(candidate.works) ? candidate.works : []).forEach(function (work) {
+      var title = String(work && typeof work === "object" ? work.title : work || "").trim().slice(0, 140);
+      var key = title.toLowerCase();
+      if (title && !seenWorks[key]) {
+        seenWorks[key] = true;
+        works.push(title);
+      }
+    });
+
+    authors.push({
+      id: id,
+      name: name || penName,
+      penName: penName || name,
+      genre: String(candidate.genre || "").trim(),
+      background: String(candidate.background || "").trim(),
+      photo: String(candidate.photo || "").trim(),
+      works: works.slice(0, 30),
+      visible: candidate.visible !== false
+    });
+  });
+
   var visibleIds = novels.filter(function (novel) { return novel.visible; }).map(function (novel) {
     return novel.id;
   });
@@ -252,6 +293,7 @@ function normalizeState(raw) {
   return {
     novels: novels,
     chapters: chapters,
+    authors: authors,
     home: {
       spotlight: spotlight,
       latest: latest,

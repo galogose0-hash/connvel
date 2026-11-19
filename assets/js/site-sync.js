@@ -4,17 +4,20 @@
   var novels = [];
   var visible = [];
   var visibleIds = [];
+  var authors = [];
   var home = {};
 
   function applyState(data) {
     novels = (data && data.novels) || [];
     visible = novels.filter(function (novel) { return novel.visible !== false; });
     visibleIds = visible.map(function (novel) { return novel.id; });
+    authors = (data && data.authors) || [];
     home = (data && data.home) || {};
 
     syncHomeCarousel();
     syncSpotlightArt();
     syncBrowseCatalog();
+    syncAuthorCatalog();
   }
 
   function loadLocalState() {
@@ -103,6 +106,31 @@
       return novel.poster;
     }
     return novel.poster.replace(/^(\.\.\/)+/, "");
+  }
+
+  function authorHref(author) {
+    var prefix = /\/penulis\//.test(window.location.pathname) ? "" : "penulis/";
+    return prefix + encodeURIComponent(author.id) + ".html";
+  }
+
+  function authorPhoto(author) {
+    var photo = String((author && author.photo) || "");
+    if (!photo) {
+      return "";
+    }
+    if (photo.indexOf("data:") === 0 || photo.charAt(0) === "/" || /^https?:\/\//i.test(photo)) {
+      return photo;
+    }
+    return "/" + photo.replace(/^(\.\.\/)+/, "");
+  }
+
+  function authorInitials(author) {
+    var source = String((author && author.penName) || (author && author.name) || "?").trim();
+    var parts = source.split(/\s+/).filter(Boolean);
+    if (parts.length > 1) {
+      return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+    }
+    return source.slice(0, 2).toUpperCase() || "?";
   }
 
   function setText(element, value) {
@@ -424,6 +452,118 @@
 
     try {
       document.dispatchEvent(new CustomEvent("connvel:catalog-updated"));
+    } catch (error) {
+      /* Peristiwa kustom hanya bonus; abaikan bila tidak didukung. */
+    }
+  }
+
+  function updateAuthorCard(card, author) {
+    var displayName = String(author.name || author.penName || "Penulis");
+    var penName = String(author.penName || author.name || "Penulis");
+    var works = Array.isArray(author.works) ? author.works : [];
+    var href = authorHref(author);
+
+    card.setAttribute("data-name", displayName);
+    card.setAttribute("data-pen-name", penName);
+    card.setAttribute("data-genre", genreTokens(author.genre));
+    card.setAttribute("data-works", String(works.length));
+    card.setAttribute("data-background", String(author.background || ""));
+
+    setText(card.querySelector(".novel-title a"), displayName);
+    setText(card.querySelector(".book-author"), "Nama pena · " + penName);
+    setText(card.querySelector(".novel-synopsis"), author.background || "");
+    setText(card.querySelector(".author-work-count"), works.length + " karya");
+    setText(card.querySelector(".novel-genre"), author.genre || "Umum");
+
+    card.querySelectorAll("a").forEach(function (link) {
+      link.setAttribute("href", href);
+    });
+
+    var coverLink = card.querySelector(".novel-cover");
+    if (coverLink) {
+      coverLink.setAttribute("aria-label", "Lihat profil " + displayName);
+    }
+
+    var photoHolder = card.querySelector(".author-portrait-fill");
+    if (!photoHolder) {
+      return;
+    }
+
+    var photo = authorPhoto(author);
+    var image = photoHolder.querySelector("img");
+    if (photo) {
+      if (!image) {
+        photoHolder.textContent = "";
+        image = document.createElement("img");
+        photoHolder.appendChild(image);
+      }
+      if (image.getAttribute("src") !== photo) {
+        image.src = photo;
+      }
+      image.alt = "Foto profil " + displayName;
+      photoHolder.classList.add("author-portrait-fill--image");
+      photoHolder.classList.remove("author-initials");
+    } else {
+      photoHolder.classList.remove("author-portrait-fill--image");
+      photoHolder.classList.add("author-initials");
+      photoHolder.textContent = authorInitials(author);
+    }
+  }
+
+  function buildAuthorCard(author) {
+    var card = document.createElement("article");
+    card.className = "author-row-item novel-row-item";
+    card.setAttribute("data-author-id", author.id);
+    card.innerHTML =
+      '<a class="novel-cover" href="#" aria-label=""><span class="author-portrait-fill author-initials" aria-hidden="true"></span></a>' +
+      '<div class="novel-info">' +
+      '<p class="book-genre novel-genre"></p>' +
+      '<h3 class="novel-title"><a href="#"></a></h3>' +
+      '<p class="book-author"></p>' +
+      '<p class="novel-synopsis"></p>' +
+      '<div class="novel-meta">' +
+      '<span class="novel-chapters author-work-count"></span>' +
+      '<span class="stat-divider" aria-hidden="true">&middot;</span>' +
+      '<span class="novel-status">Penulis Connvel</span>' +
+      "</div>" +
+      '<a class="btn btn-primary novel-action" href="#">' +
+      "Lihat Profil" +
+      '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>' +
+      "</a>" +
+      "</div>";
+    return card;
+  }
+
+  function syncAuthorCatalog() {
+    var list = document.getElementById("author-list");
+    if (!list) {
+      return;
+    }
+
+    var cards = Array.prototype.slice.call(list.querySelectorAll(".author-row-item"));
+    var existing = {};
+
+    cards.forEach(function (card) {
+      var id = card.getAttribute("data-author-id");
+      if (!id || !authors.some(function (author) { return author.id === id && author.visible !== false; })) {
+        card.remove();
+        return;
+      }
+      existing[id] = card;
+      updateAuthorCard(card, authors.find(function (author) { return author.id === id; }));
+    });
+
+    authors.forEach(function (author) {
+      if (author.visible === false || existing[author.id]) {
+        return;
+      }
+      var card = buildAuthorCard(author);
+      updateAuthorCard(card, author);
+      list.appendChild(card);
+    });
+
+    try {
+      document.dispatchEvent(new CustomEvent("connvel:authors-updated"));
     } catch (error) {
       /* Peristiwa kustom hanya bonus; abaikan bila tidak didukung. */
     }

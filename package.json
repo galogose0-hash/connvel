@@ -11,7 +11,7 @@
     "dev": "vercel dev",
     "build": "node build-vercel.js",
     "build:vercel": "node build-vercel.js",
-    "check": "node --check server.js && node --check server/render.js && node --check server/normalize.js && node --check server/seed.js && node --check build-vercel.js && node --check server/vercel-state.mjs && node --check api/index.mjs && node --check api/pages.mjs && node --check assets/js/dashboard.js && node --check assets/js/dashboard-login.js && node --check assets/js/site-sync.js && node --check assets/js/info.js && node --check assets/js/novel.js && node --check assets/js/browse.js && node --check assets/js/connvel-store.js && node --check assets/js/donate.js && node --check assets/js/ruang-tulis.js"
+    "check": "node --check server.js && node --check server/render.js && node --check server/normalize.js && node --check server/seed.js && node --check build-vercel.js && node --check server/vercel-state.mjs && node --check api/index.mjs && node --check api/pages.mjs && node --check assets/js/dashboard.js && node --check assets/js/dashboard-login.js && node --check assets/js/site-sync.js && node --check assets/js/info.js && node --check assets/js/novel.js && node --check assets/js/browse.js && node --check assets/js/penulis.js && node --check assets/js/connvel-store.js && node --check assets/js/donate.js && node --check assets/js/ruang-tulis.js"
   },
   "engines": {
     "node": ">=20"

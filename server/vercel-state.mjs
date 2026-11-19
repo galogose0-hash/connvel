@@ -4,6 +4,7 @@ import { normalizeState } from "./normalize.js";
 
 const STATE_PATHNAME = "connvel/state.json";
 const POSTER_PREFIX = "connvel/posters/";
+const AUTHOR_PHOTO_PREFIX = "connvel/author-photos/";
 const BLOB_ACCESS = "private";
 const MAX_POSTER_BYTES = 4 * 1024 * 1024;
 
@@ -70,6 +71,20 @@ function posterPublicPath(novel) {
   return poster;
 }
 
+function authorPublicPath(author) {
+  var photo = String((author && author.photo) || "");
+  if (!photo) {
+    return "";
+  }
+  if (photo.indexOf("data:") === 0 || photo.indexOf("/api/author-photo/") === 0) {
+    return "/api/author-photo/" + encodeURIComponent(author.id);
+  }
+  if (photo.charAt(0) === "/" || /^https?:\/\//i.test(photo)) {
+    return photo;
+  }
+  return "/" + photo.replace(/^(\.\.\/)+/, "");
+}
+
 export function sanitizeState(state) {
   var source = state && typeof state === "object" ? state : {};
   var novels = (Array.isArray(source.novels) ? source.novels : [])
@@ -88,6 +103,24 @@ export function sanitizeState(state) {
         visible: true,
         poster: posterPublicPath(novel),
         synopsis: novel.synopsis
+      };
+    });
+
+  var authors = (Array.isArray(source.authors) ? source.authors : [])
+    .filter(function (author) {
+      return author && author.visible !== false &&
+        (String(author.name || "").trim() || String(author.penName || "").trim());
+    })
+    .map(function (author) {
+      return {
+        id: String(author.id || ""),
+        name: String(author.name || ""),
+        penName: String(author.penName || ""),
+        genre: String(author.genre || ""),
+        background: String(author.background || ""),
+        photo: authorPublicPath(author),
+        works: Array.isArray(author.works) ? author.works.slice() : [],
+        visible: true
       };
     });
 
@@ -116,6 +149,7 @@ export function sanitizeState(state) {
 
   return {
     novels: novels,
+    authors: authors,
     home: source.home && typeof source.home === "object" ? source.home : {},
     announcements: announcements,
     comments: Array.isArray(source.comments) ? source.comments : [],
@@ -159,6 +193,51 @@ export async function readPoster(store, novelId) {
     return null;
   }
   var result = await get(POSTER_PREFIX + novelId, { access: BLOB_ACCESS, useCache: false });
+  if (!result || result.statusCode !== 200 || !result.stream) {
+    return null;
+  }
+  return {
+    mime: result.blob.contentType || "application/octet-stream",
+    stream: result.stream
+  };
+}
+
+export async function persistAuthorPhotos(store, state) {
+  for (const author of state.authors || []) {
+    var photo = String(author.photo || "");
+    var match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s.exec(photo);
+    if (!match) {
+      continue;
+    }
+    var mime = match[1].toLowerCase();
+    var bytes = Buffer.from(match[2], "base64");
+    if (!bytes.length || bytes.length > MAX_POSTER_BYTES) {
+      var error = new Error("Foto profil " + (author.name || author.penName) + " tidak valid atau terlalu besar (maksimal 4 MB).");
+      error.status = 413;
+      throw error;
+    }
+    await put(AUTHOR_PHOTO_PREFIX + author.id, bytes, {
+      access: BLOB_ACCESS,
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: mime
+    });
+    author.photo = "/api/author-photo/" + author.id;
+  }
+}
+
+export async function readAuthorPhoto(store, authorId) {
+  var state = await readState(store);
+  var author = state.authors.find(function (item) {
+    return item.id === authorId && item.visible !== false;
+  });
+  if (!author) {
+    return null;
+  }
+  if (String(author.photo || "") !== "/api/author-photo/" + authorId) {
+    return null;
+  }
+  var result = await get(AUTHOR_PHOTO_PREFIX + authorId, { access: BLOB_ACCESS, useCache: false });
   if (!result || result.statusCode !== 200 || !result.stream) {
     return null;
   }

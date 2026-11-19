@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penulis — Connvel</title>
+  <meta name="description" content="Kenali para penulis yang sudah menuangkan ceritanya ke Connvel. Jelajahi profil, latar belakang, genre favorit, dan karya mereka.">
+  <meta name="theme-color" content="#F6F0E5">
+  <meta property="og:title" content="Penulis — Connvel">
+  <meta property="og:description" content="Temukan penulis di balik cerita-cerita Connvel.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/sections.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/browse.css">
+  <link rel="stylesheet" href="../assets/css/penulis.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lompat ke konten</a>
+
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-spark" viewBox="0 0 24 24">
+      <path d="M12 1.8c.7 5.5 4.7 9.5 10.2 10.2-5.5.7-9.5 4.7-10.2 10.2C11.3 16.7 7.3 12.7 1.8 12 7.3 11.3 11.3 7.3 12 1.8Z"/>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M4.5 12h15M13.5 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+      <path d="M7 17 17 7M8 7h9v9"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="Connvel — beranda">
+        <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+          <rect width="36" height="36" rx="11" fill="currentColor"/>
+          <path d="M9.5 12.3c3.3-1.4 5.9-1.1 8.5 1 2.6-2.1 5.2-2.4 8.5-1v11.5c-3.3-1.2-5.9-.9-8.5 1.2-2.6-2.1-5.2-2.4-8.5-1.2V12.3Z" fill="#F7F1E6"/>
+          <path d="M18 13.2v11.4" stroke="#B45A3A" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-name">Connvel<span class="brand-dot">.</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Utama">
+        <a class="nav-link" href="../index.html">Beranda</a>
+        <a class="nav-link" href="../browse.html">Jelajahi</a>
+        <a class="nav-link is-active" href="index.html" aria-current="page">Penulis</a>
+        <a class="nav-link" href="../novelis/ruang-tulis.html">Menulis</a>
+        <a class="nav-link" href="../tentang/about.html">Tentang Connvel</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn-primary btn-small" href="../info/index.html">Pengumuman</a>
+      </div>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="menu-label">Menu</span>
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
+    <nav class="mobile-nav" aria-label="Navigasi utama seluler">
+      <a href="../index.html"><span>01</span>Beranda</a>
+      <a href="../browse.html"><span>02</span>Jelajahi</a>
+      <a href="index.html"><span>03</span>Penulis</a>
+      <a href="../novelis/ruang-tulis.html"><span>04</span>Menulis</a>
+      <a href="../tentang/about.html"><span>05</span>Tentang Connvel</a>
+    </nav>
+    <div class="mobile-menu-foot">
+      <div class="mobile-actions">
+        <a class="btn btn-primary" href="../info/index.html">Pengumuman</a>
+      </div>
+      <p class="mobile-motto">Cerita yang menghubungkan dunia.</p>
+    </div>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <section class="browse-hero" aria-labelledby="author-catalog-title">
+      <div class="container">
+        <p class="eyebrow" data-reveal>
+          <svg class="icon icon-spark" aria-hidden="true"><use href="#icon-spark"/></svg>
+          Orang di balik cerita
+        </p>
+        <h1 class="browse-title" id="author-catalog-title" data-reveal>Kenali <em>penulis</em> Connvel.</h1>
+        <p class="browse-lead" data-reveal>Setiap cerita bermula dari seseorang yang berani membagikan dunianya. Temukan kontributor Connvel, baca latar belakang mereka, dan jelajahi karya-karya yang sudah mereka tuangkan di platform ini.</p>
+      </div>
+    </section>
+
+    <section class="browse-catalog" id="katalog-penulis" aria-labelledby="catalog-title">
+      <div class="container">
+        <h2 id="catalog-title" class="sr-only">Daftar penulis</h2>
+
+        <div class="browse-toolbar" data-reveal>
+          <div class="browse-search">
+            <svg class="browse-search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m16.5 16.5 4 4"/>
+            </svg>
+            <label class="sr-only" for="author-search">Cari nama atau nama pena</label>
+            <input type="search" id="author-search" name="search" placeholder="Cari nama atau nama pena…" autocomplete="off">
+          </div>
+
+          <div class="browse-filters">
+            <label class="sr-only" for="author-genre">Filter genre</label>
+            <span class="browse-select">
+              <select id="author-genre">
+                <option value="all">Semua Genre</option>
+                <option value="fantasi">Fantasi</option>
+                <option value="fiksi-ilmiah">Fiksi Ilmiah</option>
+                <option value="roman">Roman</option>
+                <option value="misteri">Misteri</option>
+                <option value="potongan-kehidupan">Potongan Kehidupan</option>
+                <option value="sejarah">Sejarah</option>
+              </select>
+            </span>
+
+            <label class="sr-only" for="author-sort">Urutkan penulis</label>
+            <span class="browse-select">
+              <select id="author-sort">
+                <option value="nama">Nama A–Z</option>
+                <option value="pena">Nama Pena A–Z</option>
+                <option value="karya">Jumlah Karya</option>
+              </select>
+            </span>
+          </div>
+        </div>
+
+        <p class="browse-count" id="author-count" aria-live="polite">3 penulis</p>
+
+        <div class="browse-list" id="author-list">
+          <article class="author-row-item novel-row-item" data-reveal data-author-id="alya-prameswari" data-name="Alya Prameswari" data-pen-name="Alya P." data-genre="fantasi" data-works="1" data-background="Alya menulis cerita fantasi yang berakar pada kota pelabuhan dan peta-peta lama.">
+            <a class="novel-cover" href="alya-prameswari.html" aria-label="Lihat profil Alya Prameswari">
+              <span class="author-portrait-fill author-initials" aria-hidden="true">AP</span>
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Fantasi</p>
+              <h3 class="novel-title"><a href="alya-prameswari.html">Alya Prameswari</a></h3>
+              <p class="book-author">Nama pena · Alya P.</p>
+              <p class="novel-synopsis">Alya menulis cerita fantasi yang berakar pada kota pelabuhan dan peta-peta lama.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters author-work-count">1 karya</span>
+                <span class="stat-divider" aria-hidden="true">&middot;</span>
+                <span class="novel-status">Penulis Connvel</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="alya-prameswari.html">
+                Lihat Profil
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="author-row-item novel-row-item" data-reveal data-author-id="eris" data-name="Eris'a" data-pen-name="Eris" data-genre="roman potongan-kehidupan" data-works="1" data-background="Eris'a menulis tentang pertemuan-pertemuan kecil yang mengubah hari seseorang.">
+            <a class="novel-cover" href="eris.html" aria-label="Lihat profil Eris'a">
+              <span class="author-portrait-fill author-initials" aria-hidden="true">ER</span>
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Roman, Potongan Kehidupan</p>
+              <h3 class="novel-title"><a href="eris.html">Eris'a</a></h3>
+              <p class="book-author">Nama pena · Eris</p>
+              <p class="novel-synopsis">Eris'a menulis tentang pertemuan-pertemuan kecil yang mengubah hari seseorang.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters author-work-count">1 karya</span>
+                <span class="stat-divider" aria-hidden="true">&middot;</span>
+                <span class="novel-status">Penulis Connvel</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="eris.html">
+                Lihat Profil
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="author-row-item novel-row-item" data-reveal data-author-id="sekar-ayu" data-name="Sekar Ayu" data-pen-name="Sekar" data-genre="fiksi-ilmiah" data-works="1" data-background="Sekar menyukai cerita yang memberi ruang bagi teknologi untuk tetap terasa manusiawi.">
+            <a class="novel-cover" href="sekar-ayu.html" aria-label="Lihat profil Sekar Ayu">
+              <span class="author-portrait-fill author-initials" aria-hidden="true">SA</span>
+            </a>
+            <div class="novel-info">
+              <p class="book-genre novel-genre">Fiksi Ilmiah</p>
+              <h3 class="novel-title"><a href="sekar-ayu.html">Sekar Ayu</a></h3>
+              <p class="book-author">Nama pena · Sekar</p>
+              <p class="novel-synopsis">Sekar menyukai cerita yang memberi ruang bagi teknologi untuk tetap terasa manusiawi.</p>
+              <div class="novel-meta">
+                <span class="novel-chapters author-work-count">1 karya</span>
+                <span class="stat-divider" aria-hidden="true">&middot;</span>
+                <span class="novel-status">Penulis Connvel</span>
+              </div>
+              <a class="btn btn-primary novel-action" href="sekar-ayu.html">
+                Lihat Profil
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <p class="browse-empty" id="author-empty" hidden>Belum ada penulis yang cocok dengan pencarianmu. Coba kata kunci atau genre lain.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="../index.html" aria-label="Connvel — beranda">
+          <svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+            <rect width="36" height="36" rx="11" fill="currentColor"/>
+            <path d="M9.5 12.3c3.3-1.4 5.9-1.1 8.5 1 2.6-2.1 5.2-2.4 8.5-1v11.5c-3.3-1.2-5.9-.9-8.5 1.2-2.6-2.1-5.2-2.4-8.5-1.2V12.3Z" fill="#241C16"/>
+            <path d="M18 13.2v11.4" stroke="#E9BE9E" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span class="brand-name">Connvel<span class="brand-dot">.</span></span>
+        </a>
+        <p class="footer-tagline">Connvel bukan hanya tentang halaman dan kata-kata. Ini tentang cerita yang mempertemukan imajinasi, penulis, dan pembaca dalam satu dunia.</p>
+      </div>
+
+      <nav class="footer-col" aria-label="Community">
+        <h3>Community</h3>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+        <a href="#">X</a>
+      </nav>
+
+      <nav class="footer-col" aria-label="Platform">
+        <h3>Platform</h3>
+        <a href="../index.html">Beranda</a>
+        <a href="../browse.html">Jelajahi</a>
+        <a href="index.html">Penulis</a>
+        <a href="../novelis/ruang-tulis.html">Menulis</a>
+        <a href="../tentang/about.html">Tentang Connvel</a>
+      </nav>
+
+      <nav class="footer-col" aria-label="Support us">
+        <h3>Support us</h3>
+        <a href="../donate.html">Donate</a>
+      </nav>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2026 Connvel. Dibuat untuk pembaca, di mana pun.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/connvel-store.js" defer></script>
+  <script src="../assets/js/site-sync.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+  <script src="../assets/js/penulis.js" defer></script>
+</body>
+</html>

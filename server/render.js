@@ -180,6 +180,7 @@ function siteHeader() {
     '<nav class="main-nav" aria-label="Utama">' +
     '<a class="nav-link" href="../index.html">Beranda</a>' +
     '<a class="nav-link is-active" href="../browse.html" aria-current="page">Jelajahi</a>' +
+    '<a class="nav-link" href="../penulis/index.html">Penulis</a>' +
     '<a class="nav-link" href="../novelis/ruang-tulis.html">Menulis</a>' +
     '<a class="nav-link" href="../tentang/about.html">Tentang Connvel</a>' +
     "</nav>" +
@@ -193,8 +194,9 @@ function siteHeader() {
     '<nav class="mobile-nav" aria-label="Navigasi utama seluler">' +
     '<a href="../index.html"><span>01</span>Beranda</a>' +
     '<a href="../browse.html"><span>02</span>Jelajahi</a>' +
-    '<a href="../novelis/ruang-tulis.html"><span>03</span>Menulis</a>' +
-    '<a href="../tentang/about.html"><span>04</span>Tentang Connvel</a>' +
+    '<a href="../penulis/index.html"><span>03</span>Penulis</a>' +
+    '<a href="../novelis/ruang-tulis.html"><span>04</span>Menulis</a>' +
+    '<a href="../tentang/about.html"><span>05</span>Tentang Connvel</a>' +
     "</nav>" +
     '<div class="mobile-menu-foot"><div class="mobile-actions">' +
     '<a class="btn btn-primary" href="../info/index.html">Pengumuman</a>' +
@@ -212,6 +214,7 @@ function siteFooter() {
     '<a href="#">Instagram</a><a href="#">TikTok</a><a href="#">X</a></nav>' +
     '<nav class="footer-col" aria-label="Platform"><h3>Platform</h3>' +
     '<a href="../index.html">Beranda</a><a href="../browse.html">Jelajahi</a>' +
+    '<a href="../penulis/index.html">Penulis</a>' +
     '<a href="../novelis/ruang-tulis.html">Menulis</a><a href="../tentang/about.html">Tentang Connvel</a></nav>' +
     '<nav class="footer-col" aria-label="Support us"><h3>Support us</h3>' +
     '<a href="../donate.html">Donate</a></nav></div>' +
@@ -254,8 +257,24 @@ function renderChapterList(novel, chapters) {
   }).join("") + "</ol>";
 }
 
-function renderNovelPage(novel, chapters) {
+function authorProfileHref(name, authors) {
+  var wanted = String(name || "").trim().toLowerCase();
+  if (!wanted) {
+    return "../penulis/index.html";
+  }
+
+  var match = (Array.isArray(authors) ? authors : []).find(function (author) {
+    return [author.name, author.penName].some(function (value) {
+      return String(value || "").trim().toLowerCase() === wanted;
+    });
+  });
+
+  return match ? "../penulis/" + encodeURIComponent(match.id) + ".html" : "../penulis/index.html";
+}
+
+function renderNovelPage(novel, chapters, authors) {
   var title = escapeHtml(novel.title);
+  var authorHref = authorProfileHref(novel.author, authors);
   var synopsisText = descriptionFor(novel.synopsis, 170);
   var poster = posterPath(novel);
   var published = chapters.filter(function (chapter) { return chapter.published; });
@@ -292,15 +311,15 @@ function renderNovelPage(novel, chapters) {
     '<img src="../' + escapeAttr(poster) + '" alt="Sampul ' + escapeAttr(novel.title) + '" width="700" height="1050">' +
     "</figure>" +
     '<div class="novel-poster-actions">' +
-    '<button class="btn btn-primary novel-poster-action" type="button" data-bookmark aria-pressed="false">' +
-    '<svg class="icon" aria-hidden="true"><use href="#icon-bookmark"/></svg><span data-bookmark-label>Simpan ke Perpustakaan</span></button>' +
+    '<a class="btn btn-primary novel-poster-action" href="' + escapeAttr(authorHref) + '">' +
+    '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"/></svg><span>Info Penulis</span></a>' +
     '<button class="btn btn-outline novel-poster-action" type="button" data-share>' +
     '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 15V4M8.5 7.5 12 4l3.5 3.5M5 12v7h14v-7"/></svg>Bagikan</button>' +
     '<p class="share-status" data-share-status role="status" aria-live="polite"></p></div></div>' +
     '<div class="novel-detail-info" data-reveal>' +
     '<p class="book-genre novel-detail-genre">' + escapeHtml(novel.genre) + "</p>" +
     '<h1 class="novel-detail-title" id="novel-title">' + title + "</h1>" +
-    '<p class="novel-detail-author">oleh <a href="#">' + escapeHtml(novel.author) + "</a></p>" +
+    '<p class="novel-detail-author">oleh <a href="' + escapeAttr(authorHref) + '">' + escapeHtml(novel.author) + "</a></p>" +
     '<dl class="novel-facts">' +
     '<div class="novel-fact"><dt>Total Bab</dt><dd>' + escapeHtml(totalChapters) + " Bab</dd></div>" +
     '<div class="novel-fact"><dt>Status</dt><dd>' + escapeHtml(statusLabel(novel)) + "</dd></div>" +
@@ -399,6 +418,134 @@ function renderChapterPage(novel, chapter, chapters) {
     chapterNav(novel, chapter, chapters) + "</nav></main></body></html>";
 }
 
+function authorPhotoPath(author) {
+  var photo = String((author && author.photo) || "");
+  if (!photo) {
+    return "";
+  }
+  if (photo.indexOf("data:") === 0 || photo.charAt(0) === "/") {
+    return photo;
+  }
+  return "../" + photo.replace(/^(\.\.\/)+/, "");
+}
+
+function authorInitials(author) {
+  var source = String((author && author.penName) || (author && author.name) || "?").trim();
+  var parts = source.split(/\s+/).filter(Boolean);
+  if (parts.length > 1) {
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  }
+  return source.slice(0, 2).toUpperCase() || "?";
+}
+
+function authorWorkPoster(novel) {
+  var poster = String((novel && novel.poster) || "assets/images/connvel-book.jpg");
+  if (poster.indexOf("data:") === 0 || poster.charAt(0) === "/") {
+    return poster;
+  }
+  return "../" + poster.replace(/^(\.\.\/)+/, "");
+}
+
+function renderAuthorWorks(author, novels) {
+  var works = Array.isArray(author.works) ? author.works : [];
+  if (!works.length) {
+    return '<p class="author-empty">Belum ada karya yang ditambahkan untuk penulis ini.</p>';
+  }
+
+  return '<div class="author-work-grid">' + works.map(function (title) {
+    var name = String(title || "").trim();
+    var key = name.toLowerCase();
+    var novel = (novels || []).find(function (item) {
+      return String(item.title || "").toLowerCase() === key || item.id === key;
+    });
+
+    if (novel && novel.visible !== false) {
+      return '<a class="author-work-card" href="../novel/' + encodeURIComponent(novel.id) + '.html">' +
+        '<span class="author-work-cover"><img src="' + escapeAttr(authorWorkPoster(novel)) +
+        '" alt="" width="140" height="210" loading="lazy"></span>' +
+        '<span class="author-work-info"><strong>' + escapeHtml(novel.title) + "</strong>" +
+        "<small>" + escapeHtml(novel.genre) + "</small></span>" +
+        '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"/></svg></a>';
+    }
+
+    return '<div class="author-work-card is-plain">' +
+      '<span class="author-work-info"><strong>' + escapeHtml(name) + "</strong>" +
+      "<small>Karya penulis</small></span></div>";
+  }).join("") + "</div>";
+}
+
+function renderAuthorPage(author, novels) {
+  var displayName = String(author.name || author.penName || "Penulis");
+  var penName = String(author.penName || author.name || "Penulis");
+  var photo = authorPhotoPath(author);
+  var portrait = photo
+    ? '<img src="' + escapeAttr(photo) + '" alt="Foto profil ' + escapeAttr(displayName) + '" width="480" height="480">'
+    : '<span class="author-initials" aria-hidden="true">' + escapeHtml(authorInitials(author)) + "</span>";
+  var genres = String(author.genre || "")
+    .split(",")
+    .map(function (genre) { return genre.trim(); })
+    .filter(Boolean);
+  var genreMarkup = genres.length
+    ? genres.map(function (genre) {
+        return '<span class="author-genre-pill">' + escapeHtml(genre) + "</span>";
+      }).join("")
+    : '<span class="author-genre-pill">Umum</span>';
+  var works = Array.isArray(author.works) ? author.works : [];
+  var description = String(author.background || "").replace(/\s+/g, " ").trim().slice(0, 160);
+
+  return '<!DOCTYPE html>\n<html lang="id">\n<head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+    "<title>" + escapeHtml(displayName) + " — Penulis Connvel</title>" +
+    '<meta name="description" content="' + escapeAttr(penName + " — " + (description || "Penulis kontributor Connvel.")) + '">' +
+    '<meta name="theme-color" content="#F6F0E5">' +
+    '<meta property="og:title" content="' + escapeAttr(displayName + " — Penulis Connvel") + '">' +
+    '<meta property="og:description" content="' + escapeAttr(description || "Kenali penulis di balik cerita Connvel.") + '">' +
+    '<meta property="og:type" content="profile">' +
+    '<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">' +
+    '<link rel="preload" href="../assets/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>' +
+    '<link rel="preload" href="../assets/fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin>' +
+    '<link rel="stylesheet" href="../assets/css/styles.css">' +
+    '<link rel="stylesheet" href="../assets/css/sections.css">' +
+    '<link rel="stylesheet" href="../assets/css/responsive.css">' +
+    '<link rel="stylesheet" href="../assets/css/penulis.css">' +
+    "<script>document.documentElement.classList.add('js');</script></head><body>" +
+    '<a class="skip-link" href="#main">Lompat ke konten</a>' +
+    SPRITE_SVG + siteHeader() +
+    '<main id="main" tabindex="-1">' +
+    '<section class="author-detail-hero" aria-labelledby="author-title"><div class="container author-detail-grid">' +
+    '<figure class="author-portrait" data-reveal>' + portrait + "</figure>" +
+    '<div class="author-detail-info" data-reveal>' +
+    '<p class="eyebrow"><svg class="icon icon-spark" aria-hidden="true"><use href="#icon-spark"/></svg>Kontributor Connvel</p>' +
+    '<p class="author-detail-pen">Nama pena · ' + escapeHtml(penName) + "</p>" +
+    '<h1 class="author-detail-title" id="author-title">' + escapeHtml(displayName) + "</h1>" +
+    '<div class="author-detail-genres">' + genreMarkup + "</div>" +
+    '<div class="author-background">' +
+    (String(author.background || "").trim()
+      ? renderParagraphs(author.background)
+      : '<p class="author-empty">Latar belakang penulis belum ditambahkan.</p>') +
+    "</div>" +
+    '<dl class="author-facts">' +
+    '<div class="author-fact"><dt>Nama lengkap</dt><dd>' + escapeHtml(displayName) + "</dd></div>" +
+    '<div class="author-fact"><dt>Nama pena</dt><dd>' + escapeHtml(penName) + "</dd></div>" +
+    '<div class="author-fact"><dt>Genre favorit</dt><dd>' + escapeHtml(author.genre || "Umum") + "</dd></div>" +
+    '<div class="author-fact"><dt>Karya terbit</dt><dd>' + escapeHtml(works.length) + " karya</dd></div>" +
+    "</dl>" +
+    '<div class="author-detail-actions">' +
+    '<a class="btn btn-primary" href="../penulis/index.html">Kembali ke Katalog Penulis ' +
+    '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg></a>' +
+    '<a class="text-link" href="../browse.html">Jelajahi cerita lainnya ' +
+    '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"/></svg></a></div>' +
+    "</div></div></section>" +
+    '<section class="author-works-section" id="karya" aria-labelledby="author-works-title">' +
+    '<div class="container"><div class="author-section-head">' +
+    '<p class="eyebrow"><svg class="icon icon-spark" aria-hidden="true"><use href="#icon-spark"/></svg>Rak tulisan</p>' +
+    '<h2 id="author-works-title">Karya yang sudah ditulis</h2></div>' +
+    renderAuthorWorks(author, novels) + "</div></section></main>" +
+    siteFooter() +
+    '<script src="../assets/js/connvel-store.js" defer></script>' +
+    '<script src="../assets/js/main.js" defer></script></body></html>';
+}
+
 module.exports = {
   escapeHtml: escapeHtml,
   slugify: slugify,
@@ -406,6 +553,7 @@ module.exports = {
   stripHtml: stripHtml,
   renderNovelPage: renderNovelPage,
   renderChapterPage: renderChapterPage,
+  renderAuthorPage: renderAuthorPage,
   chapterHref: chapterHref,
   novelHref: novelHref
 };

@@ -14,6 +14,7 @@ var DATA_FILE = path.join(DATA_DIR, "connvel.json");
 var UPLOAD_DIR = path.join(ROOT, "assets", "images", "uploads");
 var NOVEL_DIR = path.join(ROOT, "novel");
 var CHAPTER_ROOT = path.join(ROOT, "ceritanovel");
+var AUTHOR_DIR = path.join(ROOT, "penulis");
 var MAX_BODY = 16 * 1024 * 1024;
 var PORT = Number(process.env.PORT) || 3000;
 
@@ -36,7 +37,7 @@ var MIME_TYPES = {
 };
 
 function ensureDirs() {
-  [DATA_DIR, UPLOAD_DIR, NOVEL_DIR, CHAPTER_ROOT].forEach(function (dir) {
+  [DATA_DIR, UPLOAD_DIR, NOVEL_DIR, CHAPTER_ROOT, AUTHOR_DIR].forEach(function (dir) {
     fs.mkdirSync(dir, { recursive: true });
   });
 }
@@ -116,11 +117,48 @@ function processPosters(state) {
   state.novels.forEach(persistPoster);
 }
 
+function persistAuthorPhoto(author) {
+  var match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s.exec(author.photo);
+  if (!match) {
+    return;
+  }
+
+  var mime = match[1].toLowerCase();
+  var buffer = Buffer.from(match[2], "base64");
+  if (!buffer.length || buffer.length > 4 * 1024 * 1024) {
+    throw new Error("Foto profil " + (author.name || author.penName) + " tidak valid atau terlalu besar.");
+  }
+
+  ensureDirs();
+  var filename = author.id + "-photo." + extensionForMime(mime);
+  fs.writeFileSync(path.join(UPLOAD_DIR, filename), buffer);
+
+  var previous = String(author.photo || "");
+  var nextPath = "assets/images/uploads/" + filename;
+  if (previous.indexOf("assets/images/uploads/") === 0 && previous !== nextPath) {
+    removeFile(path.join(ROOT, previous));
+  }
+
+  author.photo = nextPath;
+}
+
+function processAuthorPhotos(state) {
+  (state.authors || []).forEach(persistAuthorPhoto);
+}
+
 function absolutePoster(novel) {
   if (!novel.poster || novel.poster.indexOf("data:") === 0) {
     return null;
   }
   return path.join(ROOT, novel.poster.replace(/^(\.\.\/)+/, ""));
+}
+
+function absoluteAuthorPhoto(author) {
+  var photo = String((author && author.photo) || "");
+  if (!photo || photo.indexOf("data:") === 0 || photo.charAt(0) === "/") {
+    return null;
+  }
+  return path.join(ROOT, photo.replace(/^(\.\.\/)+/, ""));
 }
 
 function removeFile(filePath) {
@@ -169,6 +207,23 @@ function syncGeneratedFiles(state, previousState) {
     });
   }
 
+  if (previousState && Array.isArray(previousState.authors)) {
+    var currentAuthorIds = {};
+    state.authors.forEach(function (author) {
+      currentAuthorIds[author.id] = true;
+    });
+    previousState.authors.forEach(function (oldAuthor) {
+      if (!oldAuthor || !oldAuthor.id || currentAuthorIds[oldAuthor.id]) {
+        return;
+      }
+      removeFile(path.join(AUTHOR_DIR, oldAuthor.id + ".html"));
+      var photo = absoluteAuthorPhoto(oldAuthor);
+      if (photo && photo.indexOf(UPLOAD_DIR) === 0) {
+        removeFile(photo);
+      }
+    });
+  }
+
   state.novels.forEach(function (novel) {
     var chapters = chaptersFor(state, novel.id);
     var chapterDir = path.join(CHAPTER_ROOT, novel.id);
@@ -176,7 +231,7 @@ function syncGeneratedFiles(state, previousState) {
 
     fs.writeFileSync(
       path.join(NOVEL_DIR, novel.id + ".html"),
-      render.renderNovelPage(novel, chapters),
+      render.renderNovelPage(novel, chapters, state.authors),
       "utf8"
     );
 
@@ -196,6 +251,23 @@ function syncGeneratedFiles(state, previousState) {
         removeFile(path.join(chapterDir, filename));
       }
     });
+  });
+
+  var expectedAuthors = {};
+  state.authors.forEach(function (author) {
+    var filename = author.id + ".html";
+    expectedAuthors[filename] = true;
+    fs.writeFileSync(
+      path.join(AUTHOR_DIR, filename),
+      render.renderAuthorPage(author, state.novels),
+      "utf8"
+    );
+  });
+
+  fs.readdirSync(AUTHOR_DIR).forEach(function (filename) {
+    if (filename !== "index.html" && /^[a-z0-9-]+\.html$/i.test(filename) && !expectedAuthors[filename]) {
+      removeFile(path.join(AUTHOR_DIR, filename));
+    }
   });
 }
 
@@ -277,6 +349,7 @@ function handleApi(request, response, pathname) {
       var previous = readStateOrNull();
       var state = normalizeState(candidate);
       processPosters(state);
+      processAuthorPhotos(state);
       writeState(state);
       syncGeneratedFiles(state, previous);
       sendJson(response, 200, { state: state });
@@ -382,7 +455,7 @@ function serveStatic(request, response, pathname) {
     pathname = "/index.html";
   }
   if (pathname === "/dashboard" || pathname === "/dashboard/") {
-    pathname = "/dashboard/panel.html";
+    pathname = "/dashboard/index.html";
   }
 
   var decoded;

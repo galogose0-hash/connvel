@@ -85,6 +85,13 @@
   line-height: 1.3;
 }
 
+.dash-field-hint {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
 .genre-options {
   display: flex;
   flex-wrap: wrap;
@@ -1167,6 +1174,10 @@
   cursor: pointer;
 }
 
+.novel-check[hidden] {
+  display: none;
+}
+
 .novel-check > input {
   position: absolute;
   width: 1px;
@@ -1383,6 +1394,22 @@
 
 .table-card-head h2 {
   font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+}
+
+.table-head-actions {
+  display: grid;
+  grid-template-columns: minmax(180px, 310px) auto;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+}
+
+.table-head-actions .search-field {
+  width: 100%;
+}
+
+.table-head-actions .btn {
+  white-space: nowrap;
 }
 
 .table-wrap {
@@ -2233,6 +2260,70 @@
   line-height: 1.45;
 }
 
+.work-picker {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+.work-picker-search {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+
+.work-picker-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+.work-picker-list {
+  max-height: 250px;
+  gap: 7px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.work-picker-empty {
+  margin: 0;
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.work-picker-custom {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  background: rgba(251, 247, 239, 0.6);
+}
+
+.work-picker-custom input {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: #fffdf8;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.76rem;
+}
+
+.work-picker-custom input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(180, 90, 58, 0.1);
+}
+
+.work-picker-custom .btn {
+  flex: none;
+  min-height: 38px;
+}
+
 .dialog-error {
   min-height: 1.2em;
   margin-top: 12px;
@@ -2258,6 +2349,75 @@
   min-height: 42px;
   padding: 0 18px;
   font-size: 0.76rem;
+}
+
+.crop-dialog {
+  width: min(520px, calc(100% - 30px));
+}
+
+.crop-inner {
+  padding: clamp(22px, 3.5vw, 32px);
+}
+
+.crop-stage {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg-soft);
+  place-items: center;
+}
+
+.crop-frame {
+  position: relative;
+  width: min(100%, 360px);
+}
+
+.crop-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M33.333 0V100M66.667 0V100M0 33.333H100M0 66.667H100' stroke='white' stroke-opacity='0.45' stroke-width='0.6'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.crop-stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.crop-stage canvas:active {
+  cursor: grabbing;
+}
+
+.crop-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.crop-control label {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.crop-control input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent-deep);
+}
+
+.crop-size {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Toast */
@@ -2382,8 +2542,18 @@
     flex-direction: column;
   }
 
-  .search-field {
+  .table-head-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     width: 100%;
+  }
+
+  .table-head-actions .search-field {
+    width: 100%;
+  }
+
+  .table-head-actions .btn {
+    white-space: nowrap;
   }
 
   .select-field {
@@ -2474,6 +2644,26 @@
 
   .dash-table {
     min-width: 640px;
+  }
+
+  .table-head-actions {
+    gap: 8px;
+  }
+
+  .table-head-actions .search-field {
+    min-height: 40px;
+    padding: 0 10px;
+  }
+
+  .table-head-actions .btn {
+    min-height: 40px;
+    padding: 0 11px;
+    font-size: 0.7rem;
+  }
+
+  .table-head-actions .btn .icon {
+    width: 14px;
+    height: 14px;
   }
 
   .dash-dialog {

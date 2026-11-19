@@ -8,7 +8,9 @@ import {
   hasAuthHeader,
   sanitizeState,
   persistPosters,
-  readPoster
+  readPoster,
+  persistAuthorPhotos,
+  readAuthorPhoto
 } from "../server/vercel-state.mjs";
 
 const MAX_BODY = 4 * 1024 * 1024;
@@ -77,6 +79,7 @@ async function handlePutState(request) {
   var store = await openStore();
   var state = normalizeState(candidate);
   await persistPosters(store, state);
+  await persistAuthorPhotos(store, state);
   await writeState(store, state);
   return json({ state: state });
 }
@@ -184,6 +187,28 @@ async function handlePoster(pathname) {
   });
 }
 
+async function handleAuthorPhoto(pathname) {
+  var authorId = pathname.slice("/api/author-photo/".length);
+  try {
+    authorId = decodeURIComponent(authorId);
+  } catch (error) {
+    return fail(404, "Foto penulis tidak ditemukan.");
+  }
+  var store = await openStore();
+  var photo = await readAuthorPhoto(store, authorId);
+  if (!photo) {
+    return fail(404, "Foto penulis tidak ditemukan.");
+  }
+  return new Response(photo.stream, {
+    status: 200,
+    headers: {
+      "Content-Type": photo.mime,
+      "Cache-Control": "public, max-age=3600",
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
+}
+
 function resolvePathname(request) {
   var url = new URL(request.url);
   try {
@@ -226,6 +251,10 @@ async function handle(request) {
 
     if (method === "GET" && pathname.indexOf("/api/poster/") === 0) {
       return await handlePoster(pathname);
+    }
+
+    if (method === "GET" && pathname.indexOf("/api/author-photo/") === 0) {
+      return await handleAuthorPhoto(pathname);
     }
 
     return fail(404, "Endpoint API tidak ditemukan.");

@@ -51,14 +51,29 @@ async function handle(request) {
 
   var novelMatch = /^\/novel\/([^\/]+)\.html$/.exec(pathname);
   var chapterMatch = /^\/ceritanovel\/([^\/]+)\/bab-(\d+)\.html$/.exec(pathname);
+  var authorMatch = /^\/penulis\/([^\/]+)\.html$/.exec(pathname);
+  if (authorMatch && authorMatch[1] === "index") {
+    authorMatch = null;
+  }
 
-  if (!novelMatch && !chapterMatch) {
+  if (!novelMatch && !chapterMatch && !authorMatch) {
     return notFound();
   }
 
-  var novelId = novelMatch ? novelMatch[1] : chapterMatch[1];
   var store = await openStore();
   var state = await readState(store);
+
+  if (authorMatch) {
+    var author = state.authors.find(function (item) {
+      return item.id === authorMatch[1] && item.visible !== false;
+    });
+    if (!author) {
+      return notFound();
+    }
+    return html(render.renderAuthorPage(author, state.novels));
+  }
+
+  var novelId = novelMatch ? novelMatch[1] : chapterMatch[1];
   var novel = state.novels.find(function (item) {
     return item.id === novelId && item.visible !== false;
   });
@@ -73,7 +88,7 @@ async function handle(request) {
     .sort(function (a, b) { return a.number - b.number; });
 
   if (novelMatch) {
-    return html(render.renderNovelPage(novel, chapters));
+    return html(render.renderNovelPage(novel, chapters, state.authors));
   }
 
   var number = parseInt(chapterMatch[2], 10);

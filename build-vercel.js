@@ -67,9 +67,14 @@ function countFiles(dir) {
 }
 
 async function writeSeedState(state) {
-  var vercelState = await import("./server/vercel-state.mjs");
   fs.mkdirSync(SERVER_DIR, { recursive: true });
   var seed = normalizeState(state);
+  fs.writeFileSync(
+    SEED_FILE,
+    "export default " + JSON.stringify(seed, null, 2) + ";\n",
+    "utf8"
+  );
+  var vercelState = await import("./server/vercel-state.mjs");
   var publicState = vercelState.sanitizeState(seed);
   var publicPhotos = {};
   publicState.authors.forEach(function (author) {

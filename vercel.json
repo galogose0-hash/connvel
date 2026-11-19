@@ -29,7 +29,7 @@
       "destination": "/api/pages"
     },
     {
-      "source": "/penulis/(.*)",
+      "source": "/penulis/((?!index.html)[^/]+)",
       "destination": "/api/pages"
     }
   ],
